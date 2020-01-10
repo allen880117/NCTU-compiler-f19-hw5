@@ -22,6 +22,7 @@
 #include "semantic/SymbolTable.hpp"
 #include "semantic/ErrorMsg.hpp"
 #include "semantic/DumpSymbolTable.hpp"
+#include "code_generate/CodeGenerator.hpp"
 #include "core/error.h"
 
 #include <stdio.h>
@@ -93,6 +94,7 @@ static Node AST;
 %code requires { #include "semantic/SymbolTable.hpp" }
 %code requires { #include "semantic/ErrorMsg.hpp" }
 %code requires { #include "semantic/DumpSymbolTable.hpp" }
+%code requires { #include "code_generate/CodeGenerator.hpp" }
 
     /* Union Define */
 %union {
@@ -1157,6 +1159,7 @@ void dumpAST(ASTNodeBase* node){
 }
 
 int main(int argc, const char *argv[]) {
+    /*
     CHECK((argc >= 2) && (argc<=3), "Usage: ./parser <filename> [--dump-ast]\n");
     
     int isDumpNeed;
@@ -1167,20 +1170,23 @@ int main(int argc, const char *argv[]) {
             exit(-1);                                                          
         }
     }
-        
+    */
+    CHECK((argc == 4), "Usage:./compiler [input file] --output_code_dir [output directory name]\n");
+
     FILE *fp = fopen(argv[1], "r");
 
     CHECK(fp != NULL, "fopen() fails.\n");
     yyin = fp;
     yyparse();
 
-    if(argc == 3 && isDumpNeed == 0)
-        dumpAST(AST);
+    //if(argc == 3 && isDumpNeed == 0)
+    //    dumpAST(AST);
 
 	// TODO: construct a SemanticAnalyzer to analyze the AST
     SemanticAnalyzer semantic_analyzer(string(argv[1]), fp);
     AST->accept(semantic_analyzer);
 
+    /*
     if(OptDum == 1)
         semantic_analyzer.dump_symbol_table();
     
@@ -1191,6 +1197,12 @@ int main(int argc, const char *argv[]) {
             "|---------------------------------------------|\n");
     else
         semantic_analyzer.output_err_msg();
+    */
+
+    CodeGenerator code_generator(string(argv[1]), string(argv[3]), output_fp, semantic_analyzer.get_symbol_table());
+    code_generator.out_file_create();
+    AST->accept(code_generator);
+    code_generator.out_file_save();
 
     // Memory_Free
     delete AST;

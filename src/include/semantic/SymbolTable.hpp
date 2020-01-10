@@ -70,13 +70,14 @@ class SymbolTable {
     // Link Info
     SymbolTable *prev_scope;
     enum EnumNodeTable in_node_type;
-    VariableInfo in_node_return_type;
+    VariableInfo       in_node_return_type;
     vector<SymbolTable *> next_scope_list;
+    int          next_scope_cur_idx;
 
     // General Info
     unsigned int level;
     map<string, SymbolEntry> entry;
-    vector<string> entry_name;
+    vector<string>           entry_name;
 
   public:
     SymbolTable(unsigned int _level);
@@ -84,4 +85,5 @@ class SymbolTable {
 
     void put(SymbolEntry _symbol_entry);
     bool redeclare_check(string _name);
+
 };

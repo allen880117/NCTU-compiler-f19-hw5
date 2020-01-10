@@ -52,7 +52,11 @@ SymbolEntry::SymbolEntry(string _name, FieldKind _kind, unsigned int _level,
 
 SymbolTable::SymbolTable(unsigned int _level) {
     this->prev_scope = NULL;
+    this->in_node_type = UNKNOWN_NODE;
+    this->in_node_return_type = VariableInfo(UNKNOWN_SET, UNKNOWN_TYPE);
     this->next_scope_list.clear();
+    this->next_scope_cur_idx = -1;
+
     this->level = _level;
     this->entry.clear();
     this->entry_name.clear();
