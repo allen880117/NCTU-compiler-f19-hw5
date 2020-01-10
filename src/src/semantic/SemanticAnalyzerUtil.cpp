@@ -48,7 +48,7 @@ SemanticAnalyzer::SemanticAnalyzer(string _filename, FILE *_fp) {
     this->error_msg = "";
 
     this->specify = false;
-    this->specify_kind = KIND_UNKNOWN;
+    this->specify_kind = FieldKind::KIND_UNKNOWN;
 }
 
 SemanticAnalyzer::~SemanticAnalyzer() { delete this->symbol_table_root; }
@@ -147,7 +147,7 @@ bool SemanticAnalyzer::check_loop_var(string _name) {
     SymbolTable *current = this->current_scope;
     while (true) {
         if (current->entry[_name].is_used == true &&
-            current->entry[_name].kind == KIND_LOOP_VAR) {
+            current->entry[_name].kind == FieldKind::KIND_LOOP_VAR) {
             found = true;
             break;
         } else {
@@ -185,9 +185,9 @@ bool SemanticAnalyzer::check_program_or_procedure_call() {
     bool is_error = false;
     SymbolTable *current = this->current_scope;
     while (true) {
-        if (current->in_node_type == FUNCTION_NODE ||
-            current->in_node_type == PROGRAM_NODE) {
-            if (current->in_node_return_type.type == TYPE_VOID) {
+        if (current->in_node_type == EnumNodeTable::FUNCTION_NODE ||
+            current->in_node_type == EnumNodeTable::PROGRAM_NODE) {
+            if (current->in_node_return_type.type == EnumType::TYPE_VOID) {
                 return true;
             }
             break;
@@ -200,7 +200,7 @@ bool SemanticAnalyzer::check_program_or_procedure_call() {
 VariableInfo SemanticAnalyzer::get_function_return_type() {
     SymbolTable *current = this->current_scope;
     while (true) {
-        if (current->in_node_type == FUNCTION_NODE) {
+        if (current->in_node_type == EnumNodeTable::FUNCTION_NODE) {
             return current->in_node_return_type;
         } else
             current = current->prev_scope;

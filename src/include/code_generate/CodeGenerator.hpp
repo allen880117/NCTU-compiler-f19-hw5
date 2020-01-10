@@ -35,7 +35,22 @@ class CodeGenerator : public ASTVisitorBase {
     void out_file_save();
 
   private:
+    // FILE INFO
     FILE*        out_fp;
     string       out_file_name;
+    
+    // SEMANTIC INFO
     SymbolTable* table_root;
+    SymbolTable *current_scope;
+    void table_push();
+    void table_pop();
+
+    unsigned int level;
+    void level_up();
+    void level_down();
+
+    // STACK INFO
+    stack<EnumNodeTable> src_node;
+    void push_src_node(EnumNodeTable);
+    void pop_src_node();
 };

@@ -102,7 +102,7 @@ static Node AST;
     double dval;
     char*  text;
 
-    enum enumOperator op_type;
+    enum EnumOperator op_type;
 
     Node      node;
     NodeList* node_list_ptr;
@@ -430,8 +430,8 @@ ReturnType:
     |
     Epsilon{
         $$ = new VariableInfo();
-        $$->type_set = UNKNOWN_SET;
-        $$->type = TYPE_VOID;
+        $$->type_set = EnumTypeSet::UNKNOWN_SET;
+        $$->type = EnumType::TYPE_VOID;
     }
 ;
 
@@ -444,7 +444,7 @@ Declaration:
         // Declaration Node
         NodeList* var_list = new NodeList();
         for(uint i=0; i<$2->size(); i++){
-            if( $4->type_set == SET_CONSTANT_LITERAL ){ 
+            if( $4->type_set == EnumTypeSet::SET_CONSTANT_LITERAL ){ 
                 // Literal Constant
                 // duplicate $4 (eliminate hierarchy problem)
                 VariableInfo* dupTemp = new VariableInfo();
@@ -541,33 +541,33 @@ Type:
 ScalarType:
     INTEGER{
         $$ = new VariableInfo();
-        $$->type_set = SET_SCALAR;
-        $$->type = TYPE_INTEGER;
+        $$->type_set = EnumTypeSet::SET_SCALAR;
+        $$->type = EnumType::TYPE_INTEGER;
     }
     |
     REAL{
         $$ = new VariableInfo();
-        $$->type_set = SET_SCALAR;
-        $$->type = TYPE_REAL;
+        $$->type_set = EnumTypeSet::SET_SCALAR;
+        $$->type = EnumType::TYPE_REAL;
     }
     |
     STRING{
         $$ = new VariableInfo();
-        $$->type_set = SET_SCALAR;
-        $$->type = TYPE_STRING;
+        $$->type_set = EnumTypeSet::SET_SCALAR;
+        $$->type = EnumType::TYPE_STRING;
     }
     |
     BOOLEAN{
         $$ = new VariableInfo();
-        $$->type_set = SET_SCALAR;
-        $$->type = TYPE_BOOLEAN;
+        $$->type_set = EnumTypeSet::SET_SCALAR;
+        $$->type = EnumType::TYPE_BOOLEAN;
     }
 ;
 
 ArrType:
     ArrDecl ScalarType{
         $$ = new VariableInfo();
-        $$->type_set = SET_ACCUMLATED;
+        $$->type_set = EnumTypeSet::SET_ACCUMLATED;
         $$->type = $2->type;
         $$->array_range = $1->array_range;
 
@@ -580,8 +580,8 @@ ArrType:
 ArrDecl:
     ARRAY INT_LITERAL TO INT_LITERAL OF{
         $$ = new VariableInfo();
-        $$->type_set = SET_ACCUMLATED;
-        $$->type = UNKNOWN_TYPE;
+        $$->type_set = EnumTypeSet::SET_ACCUMLATED;
+        $$->type = EnumType::UNKNOWN_TYPE;
         $$->array_range.push_back(IntPair{$2, $4});
     }
     |
@@ -594,22 +594,22 @@ ArrDecl:
 LiteralConstant:
     INT_LITERAL{
         $$ = new VariableInfo();
-        $$->type_set=SET_CONSTANT_LITERAL;
-        $$->type=TYPE_INTEGER;
+        $$->type_set=EnumTypeSet::SET_CONSTANT_LITERAL;
+        $$->type=EnumType::TYPE_INTEGER;
         $$->int_literal=$1;
     }
     |
     REAL_LITERAL{
         $$ = new VariableInfo();
-        $$->type_set=SET_CONSTANT_LITERAL;
-        $$->type=TYPE_REAL;
+        $$->type_set=EnumTypeSet::SET_CONSTANT_LITERAL;
+        $$->type=EnumType::TYPE_REAL;
         $$->real_literal=$1;
     }
     |
     STRING_LITERAL{
         $$ = new VariableInfo();
-        $$->type_set=SET_CONSTANT_LITERAL;
-        $$->type=TYPE_STRING;
+        $$->type_set=EnumTypeSet::SET_CONSTANT_LITERAL;
+        $$->type=EnumType::TYPE_STRING;
         $$->string_literal=string($1);
 
         // Memory_Free
@@ -618,15 +618,15 @@ LiteralConstant:
     |
     TRUE{
         $$ = new VariableInfo();
-        $$->type_set=SET_CONSTANT_LITERAL;
-        $$->type=TYPE_BOOLEAN;
+        $$->type_set=EnumTypeSet::SET_CONSTANT_LITERAL;
+        $$->type=EnumType::TYPE_BOOLEAN;
         $$->boolean_literal=Boolean_TRUE;
     }
     |
     FALSE{
         $$ = new VariableInfo();
-        $$->type_set=SET_CONSTANT_LITERAL;
-        $$->type=TYPE_BOOLEAN;
+        $$->type_set=EnumTypeSet::SET_CONSTANT_LITERAL;
+        $$->type=EnumType::TYPE_BOOLEAN;
         $$->boolean_literal=Boolean_FALSE;
     }
 ;
@@ -796,8 +796,8 @@ For:
     END DO {
         // loop_variable_declaration : a declaration node
         VariableInfo* var_info = new VariableInfo();
-        var_info->type_set = SET_SCALAR;
-        var_info->type = TYPE_INTEGER;
+        var_info->type_set = EnumTypeSet::SET_SCALAR;
+        var_info->type = EnumType::TYPE_INTEGER;
         VariableNode* variable_node = new VariableNode(
             @2.first_line,
             @2.first_column,
@@ -823,8 +823,8 @@ For:
         );
 
         VariableInfo* constant_value_info = new VariableInfo();
-        constant_value_info->type_set = SET_CONSTANT_LITERAL;
-        constant_value_info->type = TYPE_INTEGER;
+        constant_value_info->type_set = EnumTypeSet::SET_CONSTANT_LITERAL;
+        constant_value_info->type = EnumType::TYPE_INTEGER;
         constant_value_info->int_literal = $4;
         ConstantValueNode* constant_value_node = new ConstantValueNode(
             @4.first_line,
@@ -841,8 +841,8 @@ For:
 
         // condition: an expression node ( constant value node )
         VariableInfo* constant_value_info2 = new VariableInfo();
-        constant_value_info2->type_set = SET_CONSTANT_LITERAL;
-        constant_value_info2->type = TYPE_INTEGER;
+        constant_value_info2->type_set = EnumTypeSet::SET_CONSTANT_LITERAL;
+        constant_value_info2->type = EnumType::TYPE_INTEGER;
         constant_value_info2->int_literal = $6;
         ConstantValueNode* constant_value_node2 = new ConstantValueNode(
             @6.first_line,
@@ -1199,7 +1199,7 @@ int main(int argc, const char *argv[]) {
         semantic_analyzer.output_err_msg();
     */
 
-    CodeGenerator code_generator(string(argv[1]), string(argv[3]), output_fp, semantic_analyzer.get_symbol_table());
+    CodeGenerator code_generator(string(argv[1]), string(argv[3]), semantic_analyzer.get_symbol_table());
     code_generator.out_file_create();
     AST->accept(code_generator);
     code_generator.out_file_save();

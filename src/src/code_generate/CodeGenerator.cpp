@@ -25,11 +25,10 @@ using namespace std;
 
 void CodeGenerator::visit(ProgramNode *m) {
     // Put Symbol Table (Special Case)
-    SymbolTable *new_scope = new SymbolTable(0);
-    this->push(new_scope, PROGRAM_NODE, VariableInfo(UNKNOWN_SET, TYPE_VOID));
+    this->table_push();
 
     // Visit Child Nodes
-    this->push_src_node(PROGRAM_NODE);
+    this->push_src_node(EnumNodeTable::PROGRAM_NODE);
     if (m->declaration_node_list != nullptr)
         for (uint i = 0; i < m->declaration_node_list->size(); i++) {
             (*(m->declaration_node_list))[i]->accept(*this);
@@ -45,12 +44,12 @@ void CodeGenerator::visit(ProgramNode *m) {
     this->pop_src_node();
 
     // Pop Scope
-    this->pop();
+    this->table_pop();
 }
 
 void CodeGenerator::visit(DeclarationNode *m) {
     // Visit Child Nodes
-    this->push_src_node(DECLARATION_NODE);
+    this->push_src_node(EnumNodeTable::DECLARATION_NODE);
     if (m->variables_node_list != nullptr)
         for (uint i = 0; i < m->variables_node_list->size(); i++) {
             (*(m->variables_node_list))[i]->accept(*this);
@@ -67,38 +66,33 @@ void CodeGenerator::visit(ConstantValueNode *m) { // EXPRESSION
 void CodeGenerator::visit(FunctionNode *m) {
     // Push Scope
     this->level_up();
-    SymbolTable *new_scope = new SymbolTable(this->level);
-    this->push(new_scope, FUNCTION_NODE, *(m->return_type));
-
+    this->table_push();
+    
     // Visit Child Node
-    this->push_src_node(FUNCTION_NODE);
-    this->specify_on(KIND_PARAMETER);
+    this->push_src_node(EnumNodeTable::FUNCTION_NODE);
     if (m->parameters != nullptr)
         for (uint i = 0; i < m->parameters->size(); i++) {
             (*(m->parameters))[i]->node->accept(*this);
         }
-    this->specify_off();
 
     if (m->body != nullptr)
         m->body->accept(*this);
     this->pop_src_node();
 
     // Pop Scope
-    this->pop();
+    this->table_pop();
     this->level_down();
 }
 
 void CodeGenerator::visit(CompoundStatementNode *m) { // STATEMENT
     // Push Scope
-    if (this->src_node.top() != FUNCTION_NODE) {
+    if (this->src_node.top() != EnumNodeTable::FUNCTION_NODE) {
         this->level_up();
-        SymbolTable *new_scope = new SymbolTable(this->level);
-        this->push(new_scope, COMPOUND_STATEMENT_NODE,
-                   VariableInfo(UNKNOWN_SET, UNKNOWN_TYPE));
+        this->table_push();
     }
 
     // Visit Child Nodes
-    this->push_src_node(COMPOUND_STATEMENT_NODE);
+    this->push_src_node(EnumNodeTable::COMPOUND_STATEMENT_NODE);
     if (m->declaration_node_list != nullptr)
         for (uint i = 0; i < m->declaration_node_list->size(); i++) {
             (*(m->declaration_node_list))[i]->accept(*this);
@@ -111,15 +105,15 @@ void CodeGenerator::visit(CompoundStatementNode *m) { // STATEMENT
     this->pop_src_node();
 
     // Pop Scope
-    if (this->src_node.top() != FUNCTION_NODE) {
-        this->pop();
+    if (this->src_node.top() != EnumNodeTable::FUNCTION_NODE) {
+        this->table_pop();
         this->level_down();
     }
 }
 
 void CodeGenerator::visit(AssignmentNode *m) { // STATEMENT
     // Visit Child Node
-    this->push_src_node(ASSIGNMENT_NODE);
+    this->push_src_node(EnumNodeTable::ASSIGNMENT_NODE);
     if (m->variable_reference_node != nullptr)
         m->variable_reference_node->accept(*this);
 
@@ -130,7 +124,7 @@ void CodeGenerator::visit(AssignmentNode *m) { // STATEMENT
 
 void CodeGenerator::visit(PrintNode *m) { // STATEMENT
     // Visit Child Node
-    this->push_src_node(PRINT_NODE);
+    this->push_src_node(EnumNodeTable::PRINT_NODE);
     if (m->expression_node != nullptr)
         m->expression_node->accept(*this);
     this->pop_src_node();
@@ -138,14 +132,14 @@ void CodeGenerator::visit(PrintNode *m) { // STATEMENT
 
 void CodeGenerator::visit(ReadNode *m) { // STATEMENT
     // Visit Child Node
-    this->push_src_node(READ_NODE);
+    this->push_src_node(EnumNodeTable::READ_NODE);
     if (m->variable_reference_node != nullptr)
         m->variable_reference_node->accept(*this);
     this->pop_src_node();
 }
 
 void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
-    this->push_src_node(VARIABLE_REFERENCE_NODE);
+    this->push_src_node(EnumNodeTable::VARIABLE_REFERENCE_NODE);
     if (m->expression_node_list != nullptr)
         for (int i = m->expression_node_list->size() - 1; i >= 0;
                 i--) // REVERSE TRAVERSE
@@ -155,7 +149,7 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
 
 void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
     // Visit Child Node
-    this->push_src_node(BINARY_OPERATOR_NODE);
+    this->push_src_node(EnumNodeTable::BINARY_OPERATOR_NODE);
     if (m->left_operand != nullptr)
         m->left_operand->accept(*this);
 
@@ -166,7 +160,7 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
 
 void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
     // Visit Child Node
-    this->push_src_node(UNARY_OPERATOR_NODE);
+    this->push_src_node(EnumNodeTable::UNARY_OPERATOR_NODE);
     if (m->operand != nullptr)
         m->operand->accept(*this);
     this->pop_src_node();
@@ -174,7 +168,7 @@ void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
 
 void CodeGenerator::visit(IfNode *m) { // STATEMENT
     // Visit Child Nodes
-    this->push_src_node(IF_NODE);
+    this->push_src_node(EnumNodeTable::IF_NODE);
     if (m->condition != nullptr)
         m->condition->accept(*this);
 
@@ -190,7 +184,7 @@ void CodeGenerator::visit(IfNode *m) { // STATEMENT
 
 void CodeGenerator::visit(WhileNode *m) { // STATEMENT
     // Visit Child Nodes
-    this->push_src_node(WHILE_NODE);
+    this->push_src_node(EnumNodeTable::WHILE_NODE);
     if (m->condition != nullptr)
         m->condition->accept(*this);
 
@@ -203,20 +197,15 @@ void CodeGenerator::visit(WhileNode *m) { // STATEMENT
 void CodeGenerator::visit(ForNode *m) { // STATEMENT
     // Push Scope
     this->level_up();
-    SymbolTable *new_scope = new SymbolTable(this->level);
-    this->push(new_scope, FOR_NODE, VariableInfo(UNKNOWN_SET, UNKNOWN_TYPE));
+    this->table_push();
 
     // Visit Child Node
-    this->push_src_node(FOR_NODE);
-    this->specify_on(KIND_LOOP_VAR);
+    this->push_src_node(EnumNodeTable::FOR_NODE);
     if (m->loop_variable_declaration != nullptr)
         m->loop_variable_declaration->accept(*this);
-    this->specify_off();
 
-    this->specify_on(KIND_LOOP_VAR);
     if (m->initial_statement != nullptr)
         m->initial_statement->accept(*this);
-    this->specify_off();
 
     if (m->condition != nullptr)
         m->condition->accept(*this);
@@ -227,13 +216,13 @@ void CodeGenerator::visit(ForNode *m) { // STATEMENT
     this->pop_src_node();
 
     // Pop Scope
-    this->pop();
+    this->table_pop();
     this->level_down();
 }
 
 void CodeGenerator::visit(ReturnNode *m) { // STATEMENT
     // Visit Child Node
-    this->push_src_node(RETURN_NODE);
+    this->push_src_node(EnumNodeTable::RETURN_NODE);
     if (m->return_value != nullptr)
         m->return_value->accept(*this);
     this->pop_src_node();
@@ -241,7 +230,7 @@ void CodeGenerator::visit(ReturnNode *m) { // STATEMENT
 
 void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
     // Visit Child Node
-    this->push_src_node(FUNCTION_CALL_NODE);
+    this->push_src_node(EnumNodeTable::FUNCTION_CALL_NODE);
     if (m->arguments != nullptr)
         for (int i = m->arguments->size() - 1; i >= 0; i--) // REVERSE TRAVERSE
             (*(m->arguments))[i]->accept(*this);

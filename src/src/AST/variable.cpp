@@ -26,19 +26,19 @@ void VariableNode::print() {
 
 string VariableNode::getType() {
     switch (this->type->type_set) {
-    case SET_SCALAR:
-    case SET_CONSTANT_LITERAL:
+    case EnumTypeSet::SET_SCALAR:
+    case EnumTypeSet::SET_CONSTANT_LITERAL:
         switch (this->type->type) {
-        case TYPE_INTEGER:
+        case EnumType::TYPE_INTEGER:
             this->variable_type = "integer";
             break;
-        case TYPE_REAL:
+        case EnumType::TYPE_REAL:
             this->variable_type = "real";
             break;
-        case TYPE_STRING:
+        case EnumType::TYPE_STRING:
             this->variable_type = "string";
             break;
-        case TYPE_BOOLEAN:
+        case EnumType::TYPE_BOOLEAN:
             this->variable_type = "boolean";
             break;
         default:
@@ -46,18 +46,18 @@ string VariableNode::getType() {
             break;
         }
         break;
-    case SET_ACCUMLATED:
+    case EnumTypeSet::SET_ACCUMLATED:
         switch (this->type->type) {
-        case TYPE_INTEGER:
+        case EnumType::TYPE_INTEGER:
             this->variable_type = "integer";
             break;
-        case TYPE_REAL:
+        case EnumType::TYPE_REAL:
             this->variable_type = "real";
             break;
-        case TYPE_STRING:
+        case EnumType::TYPE_STRING:
             this->variable_type = "string";
             break;
-        case TYPE_BOOLEAN:
+        case EnumType::TYPE_BOOLEAN:
             this->variable_type = "boolean";
             break;
         default:

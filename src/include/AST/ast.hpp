@@ -26,7 +26,7 @@ using namespace std;
 typedef vector<class ASTNodeBase *> NodeList;
 typedef class ASTNodeBase *Node;
 
-enum enumOperator {
+enum class EnumOperator {
     OP_ASSIGN = 500,
     OP_OR,
     OP_AND,
@@ -45,14 +45,14 @@ enum enumOperator {
     UNKNOWN_OP
 };
 
-enum EnumTypeSet {
+enum class EnumTypeSet {
     SET_SCALAR = 300,
     SET_ACCUMLATED,
     SET_CONSTANT_LITERAL,
     UNKNOWN_SET
 };
 
-enum EnumType {
+enum class EnumType {
     TYPE_INTEGER = 400,
     TYPE_REAL,
     TYPE_STRING,
@@ -78,8 +78,8 @@ struct VariableInfo {
     BooleanLiteral boolean_literal;
 
     VariableInfo() {
-        this->type_set = UNKNOWN_SET;
-        this->type = UNKNOWN_TYPE;
+        this->type_set = EnumTypeSet::UNKNOWN_SET;
+        this->type = EnumType::UNKNOWN_TYPE;
     }
 
     VariableInfo(EnumTypeSet _type_set, EnumType _type) {

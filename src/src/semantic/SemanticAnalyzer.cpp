@@ -32,7 +32,7 @@ using namespace std;
 void SemanticAnalyzer::visit(ProgramNode *m) {
     // Put Symbol Table (Special Case)
     SymbolTable *new_scope = new SymbolTable(0);
-    this->push(new_scope, PROGRAM_NODE, VariableInfo(UNKNOWN_SET, TYPE_VOID));
+    this->push(new_scope, EnumNodeTable::PROGRAM_NODE, VariableInfo(EnumTypeSet::UNKNOWN_SET, EnumType::TYPE_VOID));
 
     // Push Symbol Entity
     if (this->current_scope->redeclare_check(m->program_name) == false) {
@@ -44,13 +44,13 @@ void SemanticAnalyzer::visit(ProgramNode *m) {
             src_notation_msg(this->fp, m->line_number, m->col_number);
     } else {
         this->current_scope->put(
-            SymbolEntry(m->program_name, KIND_PROGRAM, this->level,
-                        VariableInfo(UNKNOWN_SET, TYPE_VOID),
-                        Attribute(NO_ATTRIBUTE), PROGRAM_NODE, m, NULL, NULL));
+            SymbolEntry(m->program_name, FieldKind::KIND_PROGRAM, this->level,
+                        VariableInfo(EnumTypeSet::UNKNOWN_SET, EnumType::TYPE_VOID),
+                        Attribute(AttributeType::NO_ATTRIBUTE), EnumNodeTable::PROGRAM_NODE, m, NULL, NULL));
     }
 
     // Visit Child Nodes
-    this->push_src_node(PROGRAM_NODE);
+    this->push_src_node(EnumNodeTable::PROGRAM_NODE);
     if (m->declaration_node_list != nullptr)
         for (uint i = 0; i < m->declaration_node_list->size(); i++) {
             (*(m->declaration_node_list))[i]->accept(*this);
@@ -90,7 +90,7 @@ void SemanticAnalyzer::visit(ProgramNode *m) {
 
 void SemanticAnalyzer::visit(DeclarationNode *m) {
     // Visit Child Nodes
-    this->push_src_node(DECLARATION_NODE);
+    this->push_src_node(EnumNodeTable::DECLARATION_NODE);
     if (m->variables_node_list != nullptr)
         for (uint i = 0; i < m->variables_node_list->size(); i++) {
             (*(m->variables_node_list))[i]->accept(*this);
@@ -128,26 +128,26 @@ void SemanticAnalyzer::visit(VariableNode *m) {
         if (m->constant_value_node == nullptr) { // Not Constant
             this->current_scope->put(SymbolEntry(
                 m->variable_name, this->specify_kind, this->level, *(m->type),
-                Attribute(NO_ATTRIBUTE), VARIABLE_NODE, NULL, m, NULL));
+                Attribute(AttributeType::NO_ATTRIBUTE), EnumNodeTable::VARIABLE_NODE, NULL, m, NULL));
         } else {
             this->current_scope->put(SymbolEntry(
                 m->variable_name, this->specify_kind, this->level, *(m->type),
-                Attribute(*(m->type)), VARIABLE_NODE, NULL, m, NULL));
+                Attribute(*(m->type)), EnumNodeTable::VARIABLE_NODE, NULL, m, NULL));
         }
     } else {
         if (m->constant_value_node == nullptr) { // Not Constant
             this->current_scope->put(SymbolEntry(
-                m->variable_name, KIND_VARIABLE, this->level, *(m->type),
-                Attribute(NO_ATTRIBUTE), VARIABLE_NODE, NULL, m, NULL));
+                m->variable_name, FieldKind::KIND_VARIABLE, this->level, *(m->type),
+                Attribute(AttributeType::NO_ATTRIBUTE), EnumNodeTable::VARIABLE_NODE, NULL, m, NULL));
         } else {
             this->current_scope->put(SymbolEntry(
-                m->variable_name, KIND_CONSTANT, this->level, *(m->type),
-                Attribute(*(m->type)), VARIABLE_NODE, NULL, m, NULL));
+                m->variable_name, FieldKind::KIND_CONSTANT, this->level, *(m->type),
+                Attribute(*(m->type)), EnumNodeTable::VARIABLE_NODE, NULL, m, NULL));
         }
     }
 
     // Semantic Check
-    if (m->type->type_set == SET_ACCUMLATED) {
+    if (m->type->type_set == EnumTypeSet::SET_ACCUMLATED) {
         bool is_upperbound_le_lowerbound = false;
         for (uint i = 0; i < m->type->array_range.size(); i++) {
             if (m->type->array_range[i].end <= m->type->array_range[i].start) {
@@ -193,19 +193,19 @@ void SemanticAnalyzer::visit(FunctionNode *m) {
         }
 
         this->current_scope->put(SymbolEntry(
-            m->function_name, KIND_FUNCTION, this->level, *(m->return_type),
-            Attribute(tempVI), FUNCTION_NODE, NULL, NULL, m));
+            m->function_name, FieldKind::KIND_FUNCTION, this->level, *(m->return_type),
+            Attribute(tempVI), EnumNodeTable::FUNCTION_NODE, NULL, NULL, m));
     }
 
     // Part 2:
     // Push Scope
     this->level_up();
     SymbolTable *new_scope = new SymbolTable(this->level);
-    this->push(new_scope, FUNCTION_NODE, *(m->return_type));
+    this->push(new_scope, EnumNodeTable::FUNCTION_NODE, *(m->return_type));
 
     // Visit Child Node
-    this->push_src_node(FUNCTION_NODE);
-    this->specify_on(KIND_PARAMETER);
+    this->push_src_node(EnumNodeTable::FUNCTION_NODE);
+    this->specify_on(FieldKind::KIND_PARAMETER);
     if (m->parameters != nullptr)
         for (uint i = 0; i < m->parameters->size(); i++) {
             (*(m->parameters))[i]->node->accept(*this);
@@ -234,15 +234,15 @@ void SemanticAnalyzer::visit(FunctionNode *m) {
 
 void SemanticAnalyzer::visit(CompoundStatementNode *m) { // STATEMENT
     // Push Scope
-    if (this->src_node.top() != FUNCTION_NODE) {
+    if (this->src_node.top() != EnumNodeTable::FUNCTION_NODE) {
         this->level_up();
         SymbolTable *new_scope = new SymbolTable(this->level);
-        this->push(new_scope, COMPOUND_STATEMENT_NODE,
-                   VariableInfo(UNKNOWN_SET, UNKNOWN_TYPE));
+        this->push(new_scope, EnumNodeTable::COMPOUND_STATEMENT_NODE,
+                   VariableInfo(EnumTypeSet::UNKNOWN_SET, EnumType::UNKNOWN_TYPE));
     }
 
     // Visit Child Nodes
-    this->push_src_node(COMPOUND_STATEMENT_NODE);
+    this->push_src_node(EnumNodeTable::COMPOUND_STATEMENT_NODE);
     if (m->declaration_node_list != nullptr)
         for (uint i = 0; i < m->declaration_node_list->size(); i++) {
             (*(m->declaration_node_list))[i]->accept(*this);
@@ -255,7 +255,7 @@ void SemanticAnalyzer::visit(CompoundStatementNode *m) { // STATEMENT
     this->pop_src_node();
 
     // Pop Scope
-    if (this->src_node.top() != FUNCTION_NODE) {
+    if (this->src_node.top() != EnumNodeTable::FUNCTION_NODE) {
         this->pop();
         this->level_down();
     }
@@ -263,7 +263,7 @@ void SemanticAnalyzer::visit(CompoundStatementNode *m) { // STATEMENT
 
 void SemanticAnalyzer::visit(AssignmentNode *m) { // STATEMENT
     // Visit Child Node
-    this->push_src_node(ASSIGNMENT_NODE);
+    this->push_src_node(EnumNodeTable::ASSIGNMENT_NODE);
     if (m->variable_reference_node != nullptr)
         m->variable_reference_node->accept(*this);
 
@@ -277,12 +277,12 @@ void SemanticAnalyzer::visit(AssignmentNode *m) { // STATEMENT
     VariableInfo l_type = this->expression_stack.top();
     this->expression_stack.pop();
 
-    if (l_type.type_set == UNKNOWN_SET && l_type.type == UNKNOWN_TYPE) {
+    if (l_type.type_set == EnumTypeSet::UNKNOWN_SET && l_type.type == EnumType::UNKNOWN_TYPE) {
         // No Need Further Check
         return;
     }
 
-    if (l_type.type_set == SET_CONSTANT_LITERAL) {
+    if (l_type.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) {
         this->semantic_error = 1;
         this->error_msg +=
             error_found_msg(m->variable_reference_node->line_number,
@@ -309,7 +309,7 @@ void SemanticAnalyzer::visit(AssignmentNode *m) { // STATEMENT
         return;
     }
 
-    if (l_type.type_set == SET_ACCUMLATED) {
+    if (l_type.type_set == EnumTypeSet::SET_ACCUMLATED) {
         this->semantic_error = 1;
         this->error_msg +=
             error_found_msg(m->variable_reference_node->line_number,
@@ -321,12 +321,12 @@ void SemanticAnalyzer::visit(AssignmentNode *m) { // STATEMENT
         return;
     }
 
-    if (r_type.type_set == UNKNOWN_SET && r_type.type == UNKNOWN_TYPE) {
+    if (r_type.type_set == EnumTypeSet::UNKNOWN_SET && r_type.type == EnumType::UNKNOWN_TYPE) {
         // No Need Further Check
         return;
     }
 
-    if (r_type.type_set == SET_ACCUMLATED) {
+    if (r_type.type_set == EnumTypeSet::SET_ACCUMLATED) {
         this->semantic_error = 1;
         this->error_msg += error_found_msg(m->expression_node->line_number,
                                            m->expression_node->col_number);
@@ -337,10 +337,10 @@ void SemanticAnalyzer::visit(AssignmentNode *m) { // STATEMENT
         return;
     }
 
-    if (l_type.type_set == SET_SCALAR && l_type.type == TYPE_INTEGER &&
-        (((r_type.type_set == SET_SCALAR ||
-           r_type.type_set == SET_CONSTANT_LITERAL) &&
-          (r_type.type == TYPE_INTEGER || r_type.type == TYPE_REAL)) ==
+    if (l_type.type_set == EnumTypeSet::SET_SCALAR && l_type.type == EnumType::TYPE_INTEGER &&
+        (((r_type.type_set == EnumTypeSet::SET_SCALAR ||
+           r_type.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+          (r_type.type == EnumType::TYPE_INTEGER || r_type.type == EnumType::TYPE_REAL)) ==
          false)) {
         this->semantic_error = 1;
         this->error_msg += error_found_msg(m->expression_node->line_number,
@@ -351,10 +351,10 @@ void SemanticAnalyzer::visit(AssignmentNode *m) { // STATEMENT
         this->error_msg +=
             src_notation_msg(this->fp, m->expression_node->line_number,
                              m->expression_node->col_number);
-    } else if (l_type.type_set == SET_SCALAR && l_type.type == TYPE_REAL &&
-               (((r_type.type_set == SET_SCALAR ||
-                  r_type.type_set == SET_CONSTANT_LITERAL) &&
-                 (r_type.type == TYPE_REAL)) == false)) {
+    } else if (l_type.type_set == EnumTypeSet::SET_SCALAR && l_type.type == EnumType::TYPE_REAL &&
+               (((r_type.type_set == EnumTypeSet::SET_SCALAR ||
+                  r_type.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                 (r_type.type == EnumType::TYPE_REAL)) == false)) {
         this->semantic_error = 1;
         this->error_msg += error_found_msg(m->expression_node->line_number,
                                            m->expression_node->col_number);
@@ -364,10 +364,10 @@ void SemanticAnalyzer::visit(AssignmentNode *m) { // STATEMENT
         this->error_msg +=
             src_notation_msg(this->fp, m->expression_node->line_number,
                              m->expression_node->col_number);
-    } else if (l_type.type_set == SET_SCALAR && l_type.type == TYPE_BOOLEAN &&
-               (((r_type.type_set == SET_SCALAR ||
-                  r_type.type_set == SET_CONSTANT_LITERAL) &&
-                 (r_type.type == TYPE_BOOLEAN)) == false)) {
+    } else if (l_type.type_set == EnumTypeSet::SET_SCALAR && l_type.type == EnumType::TYPE_BOOLEAN &&
+               (((r_type.type_set == EnumTypeSet::SET_SCALAR ||
+                  r_type.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                 (r_type.type == EnumType::TYPE_BOOLEAN)) == false)) {
         this->semantic_error = 1;
         this->error_msg += error_found_msg(m->expression_node->line_number,
                                            m->expression_node->col_number);
@@ -377,10 +377,10 @@ void SemanticAnalyzer::visit(AssignmentNode *m) { // STATEMENT
         this->error_msg +=
             src_notation_msg(this->fp, m->expression_node->line_number,
                              m->expression_node->col_number);
-    } else if (l_type.type_set == SET_SCALAR && l_type.type == TYPE_STRING &&
-               (((r_type.type_set == SET_SCALAR ||
-                  r_type.type_set == SET_CONSTANT_LITERAL) &&
-                 (r_type.type == TYPE_STRING)) == false)) {
+    } else if (l_type.type_set == EnumTypeSet::SET_SCALAR && l_type.type == EnumType::TYPE_STRING &&
+               (((r_type.type_set == EnumTypeSet::SET_SCALAR ||
+                  r_type.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                 (r_type.type == EnumType::TYPE_STRING)) == false)) {
         this->semantic_error = 1;
         this->error_msg += error_found_msg(m->expression_node->line_number,
                                            m->expression_node->col_number);
@@ -390,8 +390,8 @@ void SemanticAnalyzer::visit(AssignmentNode *m) { // STATEMENT
         this->error_msg +=
             src_notation_msg(this->fp, m->expression_node->line_number,
                              m->expression_node->col_number);
-    } else if (l_type.type_set == SET_ACCUMLATED &&
-               r_type.type_set == SET_ACCUMLATED) {
+    } else if (l_type.type_set == EnumTypeSet::SET_ACCUMLATED &&
+               r_type.type_set == EnumTypeSet::SET_ACCUMLATED) {
         if (array_size_check(l_type, r_type) == false) {
             this->semantic_error = 1;
             this->error_msg += error_found_msg(m->expression_node->line_number,
@@ -408,7 +408,7 @@ void SemanticAnalyzer::visit(AssignmentNode *m) { // STATEMENT
 
 void SemanticAnalyzer::visit(PrintNode *m) { // STATEMENT
     // Visit Child Node
-    this->push_src_node(PRINT_NODE);
+    this->push_src_node(EnumNodeTable::PRINT_NODE);
     if (m->expression_node != nullptr)
         m->expression_node->accept(*this);
     this->pop_src_node();
@@ -417,11 +417,11 @@ void SemanticAnalyzer::visit(PrintNode *m) { // STATEMENT
     VariableInfo tmpInfo = this->expression_stack.top();
     this->expression_stack.pop();
 
-    if (tmpInfo.type_set == UNKNOWN_SET && tmpInfo.type == UNKNOWN_TYPE) {
+    if (tmpInfo.type_set == EnumTypeSet::UNKNOWN_SET && tmpInfo.type == EnumType::UNKNOWN_TYPE) {
         return; // No Need Further Check
     }
 
-    if (tmpInfo.type_set != SET_SCALAR && tmpInfo.type_set != SET_CONSTANT_LITERAL) {
+    if (tmpInfo.type_set != EnumTypeSet::SET_SCALAR && tmpInfo.type_set != EnumTypeSet::SET_CONSTANT_LITERAL) {
         this->semantic_error = 1;
         this->error_msg += error_found_msg(m->expression_node->line_number,
                                            m->expression_node->col_number);
@@ -435,7 +435,7 @@ void SemanticAnalyzer::visit(PrintNode *m) { // STATEMENT
 
 void SemanticAnalyzer::visit(ReadNode *m) { // STATEMENT
     // Visit Child Node
-    this->push_src_node(READ_NODE);
+    this->push_src_node(EnumNodeTable::READ_NODE);
     if (m->variable_reference_node != nullptr)
         m->variable_reference_node->accept(*this);
     this->pop_src_node();
@@ -444,11 +444,11 @@ void SemanticAnalyzer::visit(ReadNode *m) { // STATEMENT
     VariableInfo r_type = this->expression_stack.top();
     this->expression_stack.pop();
 
-    if (r_type.type_set == UNKNOWN_SET && r_type.type == UNKNOWN_TYPE) {
+    if (r_type.type_set == EnumTypeSet::UNKNOWN_SET && r_type.type == EnumType::UNKNOWN_TYPE) {
         return; // No Need Further Check
     }
 
-    if (r_type.type_set == SET_CONSTANT_LITERAL) {
+    if (r_type.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) {
         this->semantic_error = 1;
         this->error_msg +=
             error_found_msg(m->variable_reference_node->line_number,
@@ -474,7 +474,7 @@ void SemanticAnalyzer::visit(ReadNode *m) { // STATEMENT
         return;
     }
 
-    if (r_type.type_set != SET_SCALAR) {
+    if (r_type.type_set != EnumTypeSet::SET_SCALAR) {
         this->semantic_error = 1;
         this->error_msg +=
             error_found_msg(m->variable_reference_node->line_number,
@@ -492,11 +492,11 @@ void SemanticAnalyzer::visit(VariableReferenceNode *m) { // EXPRESSION
     // Part 1:
     // Semantic Check
     // Special Case
-    if (this->specify == true && this->specify_kind == KIND_LOOP_VAR) {
+    if (this->specify == true && this->specify_kind == FieldKind::KIND_LOOP_VAR) {
         // Error Happen in this node
         VariableInfo tmpInfo;
-        tmpInfo.type_set = UNKNOWN_SET;
-        tmpInfo.type = UNKNOWN_TYPE;
+        tmpInfo.type_set = EnumTypeSet::UNKNOWN_SET;
+        tmpInfo.type = EnumType::UNKNOWN_TYPE;
         this->expression_stack.push(tmpInfo);
         return;
     }
@@ -524,7 +524,7 @@ void SemanticAnalyzer::visit(VariableReferenceNode *m) { // EXPRESSION
     } else if (m->expression_node_list != nullptr && m_error == false) {
 
         // First visit expression list
-        this->push_src_node(VARIABLE_REFERENCE_NODE);
+        this->push_src_node(EnumNodeTable::VARIABLE_REFERENCE_NODE);
         if (m->expression_node_list != nullptr)
             for (int i = m->expression_node_list->size() - 1; i >= 0;
                  i--) // REVERSE TRAVERSE
@@ -539,9 +539,9 @@ void SemanticAnalyzer::visit(VariableReferenceNode *m) { // EXPRESSION
             VariableInfo temp = this->expression_stack.top();
             expression_stack.pop();
 
-            if (temp.type == UNKNOWN_TYPE && type_check != 0)
+            if (temp.type == EnumType::UNKNOWN_TYPE && type_check != 0)
                 type_check = 2;
-            else if (temp.type != TYPE_INTEGER && type_check == 0) {
+            else if (temp.type != EnumType::TYPE_INTEGER && type_check == 0) {
                 type_check = 1;
                 this->semantic_error = 1;
                 this->error_msg +=
@@ -579,8 +579,8 @@ void SemanticAnalyzer::visit(VariableReferenceNode *m) { // EXPRESSION
     if (m_error == true) {
         // Error Happen in this node
         VariableInfo tmpInfo;
-        tmpInfo.type_set = UNKNOWN_SET;
-        tmpInfo.type = UNKNOWN_TYPE;
+        tmpInfo.type_set = EnumTypeSet::UNKNOWN_SET;
+        tmpInfo.type = EnumType::UNKNOWN_TYPE;
 
         this->expression_stack.push(tmpInfo);
 
@@ -593,7 +593,7 @@ void SemanticAnalyzer::visit(VariableReferenceNode *m) { // EXPRESSION
                 entry_info.array_range.size() - m->expression_node_list->size();
 
             if (dimension == 0) // Exactly SCALAR
-                tmp_info.type_set = SET_SCALAR;
+                tmp_info.type_set = EnumTypeSet::SET_SCALAR;
             else
                 for (uint i = m->expression_node_list->size();
                      i < entry_info.array_range.size(); i++)
@@ -611,7 +611,7 @@ void SemanticAnalyzer::visit(VariableReferenceNode *m) { // EXPRESSION
 
 void SemanticAnalyzer::visit(BinaryOperatorNode *m) { // EXPRESSION
     // Visit Child Node
-    this->push_src_node(BINARY_OPERATOR_NODE);
+    this->push_src_node(EnumNodeTable::BINARY_OPERATOR_NODE);
     if (m->left_operand != nullptr)
         m->left_operand->accept(*this);
 
@@ -628,19 +628,19 @@ void SemanticAnalyzer::visit(BinaryOperatorNode *m) { // EXPRESSION
 
     if (fault_type_check(lhs) && fault_type_check(rhs)) {
         switch (m->op) {
-        case OP_OR:
-        case OP_AND:
-        case OP_NOT:
-            if ((lhs.type_set == SET_SCALAR ||
-                 lhs.type_set == SET_CONSTANT_LITERAL) &&
-                (lhs.type == TYPE_BOOLEAN)) {
+        case EnumOperator::OP_OR:
+        case EnumOperator::OP_AND:
+        case EnumOperator::OP_NOT:
+            if ((lhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 lhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (lhs.type == EnumType::TYPE_BOOLEAN)) {
                 ;
             } else {
                 error = true;
             }
-            if ((rhs.type_set == SET_SCALAR ||
-                 rhs.type_set == SET_CONSTANT_LITERAL) &&
-                (rhs.type == TYPE_BOOLEAN)) {
+            if ((rhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 rhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (rhs.type == EnumType::TYPE_BOOLEAN)) {
                 ;
             } else {
                 error = true;
@@ -658,27 +658,27 @@ void SemanticAnalyzer::visit(BinaryOperatorNode *m) { // EXPRESSION
                 break;
             } else {
                 this->expression_stack.push(
-                    VariableInfo(SET_SCALAR, TYPE_BOOLEAN));
+                    VariableInfo(EnumTypeSet::SET_SCALAR, EnumType::TYPE_BOOLEAN));
             }
 
             break;
 
-        case OP_LESS:
-        case OP_LESS_OR_EQUAL:
-        case OP_EQUAL:
-        case OP_GREATER:
-        case OP_GREATER_OR_EQUAL:
-        case OP_NOT_EQUAL:
-            if ((lhs.type_set == SET_SCALAR ||
-                 lhs.type_set == SET_CONSTANT_LITERAL) &&
-                (lhs.type == TYPE_INTEGER || lhs.type == TYPE_REAL)) {
+        case EnumOperator::OP_LESS:
+        case EnumOperator::OP_LESS_OR_EQUAL:
+        case EnumOperator::OP_EQUAL:
+        case EnumOperator::OP_GREATER:
+        case EnumOperator::OP_GREATER_OR_EQUAL:
+        case EnumOperator::OP_NOT_EQUAL:
+            if ((lhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 lhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (lhs.type == EnumType::TYPE_INTEGER || lhs.type == EnumType::TYPE_REAL)) {
                 ;
             } else {
                 error = true;
             }
-            if ((rhs.type_set == SET_SCALAR ||
-                 rhs.type_set == SET_CONSTANT_LITERAL) &&
-                (rhs.type == TYPE_INTEGER || rhs.type == TYPE_REAL)) {
+            if ((rhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 rhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (rhs.type == EnumType::TYPE_INTEGER || rhs.type == EnumType::TYPE_REAL)) {
                 ;
             } else {
                 error = true;
@@ -697,44 +697,44 @@ void SemanticAnalyzer::visit(BinaryOperatorNode *m) { // EXPRESSION
                 break;
             } else {
                 this->expression_stack.push(
-                    VariableInfo(SET_SCALAR, TYPE_BOOLEAN));
+                    VariableInfo(EnumTypeSet::SET_SCALAR, EnumType::TYPE_BOOLEAN));
             }
 
             break;
 
-        case OP_PLUS: // Special Case
-            if ((lhs.type_set == SET_SCALAR ||
-                 lhs.type_set == SET_CONSTANT_LITERAL) &&
-                (lhs.type == TYPE_STRING) &&
-                (rhs.type_set == SET_SCALAR ||
-                 rhs.type_set == SET_CONSTANT_LITERAL) &&
-                (rhs.type == TYPE_STRING)) {
+        case EnumOperator::OP_PLUS: // Special Case
+            if ((lhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 lhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (lhs.type == EnumType::TYPE_STRING) &&
+                (rhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 rhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (rhs.type == EnumType::TYPE_STRING)) {
                 this->expression_stack.push(
-                    VariableInfo(SET_SCALAR, TYPE_STRING));
+                    VariableInfo(EnumTypeSet::SET_SCALAR, EnumType::TYPE_STRING));
                 break;
             }
             // Forward Check
-        case OP_MINUS:
-        case OP_MULTIPLY:
-        case OP_DIVIDE:
-            if ((lhs.type_set == SET_SCALAR ||
-                 lhs.type_set == SET_CONSTANT_LITERAL) &&
-                (lhs.type == TYPE_INTEGER) &&
-                (rhs.type_set == SET_SCALAR ||
-                 rhs.type_set == SET_CONSTANT_LITERAL) &&
-                (rhs.type == TYPE_INTEGER)) {
+        case EnumOperator::OP_MINUS:
+        case EnumOperator::OP_MULTIPLY:
+        case EnumOperator::OP_DIVIDE:
+            if ((lhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 lhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (lhs.type == EnumType::TYPE_INTEGER) &&
+                (rhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 rhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (rhs.type == EnumType::TYPE_INTEGER)) {
                 this->expression_stack.push(
-                    VariableInfo(SET_SCALAR, TYPE_INTEGER));
+                    VariableInfo(EnumTypeSet::SET_SCALAR, EnumType::TYPE_INTEGER));
                 break;
             }
-            if ((lhs.type_set == SET_SCALAR ||
-                 lhs.type_set == SET_CONSTANT_LITERAL) &&
-                (lhs.type == TYPE_INTEGER || lhs.type == TYPE_REAL) &&
-                (rhs.type_set == SET_SCALAR ||
-                 rhs.type_set == SET_CONSTANT_LITERAL) &&
-                (rhs.type == TYPE_INTEGER || rhs.type == TYPE_REAL)) {
+            if ((lhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 lhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (lhs.type == EnumType::TYPE_INTEGER || lhs.type == EnumType::TYPE_REAL) &&
+                (rhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 rhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (rhs.type == EnumType::TYPE_INTEGER || rhs.type == EnumType::TYPE_REAL)) {
                 this->expression_stack.push(
-                    VariableInfo(SET_SCALAR, TYPE_REAL));
+                    VariableInfo(EnumTypeSet::SET_SCALAR, EnumType::TYPE_REAL));
                 break;
             } else {
                 error = true;
@@ -752,17 +752,17 @@ void SemanticAnalyzer::visit(BinaryOperatorNode *m) { // EXPRESSION
 
             break;
 
-        case OP_MOD:
-            if ((lhs.type_set == SET_SCALAR ||
-                 lhs.type_set == SET_CONSTANT_LITERAL) &&
-                (lhs.type == TYPE_INTEGER)) {
+        case EnumOperator::OP_MOD:
+            if ((lhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 lhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (lhs.type == EnumType::TYPE_INTEGER)) {
                 ;
             } else {
                 error = true;
             }
-            if ((rhs.type_set == SET_SCALAR ||
-                 rhs.type_set == SET_CONSTANT_LITERAL) &&
-                (rhs.type == TYPE_INTEGER)) {
+            if ((rhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 rhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (rhs.type == EnumType::TYPE_INTEGER)) {
                 ;
             } else {
                 error = true;
@@ -781,7 +781,7 @@ void SemanticAnalyzer::visit(BinaryOperatorNode *m) { // EXPRESSION
                 break;
             } else {
                 this->expression_stack.push(
-                    VariableInfo(SET_SCALAR, TYPE_INTEGER));
+                    VariableInfo(EnumTypeSet::SET_SCALAR, EnumType::TYPE_INTEGER));
             }
 
             break;
@@ -795,7 +795,7 @@ void SemanticAnalyzer::visit(BinaryOperatorNode *m) { // EXPRESSION
 
     if (error == true) {
         // Error Has Happened Before or Now
-        this->expression_stack.push(VariableInfo(UNKNOWN_SET, UNKNOWN_TYPE));
+        this->expression_stack.push(VariableInfo(EnumTypeSet::UNKNOWN_SET, EnumType::UNKNOWN_TYPE));
     } else {
         ;
     }
@@ -803,7 +803,7 @@ void SemanticAnalyzer::visit(BinaryOperatorNode *m) { // EXPRESSION
 
 void SemanticAnalyzer::visit(UnaryOperatorNode *m) { // EXPRESSION
     // Visit Child Node
-    this->push_src_node(UNARY_OPERATOR_NODE);
+    this->push_src_node(EnumNodeTable::UNARY_OPERATOR_NODE);
     if (m->operand != nullptr)
         m->operand->accept(*this);
     this->pop_src_node();
@@ -815,10 +815,10 @@ void SemanticAnalyzer::visit(UnaryOperatorNode *m) { // EXPRESSION
 
     if (fault_type_check(rhs)) {
         switch (m->op) {
-        case OP_NOT:
-            if ((rhs.type_set == SET_SCALAR ||
-                 rhs.type_set == SET_CONSTANT_LITERAL) &&
-                (rhs.type == TYPE_BOOLEAN)) {
+        case EnumOperator::OP_NOT:
+            if ((rhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 rhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (rhs.type == EnumType::TYPE_BOOLEAN)) {
                 ;
             } else {
                 error = true;
@@ -835,16 +835,16 @@ void SemanticAnalyzer::visit(UnaryOperatorNode *m) { // EXPRESSION
                 break;
             } else {
                 this->expression_stack.push(
-                    VariableInfo(SET_SCALAR, TYPE_BOOLEAN));
+                    VariableInfo(EnumTypeSet::SET_SCALAR, EnumType::TYPE_BOOLEAN));
             }
 
             break;
 
-        case OP_MINUS:
-            if ((rhs.type_set == SET_SCALAR ||
-                 rhs.type_set == SET_CONSTANT_LITERAL) &&
-                (rhs.type == TYPE_INTEGER || rhs.type == TYPE_REAL)) {
-                this->expression_stack.push(VariableInfo(SET_SCALAR, rhs.type));
+        case EnumOperator::OP_MINUS:
+            if ((rhs.type_set == EnumTypeSet::SET_SCALAR ||
+                 rhs.type_set == EnumTypeSet::SET_CONSTANT_LITERAL) &&
+                (rhs.type == EnumType::TYPE_INTEGER || rhs.type == EnumType::TYPE_REAL)) {
+                this->expression_stack.push(VariableInfo(EnumTypeSet::SET_SCALAR, rhs.type));
                 break;
             } else {
                 error = true;
@@ -870,7 +870,7 @@ void SemanticAnalyzer::visit(UnaryOperatorNode *m) { // EXPRESSION
 
     if (error == true) {
         // Error Has Happened Before or Now
-        this->expression_stack.push(VariableInfo(UNKNOWN_SET, UNKNOWN_TYPE));
+        this->expression_stack.push(VariableInfo(EnumTypeSet::UNKNOWN_SET, EnumType::UNKNOWN_TYPE));
     } else {
         ;
     }
@@ -878,7 +878,7 @@ void SemanticAnalyzer::visit(UnaryOperatorNode *m) { // EXPRESSION
 
 void SemanticAnalyzer::visit(IfNode *m) { // STATEMENT
     // Visit Child Nodes
-    this->push_src_node(IF_NODE);
+    this->push_src_node(EnumNodeTable::IF_NODE);
     if (m->condition != nullptr)
         m->condition->accept(*this);
 
@@ -895,11 +895,11 @@ void SemanticAnalyzer::visit(IfNode *m) { // STATEMENT
     VariableInfo tmpInfo = this->expression_stack.top();
     this->expression_stack.pop();
 
-    if (tmpInfo.type_set == UNKNOWN_SET && tmpInfo.type == UNKNOWN_TYPE) {
+    if (tmpInfo.type_set == EnumTypeSet::UNKNOWN_SET && tmpInfo.type == EnumType::UNKNOWN_TYPE) {
         return; // No Need Further Check
     }
 
-    if (tmpInfo.type != TYPE_BOOLEAN) {
+    if (tmpInfo.type != EnumType::TYPE_BOOLEAN) {
         this->semantic_error = 1;
         this->error_msg += error_found_msg(m->condition->line_number,
                                            m->condition->col_number);
@@ -911,7 +911,7 @@ void SemanticAnalyzer::visit(IfNode *m) { // STATEMENT
 
 void SemanticAnalyzer::visit(WhileNode *m) { // STATEMENT
     // Visit Child Nodes
-    this->push_src_node(WHILE_NODE);
+    this->push_src_node(EnumNodeTable::WHILE_NODE);
     if (m->condition != nullptr)
         m->condition->accept(*this);
 
@@ -924,11 +924,11 @@ void SemanticAnalyzer::visit(WhileNode *m) { // STATEMENT
     VariableInfo tmpInfo = this->expression_stack.top();
     this->expression_stack.pop();
 
-    if (tmpInfo.type_set == UNKNOWN_SET && tmpInfo.type == UNKNOWN_TYPE) {
+    if (tmpInfo.type_set == EnumTypeSet::UNKNOWN_SET && tmpInfo.type == EnumType::UNKNOWN_TYPE) {
         return; // No Need Further Check
     }
 
-    if (tmpInfo.type != TYPE_BOOLEAN) {
+    if (tmpInfo.type != EnumType::TYPE_BOOLEAN) {
         this->semantic_error = 1;
         this->error_msg += error_found_msg(m->condition->line_number,
                                            m->condition->col_number);
@@ -942,16 +942,16 @@ void SemanticAnalyzer::visit(ForNode *m) { // STATEMENT
     // Push Scope
     this->level_up();
     SymbolTable *new_scope = new SymbolTable(this->level);
-    this->push(new_scope, FOR_NODE, VariableInfo(UNKNOWN_SET, UNKNOWN_TYPE));
+    this->push(new_scope, EnumNodeTable::FOR_NODE, VariableInfo(EnumTypeSet::UNKNOWN_SET, EnumType::UNKNOWN_TYPE));
 
     // Visit Child Node
-    this->push_src_node(FOR_NODE);
-    this->specify_on(KIND_LOOP_VAR);
+    this->push_src_node(EnumNodeTable::FOR_NODE);
+    this->specify_on(FieldKind::KIND_LOOP_VAR);
     if (m->loop_variable_declaration != nullptr)
         m->loop_variable_declaration->accept(*this);
     this->specify_off();
 
-    this->specify_on(KIND_LOOP_VAR);
+    this->specify_on(FieldKind::KIND_LOOP_VAR);
     if (m->initial_statement != nullptr)
         m->initial_statement->accept(*this);
     this->specify_off();
@@ -981,7 +981,7 @@ void SemanticAnalyzer::visit(ForNode *m) { // STATEMENT
 
 void SemanticAnalyzer::visit(ReturnNode *m) { // STATEMENT
     // Visit Child Node
-    this->push_src_node(RETURN_NODE);
+    this->push_src_node(EnumNodeTable::RETURN_NODE);
     if (m->return_value != nullptr)
         m->return_value->accept(*this);
     this->pop_src_node();
@@ -990,7 +990,7 @@ void SemanticAnalyzer::visit(ReturnNode *m) { // STATEMENT
     VariableInfo r_type = this->expression_stack.top();
     this->expression_stack.pop();
 
-    if (r_type.type_set == UNKNOWN_SET && r_type.type == UNKNOWN_TYPE) {
+    if (r_type.type_set == EnumTypeSet::UNKNOWN_SET && r_type.type == EnumType::UNKNOWN_TYPE) {
         return; // No Need Further Check
     }
 
@@ -1004,7 +1004,7 @@ void SemanticAnalyzer::visit(ReturnNode *m) { // STATEMENT
     }
 
     VariableInfo returnTypeInfo = get_function_return_type();
-    if ((r_type.type_set == SET_ACCUMLATED) ||
+    if ((r_type.type_set == EnumTypeSet::SET_ACCUMLATED) ||
         (r_type.type != returnTypeInfo.type)) {
         this->semantic_error = 1;
         this->error_msg += error_found_msg(m->return_value->line_number,
@@ -1021,7 +1021,7 @@ void SemanticAnalyzer::visit(ReturnNode *m) { // STATEMENT
 
 void SemanticAnalyzer::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
     // Visit Child Node
-    this->push_src_node(FUNCTION_CALL_NODE);
+    this->push_src_node(EnumNodeTable::FUNCTION_CALL_NODE);
     if (m->arguments != nullptr)
         for (int i = m->arguments->size() - 1; i >= 0; i--) // REVERSE TRAVERSE
             (*(m->arguments))[i]->accept(*this);
@@ -1036,7 +1036,7 @@ void SemanticAnalyzer::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
         this->error_msg +=
             src_notation_msg(this->fp, m->line_number, m->col_number);
 
-        this->expression_stack.push(VariableInfo(UNKNOWN_SET, UNKNOWN_TYPE));
+        this->expression_stack.push(VariableInfo(EnumTypeSet::UNKNOWN_SET, EnumType::UNKNOWN_TYPE));
 
         return;
     }
@@ -1057,7 +1057,7 @@ void SemanticAnalyzer::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
         this->error_msg +=
             src_notation_msg(this->fp, m->line_number, m->col_number);
 
-        this->expression_stack.push(VariableInfo(UNKNOWN_SET, UNKNOWN_TYPE));
+        this->expression_stack.push(VariableInfo(EnumTypeSet::UNKNOWN_SET, EnumType::UNKNOWN_TYPE));
 
         return;
     }
@@ -1069,7 +1069,7 @@ void SemanticAnalyzer::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
 
         if (error_found == false) {
             switch (tmpInfo.type_set) {
-            case SET_ACCUMLATED:
+            case EnumTypeSet::SET_ACCUMLATED:
                 if (array_size_check(tmpInfo,
                                      *(tmpEntry.function_node->prototype[i])) ==
                     false) {
@@ -1086,8 +1086,8 @@ void SemanticAnalyzer::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
                     error_found = true;
                 }
                 break;
-            case SET_SCALAR:
-            case SET_CONSTANT_LITERAL:
+            case EnumTypeSet::SET_SCALAR:
+            case EnumTypeSet::SET_CONSTANT_LITERAL:
                 if (tmpInfo.type !=
                     tmpEntry.function_node->prototype[i]->type) {
                     this->semantic_error = 1;
@@ -1103,7 +1103,7 @@ void SemanticAnalyzer::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
                     error_found = true;
                 }
                 break;
-            case UNKNOWN_SET:
+            case EnumTypeSet::UNKNOWN_SET:
             default:
                 error_found = true;
                 break;
@@ -1116,6 +1116,6 @@ void SemanticAnalyzer::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
         VariableInfo tmpInfo = *(tmpEntry.function_node->return_type);
         this->expression_stack.push(tmpInfo);
     } else {
-        this->expression_stack.push(VariableInfo(UNKNOWN_SET, UNKNOWN_TYPE));
+        this->expression_stack.push(VariableInfo(EnumTypeSet::UNKNOWN_SET, EnumType::UNKNOWN_TYPE));
     }
 }

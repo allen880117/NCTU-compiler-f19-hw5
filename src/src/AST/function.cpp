@@ -49,18 +49,18 @@ void FunctionNode::print() {
 
     // cout << return_type (scalar_type or void)
     switch (this->return_type->type_set) {
-    case SET_SCALAR:
+    case EnumTypeSet::SET_SCALAR:
         switch (this->return_type->type) {
-        case TYPE_INTEGER:
+        case EnumType::TYPE_INTEGER:
             std::cout << "integer";
             break;
-        case TYPE_REAL:
+        case EnumType::TYPE_REAL:
             std::cout << "real";
             break;
-        case TYPE_STRING:
+        case EnumType::TYPE_STRING:
             std::cout << "string";
             break;
-        case TYPE_BOOLEAN:
+        case EnumType::TYPE_BOOLEAN:
             std::cout << "boolean";
             break;
         default:
@@ -68,9 +68,9 @@ void FunctionNode::print() {
             break;
         }
         break;
-    case UNKNOWN_SET:
+    case EnumTypeSet::UNKNOWN_SET:
         switch (this->return_type->type) {
-        case TYPE_VOID:
+        case EnumType::TYPE_VOID:
             std::cout << "void";
             break;
         default:
@@ -91,19 +91,19 @@ void FunctionNode::print() {
         if (i != 0)
             std::cout << ", ";
         switch (this->prototype[i]->type_set) {
-        case SET_SCALAR:
-        case SET_CONSTANT_LITERAL:
+        case EnumTypeSet::SET_SCALAR:
+        case EnumTypeSet::SET_CONSTANT_LITERAL:
             switch (this->prototype[i]->type) {
-            case TYPE_INTEGER:
+            case EnumType::TYPE_INTEGER:
                 std::cout << "integer";
                 break;
-            case TYPE_REAL:
+            case EnumType::TYPE_REAL:
                 std::cout << "real";
                 break;
-            case TYPE_STRING:
+            case EnumType::TYPE_STRING:
                 std::cout << "string";
                 break;
-            case TYPE_BOOLEAN:
+            case EnumType::TYPE_BOOLEAN:
                 std::cout << "boolean";
                 break;
             default:
@@ -111,18 +111,18 @@ void FunctionNode::print() {
                 break;
             }
             break;
-        case SET_ACCUMLATED:
+        case EnumTypeSet::SET_ACCUMLATED:
             switch (this->prototype[i]->type) {
-            case TYPE_INTEGER:
+            case EnumType::TYPE_INTEGER:
                 std::cout << "integer";
                 break;
-            case TYPE_REAL:
+            case EnumType::TYPE_REAL:
                 std::cout << "real";
                 break;
-            case TYPE_STRING:
+            case EnumType::TYPE_STRING:
                 std::cout << "string";
                 break;
-            case TYPE_BOOLEAN:
+            case EnumType::TYPE_BOOLEAN:
                 std::cout << "boolean";
                 break;
             default:

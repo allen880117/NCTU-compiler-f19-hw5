@@ -1,32 +1,32 @@
 #include "semantic/SymbolTable.hpp"
 #include "semantic/DumpSymbolTable.hpp"
 
-Attribute::Attribute() { this->attr_type = UNKNOWN_ATTRIBUTE; }
+Attribute::Attribute() { this->attr_type = AttributeType::UNKNOWN_ATTRIBUTE; }
 
 Attribute::Attribute(AttributeType _attr_type) { this->attr_type = _attr_type; }
 
 Attribute::Attribute(vector<VariableInfo> _parameters) {
     this->parameter_type = _parameters;
-    this->attr_type = ATTRIBUTE_PARAMETERS;
+    this->attr_type = AttributeType::ATTRIBUTE_PARAMETERS;
 }
 
 Attribute::Attribute(VariableInfo _value) {
     this->value_of_constant = _value;
-    this->attr_type = ATTRIBUTE_VALUE_OF_CONSTANT;
+    this->attr_type = AttributeType::ATTRIBUTE_VALUE_OF_CONSTANT;
 }
 
 void Attribute::set_parameter_type(vector<VariableInfo> _parameters) {
     this->parameter_type = _parameters;
-    this->attr_type = ATTRIBUTE_PARAMETERS;
+    this->attr_type = AttributeType::ATTRIBUTE_PARAMETERS;
 }
 
 void Attribute::set_value_of_constant(VariableInfo _value) {
     this->value_of_constant = _value;
-    this->attr_type = ATTRIBUTE_VALUE_OF_CONSTANT;
+    this->attr_type = AttributeType::ATTRIBUTE_VALUE_OF_CONSTANT;
 }
 
 SymbolEntry::SymbolEntry() {
-    this->kind = KIND_UNKNOWN;
+    this->kind = FieldKind::KIND_UNKNOWN;
     this->is_used = false;
 }
 
@@ -52,8 +52,8 @@ SymbolEntry::SymbolEntry(string _name, FieldKind _kind, unsigned int _level,
 
 SymbolTable::SymbolTable(unsigned int _level) {
     this->prev_scope = NULL;
-    this->in_node_type = UNKNOWN_NODE;
-    this->in_node_return_type = VariableInfo(UNKNOWN_SET, UNKNOWN_TYPE);
+    this->in_node_type = EnumNodeTable::UNKNOWN_NODE;
+    this->in_node_return_type = VariableInfo(EnumTypeSet::UNKNOWN_SET, EnumType::UNKNOWN_TYPE);
     this->next_scope_list.clear();
     this->next_scope_cur_idx = -1;
 
@@ -83,4 +83,18 @@ bool SymbolTable::redeclare_check(string _name) {
     } else {
         return true;
     }
+}
+
+void SymbolTable::next_scope_cur_idx_increase(){
+    this->next_scope_cur_idx++;
+}
+
+SymbolTable* SymbolTable::get_next_scope(){
+    // Start by -1
+    this->next_scope_cur_idx_increase();
+    return this->next_scope_list[this->next_scope_cur_idx];
+}
+
+SymbolTable* SymbolTable::get_parent_scope(){
+    return this->prev_scope;
 }

@@ -33,55 +33,55 @@ bool array_size_check(VariableInfo lhs, VariableInfo rhs) {
 
 // false -> error has happened
 bool fault_type_check(VariableInfo input) {
-    if (input.type_set == UNKNOWN_SET || input.type == UNKNOWN_TYPE)
+    if (input.type_set == EnumTypeSet::UNKNOWN_SET || input.type == EnumType::UNKNOWN_TYPE)
         return false;
     else
         return true;
 }
 
-string op_convert(enum enumOperator op) {
+string op_convert(enum EnumOperator op) {
     string temp = "";
     switch (op) {
-    case OP_OR:
+    case EnumOperator::OP_OR:
         temp = "or";
         break;
-    case OP_AND:
+    case EnumOperator::OP_AND:
         temp = "and";
         break;
-    case OP_NOT:
+    case EnumOperator::OP_NOT:
         temp = "not";
         break;
-    case OP_LESS:
+    case EnumOperator::OP_LESS:
         temp = "<";
         break;
-    case OP_LESS_OR_EQUAL:
+    case EnumOperator::OP_LESS_OR_EQUAL:
         temp = "<=";
         break;
-    case OP_EQUAL:
+    case EnumOperator::OP_EQUAL:
         temp = "=";
         break;
-    case OP_GREATER:
+    case EnumOperator::OP_GREATER:
         temp = ">";
         break;
-    case OP_GREATER_OR_EQUAL:
+    case EnumOperator::OP_GREATER_OR_EQUAL:
         temp = ">=";
         break;
-    case OP_NOT_EQUAL:
+    case EnumOperator::OP_NOT_EQUAL:
         temp = "<>";
         break;
-    case OP_PLUS:
+    case EnumOperator::OP_PLUS:
         temp = "+";
         break;
-    case OP_MINUS:
+    case EnumOperator::OP_MINUS:
         temp = "-";
         break;
-    case OP_MULTIPLY:
+    case EnumOperator::OP_MULTIPLY:
         temp = "*";
         break;
-    case OP_DIVIDE:
+    case EnumOperator::OP_DIVIDE:
         temp = "/";
         break;
-    case OP_MOD:
+    case EnumOperator::OP_MOD:
         temp = "mod";
         break;
     default:
@@ -94,22 +94,22 @@ string op_convert(enum enumOperator op) {
 string info_convert(VariableInfo input) {
     string msg = "";
     switch (input.type_set) {
-    case SET_SCALAR:
-    case SET_CONSTANT_LITERAL:
+    case EnumTypeSet::SET_SCALAR:
+    case EnumTypeSet::SET_CONSTANT_LITERAL:
         switch (input.type) {
-        case TYPE_INTEGER:
+        case EnumType::TYPE_INTEGER:
             msg = "integer";
             break;
-        case TYPE_REAL:
+        case EnumType::TYPE_REAL:
             msg = "real";
             break;
-        case TYPE_STRING:
+        case EnumType::TYPE_STRING:
             msg = "string";
             break;
-        case TYPE_BOOLEAN:
+        case EnumType::TYPE_BOOLEAN:
             msg = "boolean";
             break;
-        case TYPE_VOID:
+        case EnumType::TYPE_VOID:
             msg = "void";
             break;
         default:
@@ -117,21 +117,21 @@ string info_convert(VariableInfo input) {
             break;
         }
         break;
-    case SET_ACCUMLATED:
+    case EnumTypeSet::SET_ACCUMLATED:
         switch (input.type) {
-        case TYPE_INTEGER:
+        case EnumType::TYPE_INTEGER:
             msg = "integer";
             break;
-        case TYPE_REAL:
+        case EnumType::TYPE_REAL:
             msg = "real";
             break;
-        case TYPE_STRING:
+        case EnumType::TYPE_STRING:
             msg = "string";
             break;
-        case TYPE_BOOLEAN:
+        case EnumType::TYPE_BOOLEAN:
             msg = "boolean";
             break;
-        case TYPE_VOID:
+        case EnumType::TYPE_VOID:
             msg = "void";
             break;
         default:
@@ -146,9 +146,9 @@ string info_convert(VariableInfo input) {
             msg += "]";
         }
         break;
-    case UNKNOWN_SET:
+    case EnumTypeSet::UNKNOWN_SET:
         switch (input.type) {
-        case TYPE_VOID:
+        case EnumType::TYPE_VOID:
             msg = "void";
             break;
         default:
@@ -181,22 +181,22 @@ void dumpSymbol_Body(SymbolEntry symbol_entry) {
     cout << std::right << std::left << setw(33) << symbol_entry.name;
 
     switch (symbol_entry.kind) {
-    case KIND_PROGRAM:
+    case FieldKind::KIND_PROGRAM:
         cout << std::right << std::left << setw(11) << "program";
         break;
-    case KIND_FUNCTION:
+    case FieldKind::KIND_FUNCTION:
         cout << std::right << std::left << setw(11) << "function";
         break;
-    case KIND_PARAMETER:
+    case FieldKind::KIND_PARAMETER:
         cout << std::right << std::left << setw(11) << "parameter";
         break;
-    case KIND_VARIABLE:
+    case FieldKind::KIND_VARIABLE:
         cout << std::right << std::left << setw(11) << "variable";
         break;
-    case KIND_LOOP_VAR:
+    case FieldKind::KIND_LOOP_VAR:
         cout << std::right << std::left << setw(11) << "loop_var";
         break;
-    case KIND_CONSTANT:
+    case FieldKind::KIND_CONSTANT:
         cout << std::right << std::left << setw(11) << "constant";
         break;
     default:
@@ -219,7 +219,7 @@ void dumpSymbol_Body(SymbolEntry symbol_entry) {
 
     string msg = "";
     switch (symbol_entry.attribute.attr_type) {
-    case ATTRIBUTE_PARAMETERS:
+    case AttributeType::ATTRIBUTE_PARAMETERS:
         for (uint i = 0; i < symbol_entry.attribute.parameter_type.size();
              i++) {
             if (i != 0)
@@ -228,25 +228,25 @@ void dumpSymbol_Body(SymbolEntry symbol_entry) {
         }
         cout << std::right << std::left << setw(11) << msg;
         break;
-    case ATTRIBUTE_VALUE_OF_CONSTANT:
+    case AttributeType::ATTRIBUTE_VALUE_OF_CONSTANT:
         switch (symbol_entry.attribute.value_of_constant.type) {
-        case TYPE_INTEGER:
+        case EnumType::TYPE_INTEGER:
             std::cout << std::right << std::left << setw(11)
                       << symbol_entry.attribute.value_of_constant.int_literal;
             break;
-        case TYPE_REAL:
+        case EnumType::TYPE_REAL:
             std::cout << std::right << std::left << setw(11) << fixed
                       << setprecision(6)
                       << symbol_entry.attribute.value_of_constant.real_literal;
             break;
-        case TYPE_STRING:
+        case EnumType::TYPE_STRING:
             std::cout
                 << std::right << std::left << setw(11)
                 << "\"" +
                        symbol_entry.attribute.value_of_constant.string_literal +
                        "\"";
             break;
-        case TYPE_BOOLEAN:
+        case EnumType::TYPE_BOOLEAN:
             switch (symbol_entry.attribute.value_of_constant.boolean_literal) {
             case Boolean_TRUE:
                 std::cout << std::right << std::left << setw(11) << "true";
@@ -264,8 +264,8 @@ void dumpSymbol_Body(SymbolEntry symbol_entry) {
             break;
         }
         break;
-    case NO_ATTRIBUTE:
-    case UNKNOWN_ATTRIBUTE:
+    case AttributeType::NO_ATTRIBUTE:
+    case AttributeType::UNKNOWN_ATTRIBUTE:
     default:
         break;
     }

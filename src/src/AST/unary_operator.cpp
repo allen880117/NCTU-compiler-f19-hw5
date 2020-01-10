@@ -5,7 +5,7 @@
 #include <string>
 
 UnaryOperatorNode::UnaryOperatorNode(int _line_number, int _col_number,
-                                     enumOperator _op, Node _operand) {
+                                     EnumOperator _op, Node _operand) {
     this->line_number = _line_number;
     this->col_number = _col_number;
     this->op = _op;
@@ -20,10 +20,10 @@ void UnaryOperatorNode::print() {
 
     // cout << operator
     switch (op) {
-    case OP_NOT:
+    case EnumOperator::OP_NOT:
         std::cout << "not";
         break;
-    case OP_MINUS:
+    case EnumOperator::OP_MINUS:
         std::cout << "neg";
         break;
     default:

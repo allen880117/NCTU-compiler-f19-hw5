@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-enum AttributeType {
+enum class AttributeType {
     NO_ATTRIBUTE = 200,
     ATTRIBUTE_PARAMETERS,
     ATTRIBUTE_VALUE_OF_CONSTANT,
@@ -28,7 +28,7 @@ class Attribute {
     void set_value_of_constant(VariableInfo);
 };
 
-enum FieldKind {
+enum class FieldKind {
     KIND_PROGRAM = 100,
     KIND_FUNCTION,
     KIND_PARAMETER,
@@ -72,7 +72,7 @@ class SymbolTable {
     enum EnumNodeTable in_node_type;
     VariableInfo       in_node_return_type;
     vector<SymbolTable *> next_scope_list;
-    int          next_scope_cur_idx;
+    int                next_scope_cur_idx;
 
     // General Info
     unsigned int level;
@@ -86,4 +86,7 @@ class SymbolTable {
     void put(SymbolEntry _symbol_entry);
     bool redeclare_check(string _name);
 
+    void next_scope_cur_idx_increase();
+    SymbolTable* get_next_scope();
+    SymbolTable* get_parent_scope();
 };

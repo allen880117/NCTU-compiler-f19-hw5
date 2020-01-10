@@ -40,54 +40,56 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 73 "parser.y" /* yacc.c:1909  */
- #include "AST/ast.hpp" 
 #line 74 "parser.y" /* yacc.c:1909  */
- #include "AST/program.hpp" 
+ #include "AST/ast.hpp" 
 #line 75 "parser.y" /* yacc.c:1909  */
- #include "AST/declaration.hpp" 
+ #include "AST/program.hpp" 
 #line 76 "parser.y" /* yacc.c:1909  */
- #include "AST/variable.hpp" 
+ #include "AST/declaration.hpp" 
 #line 77 "parser.y" /* yacc.c:1909  */
- #include "AST/constant_value.hpp" 
+ #include "AST/variable.hpp" 
 #line 78 "parser.y" /* yacc.c:1909  */
- #include "AST/function.hpp" 
+ #include "AST/constant_value.hpp" 
 #line 79 "parser.y" /* yacc.c:1909  */
- #include "AST/compound_statement.hpp" 
+ #include "AST/function.hpp" 
 #line 80 "parser.y" /* yacc.c:1909  */
- #include "AST/assignment.hpp" 
+ #include "AST/compound_statement.hpp" 
 #line 81 "parser.y" /* yacc.c:1909  */
- #include "AST/print.hpp" 
+ #include "AST/assignment.hpp" 
 #line 82 "parser.y" /* yacc.c:1909  */
- #include "AST/read.hpp" 
+ #include "AST/print.hpp" 
 #line 83 "parser.y" /* yacc.c:1909  */
- #include "AST/variable_reference.hpp" 
+ #include "AST/read.hpp" 
 #line 84 "parser.y" /* yacc.c:1909  */
- #include "AST/binary_operator.hpp" 
+ #include "AST/variable_reference.hpp" 
 #line 85 "parser.y" /* yacc.c:1909  */
- #include "AST/unary_operator.hpp" 
+ #include "AST/binary_operator.hpp" 
 #line 86 "parser.y" /* yacc.c:1909  */
- #include "AST/if.hpp" 
+ #include "AST/unary_operator.hpp" 
 #line 87 "parser.y" /* yacc.c:1909  */
- #include "AST/while.hpp" 
+ #include "AST/if.hpp" 
 #line 88 "parser.y" /* yacc.c:1909  */
- #include "AST/for.hpp" 
+ #include "AST/while.hpp" 
 #line 89 "parser.y" /* yacc.c:1909  */
- #include "AST/return.hpp" 
+ #include "AST/for.hpp" 
 #line 90 "parser.y" /* yacc.c:1909  */
- #include "AST/function_call.hpp" 
+ #include "AST/return.hpp" 
 #line 91 "parser.y" /* yacc.c:1909  */
- #include "visitor/visitor.hpp" 
+ #include "AST/function_call.hpp" 
 #line 92 "parser.y" /* yacc.c:1909  */
- #include "semantic/SemanticAnalyzer.hpp" 
+ #include "visitor/visitor.hpp" 
 #line 93 "parser.y" /* yacc.c:1909  */
- #include "semantic/SymbolTable.hpp" 
+ #include "semantic/SemanticAnalyzer.hpp" 
 #line 94 "parser.y" /* yacc.c:1909  */
- #include "semantic/ErrorMsg.hpp" 
+ #include "semantic/SymbolTable.hpp" 
 #line 95 "parser.y" /* yacc.c:1909  */
+ #include "semantic/ErrorMsg.hpp" 
+#line 96 "parser.y" /* yacc.c:1909  */
  #include "semantic/DumpSymbolTable.hpp" 
+#line 97 "parser.y" /* yacc.c:1909  */
+ #include "code_generate/CodeGenerator.hpp" 
 
-#line 91 "parser.h" /* yacc.c:1909  */
+#line 93 "parser.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -151,13 +153,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 98 "parser.y" /* yacc.c:1909  */
+#line 100 "parser.y" /* yacc.c:1909  */
 
     int    val;
     double dval;
     char*  text;
 
-    enum enumOperator op_type;
+    enum EnumOperator op_type;
 
     Node      node;
     NodeList* node_list_ptr;
@@ -168,7 +170,7 @@ union YYSTYPE
     vector<struct id_info>* id_list_ptr;
     VariableInfo*           variable_info_ptr;
 
-#line 172 "parser.h" /* yacc.c:1909  */
+#line 174 "parser.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

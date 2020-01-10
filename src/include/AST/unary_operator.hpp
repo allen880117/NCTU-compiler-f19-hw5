@@ -4,11 +4,11 @@
 
 class UnaryOperatorNode : public ASTNodeBase {
   public:
-    enumOperator op;
+    EnumOperator op;
     Node operand; // an expression node
 
   public:
-    UnaryOperatorNode(int _line_number, int _col_number, enumOperator _op,
+    UnaryOperatorNode(int _line_number, int _col_number, EnumOperator _op,
                       Node _operand);
     ~UnaryOperatorNode();
     void accept(ASTVisitorBase &v) { v.visit(this); }

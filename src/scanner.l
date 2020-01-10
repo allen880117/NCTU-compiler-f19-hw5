@@ -47,21 +47,21 @@ float {integer}\.(0|[0-9]*[1-9])
 "]" { TOKEN_CHAR(']'); return R_BRACKET; }
 
     /* Operator */
-"+"   { TOKEN_CHAR('+'); yylval.op_type=OP_PLUS;             return PLUS; }
-"-"   { TOKEN_CHAR('-'); yylval.op_type=OP_MINUS;            return MINUS; }
-"*"   { TOKEN_CHAR('*'); yylval.op_type=OP_MULTIPLY;         return MULTIPLY; }
-"/"   { TOKEN_CHAR('/'); yylval.op_type=OP_DIVIDE;           return DIVIDE; }
-"mod" { TOKEN(mod);      yylval.op_type=OP_MOD;              return MOD; }
-":="  { TOKEN(:=);       yylval.op_type=OP_ASSIGN;           return ASSIGN; }
-"<"   { TOKEN_CHAR('<'); yylval.op_type=OP_LESS;             return LESS; }
-"<="  { TOKEN(<=);       yylval.op_type=OP_LESS_OR_EQUAL;    return LESS_OR_EQUAL; }
-"<>"  { TOKEN(<>);       yylval.op_type=OP_NOT_EQUAL;        return NOT_EQUAL; }
-">="  { TOKEN(>=);       yylval.op_type=OP_GREATER_OR_EQUAL; return GREATER_OR_EQUAL; }
-">"   { TOKEN_CHAR('>'); yylval.op_type=OP_GREATER;          return GREATER; }
-"="   { TOKEN_CHAR('='); yylval.op_type=OP_EQUAL;            return EQUAL; }
-"and" { TOKEN(and);      yylval.op_type=OP_AND;              return AND; }
-"or"  { TOKEN(or);       yylval.op_type=OP_OR;               return OR; }
-"not" { TOKEN(not);      yylval.op_type=OP_NOT;              return NOT; }
+"+"   { TOKEN_CHAR('+'); yylval.op_type=EnumOperator::OP_PLUS;             return PLUS; }
+"-"   { TOKEN_CHAR('-'); yylval.op_type=EnumOperator::OP_MINUS;            return MINUS; }
+"*"   { TOKEN_CHAR('*'); yylval.op_type=EnumOperator::OP_MULTIPLY;         return MULTIPLY; }
+"/"   { TOKEN_CHAR('/'); yylval.op_type=EnumOperator::OP_DIVIDE;           return DIVIDE; }
+"mod" { TOKEN(mod);      yylval.op_type=EnumOperator::OP_MOD;              return MOD; }
+":="  { TOKEN(:=);       yylval.op_type=EnumOperator::OP_ASSIGN;           return ASSIGN; }
+"<"   { TOKEN_CHAR('<'); yylval.op_type=EnumOperator::OP_LESS;             return LESS; }
+"<="  { TOKEN(<=);       yylval.op_type=EnumOperator::OP_LESS_OR_EQUAL;    return LESS_OR_EQUAL; }
+"<>"  { TOKEN(<>);       yylval.op_type=EnumOperator::OP_NOT_EQUAL;        return NOT_EQUAL; }
+">="  { TOKEN(>=);       yylval.op_type=EnumOperator::OP_GREATER_OR_EQUAL; return GREATER_OR_EQUAL; }
+">"   { TOKEN_CHAR('>'); yylval.op_type=EnumOperator::OP_GREATER;          return GREATER; }
+"="   { TOKEN_CHAR('='); yylval.op_type=EnumOperator::OP_EQUAL;            return EQUAL; }
+"and" { TOKEN(and);      yylval.op_type=EnumOperator::OP_AND;              return AND; }
+"or"  { TOKEN(or);       yylval.op_type=EnumOperator::OP_OR;               return OR; }
+"not" { TOKEN(not);      yylval.op_type=EnumOperator::OP_NOT;              return NOT; }
 
     /* Keyword */
 "array"   { TOKEN(KWarray);   return ARRAY; }

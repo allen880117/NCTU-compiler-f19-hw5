@@ -4,12 +4,12 @@
 
 class BinaryOperatorNode : public ASTNodeBase {
   public:
-    enumOperator op;
+    EnumOperator op;
     Node left_operand;  // an expression node
     Node right_operand; // an expression node
 
   public:
-    BinaryOperatorNode(int _line_number, int _col_number, enumOperator _op,
+    BinaryOperatorNode(int _line_number, int _col_number, EnumOperator _op,
                        Node _left_operand, Node _right_operand);
     ~BinaryOperatorNode();
     void accept(ASTVisitorBase &v) { v.visit(this); }

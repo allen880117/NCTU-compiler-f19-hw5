@@ -17,9 +17,13 @@ VISITOR := $(shell find $(VISITORDIR) -name '*.cpp')
 SEMANTICDIR = src/semantic/
 SEMANTIC := $(shell find $(SEMANTICDIR) -name '*.cpp')
 
+CODEGENDIR = src/code_generate/
+CODEGEN := $(shell find $(CODEGENDIR) -name '*.cpp')
+
 SRC := $(AST) \
        $(VISITOR) \
-	   $(SEMANTIC)
+	   $(SEMANTIC) \
+	   $(CODEGEN)
 
 EXEC = $(PARSER)
 OBJS = $(PARSER:=.cpp) \

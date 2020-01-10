@@ -19,17 +19,17 @@ void ConstantValueNode::print() {
 
     // cout << literal_value
     switch (this->constant_value->type) {
-    case TYPE_INTEGER:
+    case EnumType::TYPE_INTEGER:
         std::cout << this->constant_value->int_literal;
         break;
-    case TYPE_REAL:
+    case EnumType::TYPE_REAL:
         std::cout << fixed << setprecision(6)
                   << this->constant_value->real_literal;
         break;
-    case TYPE_STRING:
+    case EnumType::TYPE_STRING:
         std::cout << this->constant_value->string_literal;
         break;
-    case TYPE_BOOLEAN:
+    case EnumType::TYPE_BOOLEAN:
         switch (this->constant_value->boolean_literal) {
         case Boolean_TRUE:
             std::cout << "true";

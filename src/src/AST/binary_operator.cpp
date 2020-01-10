@@ -5,7 +5,7 @@
 #include <string>
 
 BinaryOperatorNode::BinaryOperatorNode(int _line_number, int _col_number,
-                                       enumOperator _op, Node _left_operand,
+                                       EnumOperator _op, Node _left_operand,
                                        Node _right_operand) {
     this->line_number = _line_number;
     this->col_number = _col_number;
@@ -25,44 +25,44 @@ void BinaryOperatorNode::print() {
 
     // cout << operator
     switch (op) {
-    case OP_OR:
+    case EnumOperator::OP_OR:
         std::cout << "or";
         break;
-    case OP_AND:
+    case EnumOperator::OP_AND:
         std::cout << "and";
         break;
-    // case OP_NOT:              std::cout<<"not"; break;
-    case OP_LESS:
+    // case EnumOperator::OP_NOT:              std::cout<<"not"; break;
+    case EnumOperator::OP_LESS:
         std::cout << "<";
         break;
-    case OP_LESS_OR_EQUAL:
+    case EnumOperator::OP_LESS_OR_EQUAL:
         std::cout << "<=";
         break;
-    case OP_EQUAL:
+    case EnumOperator::OP_EQUAL:
         std::cout << "=";
         break;
-    case OP_GREATER:
+    case EnumOperator::OP_GREATER:
         std::cout << ">";
         break;
-    case OP_GREATER_OR_EQUAL:
+    case EnumOperator::OP_GREATER_OR_EQUAL:
         std::cout << ">=";
         break;
-    case OP_NOT_EQUAL:
+    case EnumOperator::OP_NOT_EQUAL:
         std::cout << "<>";
         break;
-    case OP_PLUS:
+    case EnumOperator::OP_PLUS:
         std::cout << "+";
         break;
-    case OP_MINUS:
+    case EnumOperator::OP_MINUS:
         std::cout << "-";
         break;
-    case OP_MULTIPLY:
+    case EnumOperator::OP_MULTIPLY:
         std::cout << "*";
         break;
-    case OP_DIVIDE:
+    case EnumOperator::OP_DIVIDE:
         std::cout << "/";
         break;
-    case OP_MOD:
+    case EnumOperator::OP_MOD:
         std::cout << "mod";
         break;
     default:
