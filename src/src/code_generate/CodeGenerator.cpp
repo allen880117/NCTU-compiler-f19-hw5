@@ -68,14 +68,12 @@ void CodeGenerator::visit(VariableNode *m) {
     if(this->current_scope->level == 0) {
         // Global Scope
         if(m->constant_value_node == nullptr) { // Not Constant
-            EMITSN(";_GLOBAL_VARIABLE_");
             EMITSN(".bss");
             EMITSN(string(m->variable_name+":").c_str());
             EMITSN("  .word 0");
             EMITSN("");
         } else {
-            EMITSN(";_GLOBAL_CONSTANT_");
-            EMITSN(".bss");
+            EMITSN(".text");
             EMITSN(string(m->variable_name+":").c_str());
             EMITS("  .word ");
             EMITDN(m->type->int_literal);
@@ -93,8 +91,6 @@ void CodeGenerator::visit(VariableNode *m) {
             this->get_table_entry(m->variable_name)
                 ->set_address_offset(this->s0_offset);
             
-            EMITSN("  ;_LOCAL_CONSTANT_");
-            
             EMITS("  li  t0, ");
             EMITDN(m->type->int_literal);
             EMITS("  sw  t0, ");
@@ -106,8 +102,8 @@ void CodeGenerator::visit(VariableNode *m) {
 }
 
 void CodeGenerator::visit(ConstantValueNode *m) { // EXPRESSION
-    EMITS_2("  li  ", this->get_target_reg().c_str(), to_string(m->constant_value->int_literal).c_str());
-    EMITSN("  ;_constant_value");
+    EMITSN_2("  li  ", "t0", to_string(m->constant_value->int_literal).c_str());
+    STACK_PUSH_32("t0");
     EMITSN("");
 }
 
@@ -135,8 +131,7 @@ void CodeGenerator::visit(FunctionNode *m) {
                         
                         string source = string("a")+to_string(i);
                         string target = to_string(entry->address_offset)+string("(s0)");
-                        EMITS_2("  sw  ", source.c_str(), target.c_str());
-                        EMITSN("  ;PARAM");
+                        EMITSN_2("  sw  ", source.c_str(), target.c_str());
                     }
                 } else {
                     for (uint i = 0; i < 8; i++) {
@@ -209,50 +204,57 @@ void CodeGenerator::visit(AssignmentNode *m) { // STATEMENT
     // Visit Child Node
     this->push_src_node(EnumNodeTable::ASSIGNMENT_NODE);
         // First, Compute RHS Value
-        this->push_target_reg(1);
         if (m->expression_node != nullptr)
             m->expression_node->accept(*this);
-        this->pop_target_reg();
 
         // Second, Get LHS Address
-        this->push_target_reg(0);
         if (m->variable_reference_node != nullptr)
             m->variable_reference_node->accept(*this);
-        this->pop_target_reg();
     this->pop_src_node();
 
+    STACK_TOP("t0");
+    STACK_POP_32;
+
+    STACK_TOP("t1");
+    STACK_POP_32;
+
     EMITS_2("  sw  ", "t1", "0(t0)");
-    EMITSN("  ;_assignment");
+    EMITSN("");
     EMITSN("");
 }
 
 void CodeGenerator::visit(PrintNode *m) { // STATEMENT
     // Visit Child Node
     this->push_src_node(EnumNodeTable::PRINT_NODE);
-        this->push_target_reg(0);
         if (m->expression_node != nullptr)
             m->expression_node->accept(*this);
-        this->pop_target_reg();
     this->pop_src_node();
 
-    EMITSN("  mv   a0, t0    ; copy value from 't0' to 'a0'");
-    EMITSN("  jal  ra, print ; call function 'print'");
+    STACK_TOP("t0");
+    STACK_POP_32;
+
+    EMITSN("  mv   a0, t0   ");
+    EMITSN("  jal  ra, print");
     EMITSN("");
 }
 
 void CodeGenerator::visit(ReadNode *m) { // STATEMENT
     // Visit Child Node
     this->push_src_node(EnumNodeTable::READ_NODE);
-        this->push_target_reg(0);
+    
+        EMITSN("  jal  ra, read");
+
         if (m->variable_reference_node != nullptr)
             m->variable_reference_node->accept(*this);
-        this->pop_target_reg();
+
+        STACK_TOP("t0");
+        STACK_POP_32;
+
+        EMITSN("  sw   a0, 0(t0)");
+
     this->pop_src_node();
 
-    EMITSN("  jal  ra, read  ; call function 'read'");
-    EMITSN("  sw   a0, 0(t0) ; save the return value to 'a'");
     EMITSN("");
-
 }
 
 void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
@@ -263,30 +265,30 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
     this->pop_src_node();
 
     SymbolEntry* entry = this->get_table_entry(m->variable_name);
-    EMITS("  ;_VARIABLE_REFERENCE_: ");
-    EMITS(m->variable_name.c_str());
-
     if(this->src_node.top() == EnumNodeTable::READ_NODE ||
        this->src_node.top() == EnumNodeTable::ASSIGNMENT_NODE ){
         // GIVE THE ADDRESS OF THE VARIABLE
-        EMITSN("  ;_give_addr");
         if(entry->level == 0){
-            string address = string("0(") + this->get_target_reg() + string(")");
-            EMITSN_2("  la  ", this->get_target_reg().c_str(), m->variable_name.c_str());
+            EMITSN_2("  la  ", "t0", m->variable_name.c_str());
+            STACK_PUSH_32("t0");
+
         } else {
             string offset = to_string(entry->address_offset);
-            EMITSN_3("  addi", this->get_target_reg().c_str(), "s0", offset.c_str());
+            EMITSN_3("  addi", "t0", "s0", offset.c_str());
+            STACK_PUSH_32("t0");
+        
         }
     }
     else {
-        EMITSN("");
         if(entry->level == 0){
-            string address = string("0(") + this->get_target_reg() + string(")");
-            EMITSN_2("  la  ", this->get_target_reg().c_str(), m->variable_name.c_str());
-            EMITSN_2("  lw  ", this->get_target_reg().c_str(), address.c_str());
+            EMITSN_2("  la  ", "t1", m->variable_name.c_str());
+            EMITSN_2("  lw  ", "t0", "0(t1)");
+            STACK_PUSH_32("t0");
+
         } else { 
             string address = to_string(entry->address_offset) + string("(s0)");
-            EMITSN_2("  lw  ", this->get_target_reg().c_str(), address.c_str());
+            EMITSN_2("  lw  ", "t0", address.c_str());
+            STACK_PUSH_32("t0");
         }
     }
 
@@ -297,19 +299,18 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
 void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
     // Visit Child Node
     this->push_src_node(EnumNodeTable::BINARY_OPERATOR_NODE);
-        this->push_target_reg(1);
         if (m->left_operand != nullptr)
             m->left_operand->accept(*this);
-        this->pop_target_reg();
         
-        this->push_target_reg(0);
         if (m->right_operand != nullptr)
             m->right_operand->accept(*this);
-        this->pop_target_reg();
     this->pop_src_node();
 
-    EMITSN_2("  mv  ", "t3", "t1");
-    EMITSN_2("  mv  ", "t2", "t0");
+    STACK_TOP("t0"); // RHS
+    STACK_POP_32;
+
+    STACK_TOP("t1"); // LHS
+    STACK_POP_32;
 
     if(this->is_specify_label == true){
         switch(m->op){
@@ -318,73 +319,79 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
             // Since Branch invokes when the result is FALSE
 
             case EnumOperator::OP_LESS: { // need >=
-                EMITS_3("  bge ", "t3", "t2", this->get_specify_label().c_str());
+                EMITSN_3("  bge ", "t1", "t0", this->get_specify_label().c_str());
             } break;
             case EnumOperator::OP_LESS_OR_EQUAL: { // need >
-                EMITS_3("  bgt ", "t3", "t2", this->get_specify_label().c_str());
+                EMITSN_3("  bgt ", "t1", "t0", this->get_specify_label().c_str());
             } break;
             case EnumOperator::OP_EQUAL: { // need !=
-                EMITS_3("  bne ", "t3", "t2", this->get_specify_label().c_str());
+                EMITSN_3("  bne ", "t1", "t0", this->get_specify_label().c_str());
             } break;
             case EnumOperator::OP_GREATER: { // need <=
-                EMITS_3("  ble ", "t3", "t2", this->get_specify_label().c_str());
+                EMITSN_3("  ble ", "t1", "t0", this->get_specify_label().c_str());
             } break;
             case EnumOperator::OP_GREATER_OR_EQUAL: { // need <
-                EMITS_3("  blt ", "t3", "t2", this->get_specify_label().c_str());
+                EMITSN_3("  blt ", "t1", "t0", this->get_specify_label().c_str());
             } break;
             case EnumOperator::OP_NOT_EQUAL: { // need ==
-                EMITS_3("  beq ", "t3", "t2", this->get_specify_label().c_str());
+                EMITSN_3("  beq ", "t1", "t0", this->get_specify_label().c_str());
             } break;
             default: break;
+
         }
     } else {
         switch(m->op){
             case EnumOperator::OP_PLUS: {
-                EMITS_3("  addw", this->get_target_reg().c_str(), "t3", "t2");            
+                EMITSN_3("  addw", "t2", "t1", "t0");        
+                STACK_PUSH_32("t2");            
             } break;
             case EnumOperator::OP_MINUS: {
-                EMITS_3("  subw", this->get_target_reg().c_str(), "t3", "t2");            
+                EMITSN_3("  subw", "t2", "t1", "t0");   
+                STACK_PUSH_32("t2");            
             } break;
             case EnumOperator::OP_MULTIPLY: {
-                EMITS_3("  mulw", this->get_target_reg().c_str(), "t3", "t2");            
+                EMITSN_3("  mulw", "t2", "t1", "t0");  
+                STACK_PUSH_32("t2");            
             } break;
             case EnumOperator::OP_DIVIDE: {
-                EMITS_3("  divw", this->get_target_reg().c_str(), "t3", "t2");            
+                EMITSN_3("  divw", "t2", "t1", "t0");    
+                STACK_PUSH_32("t2");            
             } break;
             case EnumOperator::OP_MOD: {
-                EMITS_3("  remw", this->get_target_reg().c_str(), "t3", "t2");            
+                EMITSN_3("  remw", "t2", "t1", "t0"); 
+                STACK_PUSH_32("t2");            
             } break;
             default: break;
         }
     }
 
-    EMITSN("  ;_BINARY_OP");
+    EMITSN("");
     EMITSN("");
 }
 
 void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
     // Visit Child Node
     this->push_src_node(EnumNodeTable::UNARY_OPERATOR_NODE);
-        this->push_target_reg(0);
         if (m->operand != nullptr)
             m->operand->accept(*this);
-        this->pop_target_reg();
     this->pop_src_node();
 
-    EMITSN_2("  mv  ", "t2", "t0");
+    STACK_TOP("t0");
+    STACK_POP_32;
 
     if(this->is_specify_label == true){
         ;
     } else {
         switch(m->op){
             case EnumOperator::OP_MINUS: {
-                EMITS_3("  subw", this->get_target_reg().c_str(), "zero", "t2");            
+                EMITSN_3("  subw", "t1", "zero", "t0");
+                STACK_PUSH_32("t1");            
             } break;
             default: break;
         }
     }
     
-    EMITSN("  ;_UNARY_OP");
+    EMITSN("");
     EMITSN("");
 }
 
@@ -489,11 +496,12 @@ void CodeGenerator::visit(ForNode *m) { // STATEMENT
 void CodeGenerator::visit(ReturnNode *m) { // STATEMENT
     // Visit Child Node
     this->push_src_node(EnumNodeTable::RETURN_NODE);
-        this->push_target_reg(0);
         if (m->return_value != nullptr)
             m->return_value->accept(*this);
-        this->pop_target_reg();
     this->pop_src_node();
+
+    STACK_TOP("t0");
+    STACK_POP_32;
 
     EMITS("  mv   a0, t0");
     EMITSN("  ;_return_");
@@ -508,9 +516,11 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
         if (m->arguments != nullptr){
             if(m->arguments->size()<=8){
                 for (uint i = 0; i < m->arguments->size(); i++){
-                    this->push_target_reg(0);
-                        (*(m->arguments))[i]->accept(*this);
-                    this->pop_target_reg();
+
+                    (*(m->arguments))[i]->accept(*this);
+
+                    STACK_TOP("t0");
+                    STACK_POP_32;   
 
                     string target = string("a")+to_string(i);
                     EMITSN_2("  mv  ", target.c_str(), "t0");
@@ -519,9 +529,11 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
             } else {
                 
                 for (uint i = 0; i < 8; i++){
-                    this->push_target_reg(0);
-                        (*(m->arguments))[i]->accept(*this);
-                    this->pop_target_reg();
+
+                    (*(m->arguments))[i]->accept(*this);
+
+                    STACK_TOP("t0");
+                    STACK_POP_32;  
 
                     string target = string("a")+to_string(i);
                     EMITSN_2("  mv  ", target.c_str(), "t0");
@@ -531,9 +543,11 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
                 EMITSN_3("  addi", "sp", "sp", to_string(-over_size).c_str());
 
                 for (uint i = 8; i < m->arguments->size(); i++){
-                    this->push_target_reg(0);
-                        (*(m->arguments))[i]->accept(*this);
-                    this->pop_target_reg();
+
+                    (*(m->arguments))[i]->accept(*this);
+
+                    STACK_TOP("t0");
+                    STACK_POP_32;
 
                     int offset = -4*(i-8+1);
                     string target = to_string(offset)+string("(sp)");
@@ -542,9 +556,13 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
                 }
             }
         }
-            
+        
         EMITSN_2("  jal ", "ra", m->function_name.c_str());
-        EMITSN_2("  mv  ", this->get_target_reg().c_str(), "a0");
+
+        if(over_size > 0) 
+            EMITSN_3("  addi", "sp", "sp", to_string(over_size).c_str());
+
+        STACK_PUSH_32("a0");
 
     this->pop_src_node();
 }

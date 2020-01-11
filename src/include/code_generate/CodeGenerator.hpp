@@ -42,6 +42,16 @@ using namespace std;
 #define INSERT_LABEL(val) \
   fprintf(this->out_fp, "L%d\n",(val));
 
+#define STACK_POP_32 \
+  EMITSN_3("  addi", "sp", "sp", "4")
+
+#define STACK_PUSH_32(val) \
+  EMITSN_3("  addi", "sp", "sp", "-4") \
+  EMITSN_2("  sw  ", (val), "0(sp)")   \
+
+#define STACK_TOP(target) \
+  EMITSN_2("  lw  ", (target), "0(sp)") \
+
 class CodeGenerator : public ASTVisitorBase {
   public:
     void visit(ProgramNode *m) override;
@@ -91,11 +101,6 @@ class CodeGenerator : public ASTVisitorBase {
     stack<EnumNodeTable> src_node;
     void push_src_node(EnumNodeTable);
     void pop_src_node();
-
-    stack<int> target_reg;
-    void push_target_reg(int);
-    void pop_target_reg();
-    string get_target_reg();
 
     // ADDRESS OFFSET
     int  s0_offset = 0;

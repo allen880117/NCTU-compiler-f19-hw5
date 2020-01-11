@@ -76,18 +76,6 @@ void CodeGenerator::pop_src_node() {
     this->src_node.pop(); 
 }
 
-void CodeGenerator::push_target_reg(int _reg_num){
-    this->target_reg.push(_reg_num);
-}
-
-void CodeGenerator::pop_target_reg(){
-    this->target_reg.pop();
-}
-
-string CodeGenerator::get_target_reg(){
-    return string("t")+to_string(this->target_reg.top());
-}
-
 void CodeGenerator::offset_down_64bit(){
     this->s0_offset-=8;
 }
