@@ -37,6 +37,7 @@ class CodeGenerator : public ASTVisitorBase {
   private:
     // FILE INFO
     FILE*        out_fp;
+    string       in_file_name;
     string       out_file_name;
     
     // SEMANTIC INFO
@@ -53,4 +54,9 @@ class CodeGenerator : public ASTVisitorBase {
     stack<EnumNodeTable> src_node;
     void push_src_node(EnumNodeTable);
     void pop_src_node();
+
+    // COMMON ASSEMBLY CODE
+    void function_header(string);
+    void stacking();
+    void unstacking(string);
 };

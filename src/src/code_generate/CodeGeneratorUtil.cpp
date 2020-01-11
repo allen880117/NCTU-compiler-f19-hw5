@@ -10,6 +10,7 @@ CodeGenerator::CodeGenerator(string _filename, string _dirpath, SymbolTable* _ta
             break;
         }
     }
+    this->in_file_name = _filename+".p";
     this->out_file_name = _dirpath+"/"+_filename+".s";
 
     // SEMANTIC INFO
@@ -20,6 +21,10 @@ CodeGenerator::CodeGenerator(string _filename, string _dirpath, SymbolTable* _ta
 
 void CodeGenerator::out_file_create(){
     this->out_fp = fopen(this->out_file_name.c_str(), "w");
+    fprintf(this->out_fp,"%s%s%s\n", 
+        "   .file \"", this->in_file_name.c_str(), "\"" );
+    fprintf(this->out_fp,"%s\n",
+        "   .option nopic" );
 }
 
 void CodeGenerator::out_file_save(){
@@ -48,4 +53,36 @@ void CodeGenerator::push_src_node(EnumNodeTable _node) {
 
 void CodeGenerator::pop_src_node() { 
     this->src_node.pop(); 
+}
+
+void CodeGenerator::function_header(string _label_name) {
+    fprintf(this->out_fp,"%s%s%s%s%s%s%s\n",
+        ".text\n"
+        "   .align 2\n"
+        "   .global ",_label_name.c_str(),"\n"
+        "   .type ",_label_name.c_str(),", @function\n" 
+        "\n",
+        _label_name.c_str(),":"
+    );
+}
+
+void CodeGenerator::stacking() {
+    fprintf(this->out_fp, "%s\n",
+        "   addi sp, sp, -64\n"
+        "   sd ra, 56(sp)   \n"
+        "   sd s0, 48(sp)   \n"
+        "   addi s0, sp, 64 \n"
+    );
+}
+
+void CodeGenerator::unstacking(string _lable_name) {
+    fprintf(this->out_fp, "%s\n",
+        "   ld ra, 56(sp)  \n"      
+        "   ld s0, 48(sp)  \n"          
+        "   addi sp, sp, 64\n"    
+        "   jr ra          \n"              
+    );
+    fprintf(this->out_fp, "%s%s%s%s%s\n",
+        "   .size ",_lable_name.c_str(),", .-",_lable_name.c_str(),"\n"
+    );
 }

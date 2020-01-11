@@ -29,18 +29,25 @@ void CodeGenerator::visit(ProgramNode *m) {
 
     // Visit Child Nodes
     this->push_src_node(EnumNodeTable::PROGRAM_NODE);
-    if (m->declaration_node_list != nullptr)
-        for (uint i = 0; i < m->declaration_node_list->size(); i++) {
-            (*(m->declaration_node_list))[i]->accept(*this);
-        }
 
-    if (m->function_node_list != nullptr)
-        for (uint i = 0; i < m->function_node_list->size(); i++) {
-            (*(m->function_node_list))[i]->accept(*this);
-        }
+        if (m->declaration_node_list != nullptr)
+            for (uint i = 0; i < m->declaration_node_list->size(); i++) {
+                (*(m->declaration_node_list))[i]->accept(*this);
+            }
 
-    if (m->compound_statement_node != nullptr)
-        m->compound_statement_node->accept(*this);
+        if (m->function_node_list != nullptr)
+            for (uint i = 0; i < m->function_node_list->size(); i++) {
+                (*(m->function_node_list))[i]->accept(*this);
+            }
+
+        this->function_header(string("main"));
+        this->stacking();
+
+        if (m->compound_statement_node != nullptr)
+            m->compound_statement_node->accept(*this);
+
+        this->unstacking(string("main"));
+
     this->pop_src_node();
 
     // Pop Scope
