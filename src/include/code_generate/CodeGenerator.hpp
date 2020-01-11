@@ -17,10 +17,10 @@ using namespace std;
   fprintf(this->out_fp, "%s %s\n",(instr),(val1));
 
 #define EMITS_1(instr, val1) \
-  fprintf(this->out_fp, "%s %s",(instr),(val1));
+  fprintf(this->out_fp, "%s %s",(instr),(val1)); \
 
 #define EMITSN_2(instr, val1, val2) \
-  fprintf(this->out_fp, "%s %s, %s\n",(instr),(val1),(val2));
+  fprintf(this->out_fp, "%s %s, %s\n",(instr),(val1),(val2)); \
 
 #define EMITS_2(instr, val1, val2) \
   fprintf(this->out_fp, "%s %s, %s",(instr),(val1),(val2));
