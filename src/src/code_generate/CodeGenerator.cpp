@@ -151,7 +151,7 @@ void CodeGenerator::visit(FunctionNode *m) {
                         SymbolEntry* entry = 
                             &(this->current_scope->entry[entry_name]);
                         
-                        string source = to_string(over_size)+string("(s0)");
+                        string source = to_string(over_size-4)+string("(s0)");
                         string target = to_string(entry->address_offset)+string("(s0)");
                         EMITSN_2("  lw  ", "t1", source.c_str());
                         EMITSN_2("  sw  ", "t1", target.c_str());
@@ -548,7 +548,7 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
                     STACK_TOP("t0");
                     STACK_POP_32;
 
-                    int offset = -4*(i-8+1);
+                    int offset = over_size-4*(i-8+1);
                     string target = to_string(offset)+string("(sp)");
 
                     EMITSN_2("  sw  ", "t0", target.c_str());
