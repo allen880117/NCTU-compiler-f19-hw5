@@ -139,9 +139,6 @@ dot:
   addi sp, sp, -4
   sw   t0, 0(sp)
 
-  lw   t0, 0(sp)
-  addi sp, sp, 4
-  mv   a0, t0
   lw   t0, -24(s0)
   addi sp, sp, -4
   sw   t0, 0(sp)
@@ -149,19 +146,17 @@ dot:
   lw   t0, 0(sp)
   addi sp, sp, 4
   mv   a1, t0
-  jal  ra, product
-  addi sp, sp, -4
-  sw   a0, 0(sp)
   lw   t0, 0(sp)
   addi sp, sp, 4
   mv   a0, t0
+  jal  ra, product
+  addi sp, sp, -4
+  sw   a0, 0(sp)
+
   lw   t0, -28(s0)
   addi sp, sp, -4
   sw   t0, 0(sp)
 
-  lw   t0, 0(sp)
-  addi sp, sp, 4
-  mv   a0, t0
   lw   t0, -32(s0)
   addi sp, sp, -4
   sw   t0, 0(sp)
@@ -169,15 +164,23 @@ dot:
   lw   t0, 0(sp)
   addi sp, sp, 4
   mv   a1, t0
+  lw   t0, 0(sp)
+  addi sp, sp, 4
+  mv   a0, t0
   jal  ra, product
   addi sp, sp, -4
   sw   a0, 0(sp)
+
   lw   t0, 0(sp)
   addi sp, sp, 4
   mv   a1, t0
+  lw   t0, 0(sp)
+  addi sp, sp, 4
+  mv   a0, t0
   jal  ra, sum
   addi sp, sp, -4
   sw   a0, 0(sp)
+
   addi t0, s0, -36
   addi sp, sp, -4
   sw   t0, 0(sp)
@@ -250,9 +253,6 @@ main:
   addi sp, sp, -4
   sw   t0, 0(sp)
 
-  lw   t0, 0(sp)
-  addi sp, sp, 4
-  mv   a0, t0
   la   t1, gc
   lw   t0, 0(t1)
   addi sp, sp, -4
@@ -261,9 +261,13 @@ main:
   lw   t0, 0(sp)
   addi sp, sp, 4
   mv   a1, t0
+  lw   t0, 0(sp)
+  addi sp, sp, 4
+  mv   a0, t0
   jal  ra, product
   addi sp, sp, -4
   sw   a0, 0(sp)
+
   la   t0, gv
   addi sp, sp, -4
   sw   t0, 0(sp)
@@ -283,9 +287,6 @@ main:
   addi sp, sp, -4
   sw   t0, 0(sp)
 
-  lw   t0, 0(sp)
-  addi sp, sp, 4
-  mv   a0, t0
   lw   t0, -24(s0)
   addi sp, sp, -4
   sw   t0, 0(sp)
@@ -293,9 +294,13 @@ main:
   lw   t0, 0(sp)
   addi sp, sp, 4
   mv   a1, t0
+  lw   t0, 0(sp)
+  addi sp, sp, 4
+  mv   a0, t0
   jal  ra, product
   addi sp, sp, -4
   sw   a0, 0(sp)
+
   lw   t0, 0(sp)
   addi sp, sp, 4
   lw   t1, 0(sp)
@@ -339,24 +344,15 @@ main:
   addi sp, sp, -4
   sw   t0, 0(sp)
 
-  lw   t0, 0(sp)
-  addi sp, sp, 4
-  mv   a0, t0
   la   t1, gc
   lw   t0, 0(t1)
   addi sp, sp, -4
   sw   t0, 0(sp)
 
-  lw   t0, 0(sp)
-  addi sp, sp, 4
-  mv   a1, t0
   lw   t0, -20(s0)
   addi sp, sp, -4
   sw   t0, 0(sp)
 
-  lw   t0, 0(sp)
-  addi sp, sp, 4
-  mv   a2, t0
   lw   t0, -24(s0)
   addi sp, sp, -4
   sw   t0, 0(sp)
@@ -364,9 +360,19 @@ main:
   lw   t0, 0(sp)
   addi sp, sp, 4
   mv   a3, t0
+  lw   t0, 0(sp)
+  addi sp, sp, 4
+  mv   a2, t0
+  lw   t0, 0(sp)
+  addi sp, sp, 4
+  mv   a1, t0
+  lw   t0, 0(sp)
+  addi sp, sp, 4
+  mv   a0, t0
   jal  ra, dot
   addi sp, sp, -4
   sw   a0, 0(sp)
+
   la   t0, gv
   addi sp, sp, -4
   sw   t0, 0(sp)

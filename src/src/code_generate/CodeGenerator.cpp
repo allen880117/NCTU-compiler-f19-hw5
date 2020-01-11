@@ -515,9 +515,10 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
         if (m->arguments != nullptr){
             if(m->arguments->size()<=8){
                 for (uint i = 0; i < m->arguments->size(); i++){
-
                     (*(m->arguments))[i]->accept(*this);
+                }
 
+                for (int i=m->arguments->size()-1; i>=0; i--){
                     STACK_TOP("t0");
                     STACK_POP_32;   
 
@@ -528,11 +529,12 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
             } else {
                 
                 for (uint i = 0; i < 8; i++){
-
                     (*(m->arguments))[i]->accept(*this);
+                }
 
+                for (int i=8-1; i>=0; i--){
                     STACK_TOP("t0");
-                    STACK_POP_32;  
+                    STACK_POP_32;   
 
                     string target = string("a")+to_string(i);
                     EMITSN_2("  mv  ", target.c_str(), "t0");
@@ -542,13 +544,14 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
                 EMITSN_3("  addi", "sp", "sp", to_string(-over_size).c_str());
 
                 for (uint i = 8; i < m->arguments->size(); i++){
-
                     (*(m->arguments))[i]->accept(*this);
+                }
 
+                for (int i = 8; i< m->arguments->size(); i++){
                     STACK_TOP("t0");
                     STACK_POP_32;
 
-                    int offset = over_size-4*(i-8+1);
+                    int offset = 4*(i-8);
                     string target = to_string(offset)+string("(sp)");
 
                     EMITSN_2("  sw  ", "t0", target.c_str());
@@ -562,6 +565,8 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
             EMITSN_3("  addi", "sp", "sp", to_string(over_size).c_str());
 
         STACK_PUSH_32("a0");
+
+        EMITSN("");
 
     this->pop_src_node();
 }
