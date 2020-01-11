@@ -26,10 +26,6 @@ CodeGenerator::CodeGenerator(string _filename, string _dirpath, SymbolTable* _ta
 void CodeGenerator::out_file_create(){
     this->out_fp = fopen(this->out_file_name.c_str(), "w");
     
-    SEPERATE; 
-    EMITSN("  ;_HEADER_PART_");
-    SEPERATE; 
-    
     fprintf(this->out_fp,"%s%s%s\n", 
         "  .file   \"", this->in_file_name.c_str(), "\"" );
     fprintf(this->out_fp,"%s\n",
@@ -106,9 +102,6 @@ void CodeGenerator::offset_up_32bit(){
 }
 
 void CodeGenerator::function_header(string _label_name) {
-    SEPERATE;
-    EMITSN("  ;_MAIN_/_FUNCTION_");
-    SEPERATE; 
 
     fprintf(this->out_fp,"%s%s%s%s%s%s%s\n",
         ".text\n"
@@ -128,11 +121,10 @@ void CodeGenerator::stacking() {
     this->offset_down_64bit();
 
     EMITSN("");
-    EMITSN("  ;_STACKING_");
     fprintf(this->out_fp, "%s\n",
         "  addi sp, sp, -64\n"
-        "  sd   ra, 56(sp) ; ra is 8bytes(64bits)\n"
-        "  sd   s0, 48(sp) ; s0 is 8bytes(64bits)\n"
+        "  sd   ra, 56(sp)\n"
+        "  sd   s0, 48(sp)\n"
         "  addi s0, sp, 64 "
     );
     EMITSN("");
@@ -141,10 +133,9 @@ void CodeGenerator::stacking() {
 void CodeGenerator::unstacking(string _lable_name) {
 
     EMITSN("");
-    EMITSN("  ;_UNSTACKING_");
     fprintf(this->out_fp, "%s\n",
-        "  ld   ra, 56(sp) ; ra is 8bytes(64bits)\n"      
-        "  ld   s0, 48(sp) ; s0 is 8bytes(64bits)\n"          
+        "  ld   ra, 56(sp)\n"      
+        "  ld   s0, 48(sp)\n"          
         "  addi sp, sp, 64\n"    
         "  jr   ra        "              
     );

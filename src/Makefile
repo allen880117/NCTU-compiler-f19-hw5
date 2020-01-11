@@ -25,7 +25,7 @@ SRC := $(AST) \
 	   $(SEMANTIC) \
 	   $(CODEGEN)
 
-EXEC = $(PARSER)
+EXEC = compiler
 OBJS = $(PARSER:=.cpp) \
        $(SCANNER:=.cpp) \
        $(SRC)

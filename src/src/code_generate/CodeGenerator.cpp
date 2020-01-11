@@ -68,13 +68,11 @@ void CodeGenerator::visit(VariableNode *m) {
     if(this->current_scope->level == 0) {
         // Global Scope
         if(m->constant_value_node == nullptr) { // Not Constant
-            EMITSN(";_GLOBAL_VARIABLE_");
             EMITSN(".bss");
             EMITSN(string(m->variable_name+":").c_str());
             EMITSN("  .word 0");
             EMITSN("");
         } else {
-            EMITSN(";_GLOBAL_CONSTANT_");
             EMITSN(".bss");
             EMITSN(string(m->variable_name+":").c_str());
             EMITS("  .word ");
@@ -93,8 +91,6 @@ void CodeGenerator::visit(VariableNode *m) {
             this->get_table_entry(m->variable_name)
                 ->set_address_offset(this->s0_offset);
             
-            EMITSN("  ;_LOCAL_CONSTANT_");
-            
             EMITS("  li  t0, ");
             EMITDN(m->type->int_literal);
             EMITS("  sw  t0, ");
@@ -106,8 +102,7 @@ void CodeGenerator::visit(VariableNode *m) {
 }
 
 void CodeGenerator::visit(ConstantValueNode *m) { // EXPRESSION
-    EMITS_2("  li  ", this->get_target_reg().c_str(), to_string(m->constant_value->int_literal).c_str());
-    EMITSN("  ;_constant_value");
+    EMITSN_2("  li  ", this->get_target_reg().c_str(), to_string(m->constant_value->int_literal).c_str());
     EMITSN("");
 }
 
@@ -135,8 +130,7 @@ void CodeGenerator::visit(FunctionNode *m) {
                         
                         string source = string("a")+to_string(i);
                         string target = to_string(entry->address_offset)+string("(s0)");
-                        EMITS_2("  sw  ", source.c_str(), target.c_str());
-                        EMITSN("  ;PARAM");
+                        EMITSN_2("  sw  ", source.c_str(), target.c_str());
                     }
                 } else {
                     for (uint i = 0; i < 8; i++) {
@@ -221,8 +215,7 @@ void CodeGenerator::visit(AssignmentNode *m) { // STATEMENT
         this->pop_target_reg();
     this->pop_src_node();
 
-    EMITS_2("  sw  ", "t1", "0(t0)");
-    EMITSN("  ;_assignment");
+    EMITSN_2("  sw  ", "t1", "0(t0)");
     EMITSN("");
 }
 
@@ -235,8 +228,8 @@ void CodeGenerator::visit(PrintNode *m) { // STATEMENT
         this->pop_target_reg();
     this->pop_src_node();
 
-    EMITSN("  mv   a0, t0    ; copy value from 't0' to 'a0'");
-    EMITSN("  jal  ra, print ; call function 'print'");
+    EMITSN("  mv   a0, t0");
+    EMITSN("  jal  ra, print");
     EMITSN("");
 }
 
@@ -249,8 +242,8 @@ void CodeGenerator::visit(ReadNode *m) { // STATEMENT
         this->pop_target_reg();
     this->pop_src_node();
 
-    EMITSN("  jal  ra, read  ; call function 'read'");
-    EMITSN("  sw   a0, 0(t0) ; save the return value to 'a'");
+    EMITSN("  jal  ra, read");
+    EMITSN("  sw   a0, 0(t0)");
     EMITSN("");
 
 }
@@ -263,13 +256,10 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
     this->pop_src_node();
 
     SymbolEntry* entry = this->get_table_entry(m->variable_name);
-    EMITS("  ;_VARIABLE_REFERENCE_: ");
-    EMITS(m->variable_name.c_str());
 
     if(this->src_node.top() == EnumNodeTable::READ_NODE ||
        this->src_node.top() == EnumNodeTable::ASSIGNMENT_NODE ){
         // GIVE THE ADDRESS OF THE VARIABLE
-        EMITSN("  ;_give_addr");
         if(entry->level == 0){
             string address = string("0(") + this->get_target_reg() + string(")");
             EMITSN_2("  la  ", this->get_target_reg().c_str(), m->variable_name.c_str());
@@ -279,7 +269,6 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
         }
     }
     else {
-        EMITSN("");
         if(entry->level == 0){
             string address = string("0(") + this->get_target_reg() + string(")");
             EMITSN_2("  la  ", this->get_target_reg().c_str(), m->variable_name.c_str());
@@ -355,7 +344,7 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
         }
     }
 
-    EMITSN("  ;_BINARY_OP");
+    EMITSN("");
     EMITSN("");
 }
 
@@ -379,7 +368,7 @@ void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
         }
     }
     
-    EMITSN("  ;_UNARY_OP");
+    EMITSN("");
     EMITSN("");
 }
 
@@ -490,8 +479,8 @@ void CodeGenerator::visit(ReturnNode *m) { // STATEMENT
         this->pop_target_reg();
     this->pop_src_node();
 
-    EMITS("  mv   a0, t0");
-    EMITSN("  ;_return_");
+    EMITSN("  mv   a0, t0");
+    EMITSN("");
 }
 
 void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
