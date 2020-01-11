@@ -56,6 +56,8 @@ class SymbolEntry {
     class VariableNode *variable_node;
     class FunctionNode *function_node;
 
+    int  address_offset;
+
   public:
     SymbolEntry();
     SymbolEntry(string _name, FieldKind _kind, unsigned int _level,
@@ -63,6 +65,8 @@ class SymbolEntry {
                 enum EnumNodeTable _node_type, class ProgramNode *_program_node,
                 class VariableNode *_variable_node,
                 class FunctionNode *_function_node);
+    
+    void set_address_offset(int);
 };
 
 class SymbolTable {

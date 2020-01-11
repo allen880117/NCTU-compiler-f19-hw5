@@ -8,6 +8,11 @@
 #include <vector>
 using namespace std;
 
+#define EMITS(val) fprintf(this->out_fp, "%s",(val));
+#define EMITSN(val) fprintf(this->out_fp, "%s\n",(val));
+#define EMITD(val) fprintf(this->out_fp, "%d",(val));
+#define EMITDN(val) fprintf(this->out_fp, "%d\n",(val));
+
 class CodeGenerator : public ASTVisitorBase {
   public:
     void visit(ProgramNode *m) override;
@@ -50,10 +55,20 @@ class CodeGenerator : public ASTVisitorBase {
     void level_up();
     void level_down();
 
+    // SYMBOL
+    SymbolEntry* get_table_entry(string);
+
     // STACK INFO
     stack<EnumNodeTable> src_node;
     void push_src_node(EnumNodeTable);
     void pop_src_node();
+
+    // ADDRESS OFFSET
+    int  s0_offset = 0;
+    void offset_down_64bit();
+    void offset_up_64bit();
+    void offset_down_32bit();
+    void offset_up_32bit();
 
     // COMMON ASSEMBLY CODE
     void function_header(string);

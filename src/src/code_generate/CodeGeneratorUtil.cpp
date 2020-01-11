@@ -21,10 +21,12 @@ CodeGenerator::CodeGenerator(string _filename, string _dirpath, SymbolTable* _ta
 
 void CodeGenerator::out_file_create(){
     this->out_fp = fopen(this->out_file_name.c_str(), "w");
+
+    EMITSN("  ;_HEADER_PART_");
     fprintf(this->out_fp,"%s%s%s\n", 
-        "   .file \"", this->in_file_name.c_str(), "\"" );
+        "  .file   \"", this->in_file_name.c_str(), "\"" );
     fprintf(this->out_fp,"%s\n",
-        "   .option nopic" );
+        "  .option nopic\n" );
 }
 
 void CodeGenerator::out_file_save(){
@@ -47,6 +49,22 @@ void CodeGenerator::level_down() {
     this->level--; 
 }
 
+SymbolEntry* CodeGenerator::get_table_entry(string _name){
+    SymbolTable *current = this->current_scope;
+    while (true) {
+        if (current->entry[_name].is_used == true) {
+            return &(current->entry[_name]);
+        } else {
+            if (current->level == 0)
+                break;
+            else
+                current = current->prev_scope;
+        }
+    }
+    return nullptr; // Won't Happen .... Maybe
+}
+
+
 void CodeGenerator::push_src_node(EnumNodeTable _node) {
     this->src_node.push(_node);
 }
@@ -55,34 +73,60 @@ void CodeGenerator::pop_src_node() {
     this->src_node.pop(); 
 }
 
+void CodeGenerator::offset_down_64bit(){
+    this->s0_offset-=8;
+}
+void CodeGenerator::offset_up_64bit(){
+    this->s0_offset+=8;
+}
+void CodeGenerator::offset_down_32bit(){
+    this->s0_offset-=4;
+}
+void CodeGenerator::offset_up_32bit(){
+    this->s0_offset+=4;
+}
+
 void CodeGenerator::function_header(string _label_name) {
+    EMITSN(";_MAIN_/_FUNCTION_");
     fprintf(this->out_fp,"%s%s%s%s%s%s%s\n",
         ".text\n"
-        "   .align 2\n"
-        "   .global ",_label_name.c_str(),"\n"
-        "   .type ",_label_name.c_str(),", @function\n" 
+        "  .align  2\n"
+        "  .global ",_label_name.c_str(),"\n"
+        "  .type   ",_label_name.c_str(),", @function\n" 
         "\n",
         _label_name.c_str(),":"
     );
 }
 
 void CodeGenerator::stacking() {
+
+    this->offset_down_64bit();
+    this->offset_down_64bit();
+
+    EMITSN("  ;_STACKING_");
     fprintf(this->out_fp, "%s\n",
-        "   addi sp, sp, -64\n"
-        "   sd ra, 56(sp)   \n"
-        "   sd s0, 48(sp)   \n"
-        "   addi s0, sp, 64 \n"
+        "  addi sp, sp, -64\n"
+        "  sd   ra, 56(sp) ; ra is 8bytes(64bits)\n"
+        "  sd   s0, 48(sp) ; s0 is 8bytes(64bits)\n"
+        "  addi s0, sp, 64 "
     );
+    EMITSN("");
 }
 
 void CodeGenerator::unstacking(string _lable_name) {
+
+    EMITSN("  ;_UNSTACKING_");
     fprintf(this->out_fp, "%s\n",
-        "   ld ra, 56(sp)  \n"      
-        "   ld s0, 48(sp)  \n"          
-        "   addi sp, sp, 64\n"    
-        "   jr ra          \n"              
+        "  ld   ra, 56(sp) ; ra is 8bytes(64bits)\n"      
+        "  ld   s0, 48(sp) ; s0 is 8bytes(64bits)\n"          
+        "  addi sp, sp, 64\n"    
+        "  jr   ra        "              
     );
-    fprintf(this->out_fp, "%s%s%s%s%s\n",
-        "   .size ",_lable_name.c_str(),", .-",_lable_name.c_str(),"\n"
+    fprintf(this->out_fp, "%s%s%s%s\n",
+        "  .size ",_lable_name.c_str(),", .-",_lable_name.c_str()
     );
+    EMITSN("");
+
+    this->offset_up_64bit();
+    this->offset_up_64bit();
 }

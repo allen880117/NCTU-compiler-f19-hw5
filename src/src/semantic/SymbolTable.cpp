@@ -48,6 +48,12 @@ SymbolEntry::SymbolEntry(string _name, FieldKind _kind, unsigned int _level,
 
     this->is_used = true;
     this->is_arr_decl_error = false;
+
+    this->address_offset = 0;
+}
+
+void SymbolEntry::set_address_offset(int _offset){
+    this->address_offset = _offset;
 }
 
 SymbolTable::SymbolTable(unsigned int _level) {

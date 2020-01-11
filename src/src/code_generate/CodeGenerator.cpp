@@ -65,6 +65,44 @@ void CodeGenerator::visit(DeclarationNode *m) {
 }
 
 void CodeGenerator::visit(VariableNode *m) {
+    if(this->current_scope->level == 0) {
+        // Global Scope
+        if(m->constant_value_node == nullptr) { // Not Constant
+            EMITSN(";_GLOBAL_VARIABLE_");
+            EMITSN(".bss");
+            EMITSN(string(m->variable_name+":").c_str());
+            EMITSN("  .word 0");
+            EMITSN("");
+        } else {
+            EMITSN(";_GLOBAL_CONSTANT_");
+            EMITSN(".bss");
+            EMITSN(string(m->variable_name+":").c_str());
+            EMITS("  .word ");
+            EMITDN(m->type->int_literal);
+            EMITSN("");
+        }
+    } else {
+        // Local Scope
+        if(m->constant_value_node == nullptr) { // Not Constant
+            this->offset_down_32bit();
+            this->get_table_entry(m->variable_name)
+                ->set_address_offset(this->s0_offset);
+
+        } else {
+            this->offset_down_32bit();
+            this->get_table_entry(m->variable_name)
+                ->set_address_offset(this->s0_offset);
+            
+            EMITSN("  ;_LOCAL_CONSTANT_");
+            
+            EMITS("  li  t0, ");
+            EMITDN(m->type->int_literal);
+            EMITS("  sw  t0, ");
+            EMITD(this->s0_offset);
+            EMITSN("(s0)");
+            EMITSN("");
+        }
+    }
 }
 
 void CodeGenerator::visit(ConstantValueNode *m) { // EXPRESSION
