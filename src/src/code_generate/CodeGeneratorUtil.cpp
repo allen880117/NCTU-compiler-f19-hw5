@@ -17,12 +17,19 @@ CodeGenerator::CodeGenerator(string _filename, string _dirpath, SymbolTable* _ta
     this->table_root    = _table_root;
     this->current_scope = _table_root;
     this->level         = 0;
+    this->label         = 0;
+
+    this->is_specify_label = false;
+    this->specify_label    = 0;
 }
 
 void CodeGenerator::out_file_create(){
     this->out_fp = fopen(this->out_file_name.c_str(), "w");
-
+    
+    SEPERATE; 
     EMITSN("  ;_HEADER_PART_");
+    SEPERATE; 
+    
     fprintf(this->out_fp,"%s%s%s\n", 
         "  .file   \"", this->in_file_name.c_str(), "\"" );
     fprintf(this->out_fp,"%s\n",
@@ -73,6 +80,18 @@ void CodeGenerator::pop_src_node() {
     this->src_node.pop(); 
 }
 
+void CodeGenerator::push_target_reg(int _reg_num){
+    this->target_reg.push(_reg_num);
+}
+
+void CodeGenerator::pop_target_reg(){
+    this->target_reg.pop();
+}
+
+string CodeGenerator::get_target_reg(){
+    return string("t")+to_string(this->target_reg.top());
+}
+
 void CodeGenerator::offset_down_64bit(){
     this->s0_offset-=8;
 }
@@ -87,7 +106,10 @@ void CodeGenerator::offset_up_32bit(){
 }
 
 void CodeGenerator::function_header(string _label_name) {
-    EMITSN(";_MAIN_/_FUNCTION_");
+    SEPERATE;
+    EMITSN("  ;_MAIN_/_FUNCTION_");
+    SEPERATE; 
+
     fprintf(this->out_fp,"%s%s%s%s%s%s%s\n",
         ".text\n"
         "  .align  2\n"
@@ -100,9 +122,12 @@ void CodeGenerator::function_header(string _label_name) {
 
 void CodeGenerator::stacking() {
 
+    this->s0_offset = 0;
+
     this->offset_down_64bit();
     this->offset_down_64bit();
 
+    EMITSN("");
     EMITSN("  ;_STACKING_");
     fprintf(this->out_fp, "%s\n",
         "  addi sp, sp, -64\n"
@@ -115,6 +140,7 @@ void CodeGenerator::stacking() {
 
 void CodeGenerator::unstacking(string _lable_name) {
 
+    EMITSN("");
     EMITSN("  ;_UNSTACKING_");
     fprintf(this->out_fp, "%s\n",
         "  ld   ra, 56(sp) ; ra is 8bytes(64bits)\n"      
@@ -129,4 +155,26 @@ void CodeGenerator::unstacking(string _lable_name) {
 
     this->offset_up_64bit();
     this->offset_up_64bit();
+}
+
+int CodeGenerator::new_label(){
+    this->label++;
+    return this->label;
+}
+
+void CodeGenerator::specify_label_on(int _label){
+    this->is_specify_label = true;
+    this->specify_label = _label;
+}
+
+void CodeGenerator::specify_label_off(){
+    this->is_specify_label = false;
+}
+
+string CodeGenerator::get_specify_label(){
+    return string("L")+to_string(this->specify_label);
+}
+
+string CodeGenerator::label_convert(int _label){
+    return string("L")+to_string(_label);
 }

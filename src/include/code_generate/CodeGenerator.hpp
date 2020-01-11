@@ -13,6 +13,35 @@ using namespace std;
 #define EMITD(val) fprintf(this->out_fp, "%d",(val));
 #define EMITDN(val) fprintf(this->out_fp, "%d\n",(val));
 
+#define EMITSN_1(instr, val1) \
+  fprintf(this->out_fp, "%s %s\n",(instr),(val1));
+
+#define EMITS_1(instr, val1) \
+  fprintf(this->out_fp, "%s %s",(instr),(val1));
+
+#define EMITSN_2(instr, val1, val2) \
+  fprintf(this->out_fp, "%s %s, %s\n",(instr),(val1),(val2));
+
+#define EMITS_2(instr, val1, val2) \
+  fprintf(this->out_fp, "%s %s, %s",(instr),(val1),(val2));
+
+#define EMITSN_3(instr, val1, val2, val3) \
+  fprintf(this->out_fp, "%s %s, %s, %s\n",(instr),(val1),(val2),(val3));
+
+#define EMITS_3(instr, val1, val2, val3) \
+  fprintf(this->out_fp, "%s %s, %s, %s",(instr),(val1),(val2),(val3));
+
+#define SEPERATE                            \
+    EMITS(";");                             \
+    for(int i=0; i<25; i++){ EMITS("=="); } \
+    EMITS("\n");                            \
+
+#define EMIT_LABEL(val) \
+  fprintf(this->out_fp, "L%d:\n",(val));
+
+#define INSERT_LABEL(val) \
+  fprintf(this->out_fp, "L%d\n",(val));
+
 class CodeGenerator : public ASTVisitorBase {
   public:
     void visit(ProgramNode *m) override;
@@ -63,6 +92,11 @@ class CodeGenerator : public ASTVisitorBase {
     void push_src_node(EnumNodeTable);
     void pop_src_node();
 
+    stack<int> target_reg;
+    void push_target_reg(int);
+    void pop_target_reg();
+    string get_target_reg();
+
     // ADDRESS OFFSET
     int  s0_offset = 0;
     void offset_down_64bit();
@@ -74,4 +108,15 @@ class CodeGenerator : public ASTVisitorBase {
     void function_header(string);
     void stacking();
     void unstacking(string);
+
+    // LABEL MANAGER
+    int  label;
+    int  new_label();
+    
+    bool is_specify_label;
+    int  specify_label;
+    void specify_label_on(int);
+    void specify_label_off();
+    string get_specify_label();
+    string label_convert(int);
 };
