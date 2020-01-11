@@ -234,17 +234,22 @@ void CodeGenerator::visit(PrintNode *m) { // STATEMENT
 }
 
 void CodeGenerator::visit(ReadNode *m) { // STATEMENT
+    
+
     // Visit Child Node
     this->push_src_node(EnumNodeTable::READ_NODE);
+
+        EMITSN("  jal  ra, read");
+
         this->push_target_reg(0);
         if (m->variable_reference_node != nullptr)
             m->variable_reference_node->accept(*this);
         this->pop_target_reg();
-    this->pop_src_node();
 
-    EMITSN("  jal  ra, read");
-    EMITSN("  sw   a0, 0(t0)");
-    EMITSN("");
+        EMITSN("  sw   a0, 0(t0)");
+        EMITSN("");
+
+    this->pop_src_node();
 
 }
 

@@ -68,9 +68,9 @@ main:
 
   sw   t1, 0(t0)
 
+  jal  ra, read
   la   t0, a
 
-  jal  ra, read
   sw   a0, 0(t0)
 
   la   t0, a
