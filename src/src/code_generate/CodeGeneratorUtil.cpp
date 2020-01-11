@@ -67,6 +67,22 @@ SymbolEntry* CodeGenerator::get_table_entry(string _name){
     return nullptr; // Won't Happen .... Maybe
 }
 
+SymbolEntry* CodeGenerator::get_loop_var(){
+    SymbolTable *current = this->current_scope;
+    while (true) {
+        for(uint i=0; i<current->entry_name.size(); i++){
+            if(current->entry[current->entry_name[i]].kind == FieldKind::KIND_LOOP_VAR)
+                return &(current->entry[current->entry_name[i]]);
+        }
+
+        if (current->level == 0)
+            break;
+        else
+            current = current->prev_scope;
+    
+    }
+    return nullptr; // Won't Happen .... Maybe
+}
 
 void CodeGenerator::push_src_node(EnumNodeTable _node) {
     this->src_node.push(_node);

@@ -96,6 +96,7 @@ class CodeGenerator : public ASTVisitorBase {
 
     // SYMBOL
     SymbolEntry* get_table_entry(string);
+    SymbolEntry* get_loop_var();
 
     // STACK INFO
     stack<EnumNodeTable> src_node;
