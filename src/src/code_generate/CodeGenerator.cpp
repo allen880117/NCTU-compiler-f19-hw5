@@ -276,7 +276,6 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
             string offset = to_string(entry->address_offset);
             EMITSN_3("  addi", "t0", "s0", offset.c_str());
             STACK_PUSH_32("t0");
-        
         }
     }
     else {
@@ -409,12 +408,12 @@ void CodeGenerator::visit(IfNode *m) { // STATEMENT
         this->specify_label_off();
 
         EMIT_LABEL(label_1);
-        EMITSN_1("  j   ",this->label_convert(label_3).c_str());
 
         if (m->body != nullptr)
             for (uint i = 0; i < m->body->size(); i++)
                 (*(m->body))[i]->accept(*this);
 
+        EMITSN_1("  j   ",this->label_convert(label_3).c_str());
         EMIT_LABEL(label_2);
 
         if (m->body_of_else != nullptr)
@@ -504,7 +503,7 @@ void CodeGenerator::visit(ReturnNode *m) { // STATEMENT
     STACK_POP_32;
 
     EMITS("  mv   a0, t0");
-    EMITSN("  ;_return_");
+    EMITSN("");
 }
 
 void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
