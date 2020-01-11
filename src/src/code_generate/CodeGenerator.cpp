@@ -483,7 +483,7 @@ void CodeGenerator::visit(ForNode *m) { // STATEMENT
         STACK_POP_32;
 
         EMITSN_2("  lw  ","t1",loop_var.c_str());
-        EMITSN_3("  bgt ","t1", "t0",this->label_convert(label_2).c_str());
+        EMITSN_3("  bge ","t1", "t0",this->label_convert(label_2).c_str());
 
         if (m->body != nullptr)
             for (uint i = 0; i < m->body->size(); i++)
