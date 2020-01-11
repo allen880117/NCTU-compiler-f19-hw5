@@ -470,17 +470,17 @@ void CodeGenerator::visit(ForNode *m) { // STATEMENT
         if (m->initial_statement != nullptr)
             m->initial_statement->accept(*this);
 
+        SymbolEntry* loop_var_entry = this->get_loop_var();
+        string loop_var = to_string(loop_var_entry->address_offset)+string("(s0)");
+
+        EMIT_LABEL(label_1);
+
         // Just a Constant_Value Node
         if (m->condition != nullptr)
             m->condition->accept(*this);
         
         STACK_TOP("t0"); // UpperBound;
         STACK_POP_32;
-
-        SymbolEntry* loop_var_entry = this->get_loop_var();
-        string loop_var = to_string(loop_var_entry->address_offset)+string("(s0)");
-        
-        EMIT_LABEL(label_1);
 
         EMITSN_2("  lw  ","t1",loop_var.c_str());
         EMITSN_3("  bgt ","t1", "t0",this->label_convert(label_2).c_str());
@@ -490,7 +490,7 @@ void CodeGenerator::visit(ForNode *m) { // STATEMENT
                 (*(m->body))[i]->accept(*this);
 
         EMITSN_2("  lw  ","t1",loop_var.c_str());
-        EMITSN_2("  addi","t1","1");
+        EMITSN_3("  addi","t1","t1","1");
         EMITSN_2("  sw  ","t1",loop_var.c_str());
 
         EMITSN_1("  j   ",this->label_convert(label_1).c_str()); // back edge
