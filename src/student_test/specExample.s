@@ -5,7 +5,7 @@
 a:
   .word 0
 
-.bss
+.text
 d:
   .word 4
 

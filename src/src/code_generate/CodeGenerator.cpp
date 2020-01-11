@@ -73,7 +73,7 @@ void CodeGenerator::visit(VariableNode *m) {
             EMITSN("  .word 0");
             EMITSN("");
         } else {
-            EMITSN(".bss");
+            EMITSN(".text");
             EMITSN(string(m->variable_name+":").c_str());
             EMITS("  .word ");
             EMITDN(m->type->int_literal);
