@@ -140,6 +140,11 @@ void CodeGenerator::visit(FunctionNode *m) {
                 }
             } else {
                 int over_size = 4*(m->prototype.size());
+                if(m->prototype.size() % 2 == 1){
+                    // Padding
+                    EMITSN("  # REMEMBER: PADDING OCCUR")
+                    over_size+=4;
+                }
 
                 for (uint i = 0; i < m->prototype.size(); i++) {
                     string entry_name = this->current_scope->entry_name[i];
@@ -537,7 +542,13 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
                 }
 
                 over_size = 4*(m->arguments->size());      
-
+                if(m->arguments->size()%2 == 1) {
+                    // Odd will cause alignment error
+                    // Need Padding
+                    EMITSN("  # PADDING");
+                    STACK_PUSH_32("zero");
+                    over_size += 4 ;
+                }
             }
         }
         
