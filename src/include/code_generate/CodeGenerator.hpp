@@ -38,16 +38,20 @@ using namespace std;
   fprintf(this->out_fp, "L%d\n",(val));
 
 #define STACK_POP_32 \
-  EMITSN_3("    addi", "sp", "sp", "4")
+  EMITS_3("  addi", "sp", "sp", "4") \
+  EMITSN("  # 32BITS STACK POP") \
 
 #define STACK_PUSH_32(val) \
   { \
-  EMITSN_3("    addi", "sp", "sp", "-4") \
-  EMITSN_2("    sw  ", (val), "0(sp)")   \
+  EMITS_3("  addi", "sp", "sp", "-4") \
+  EMITSN(" # 32BITS STACK PUSH STEP1") \
+  EMITS_2("  sw  ", (val), "0(sp)")   \
+  EMITSN("  # 32BITS STACK PUSH STEP2") \
   } \
 
 #define STACK_TOP(target) \
-  EMITSN_2("    lw  ", (target), "0(sp)") \
+  EMITS_2("  lw  ", (target), "0(sp)") \
+  EMITSN("  # 32BITS STACK TOP") \
 
 class CodeGenerator : public ASTVisitorBase {
   public:
