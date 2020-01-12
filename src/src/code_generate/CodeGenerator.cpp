@@ -139,20 +139,9 @@ void CodeGenerator::visit(FunctionNode *m) {
                     EMITSN("  # __param_save_to_local");
                 }
             } else {
-                for (uint i = 0; i < 8; i++) {
-                    string entry_name = this->current_scope->entry_name[i];
-                    SymbolEntry* entry = 
-                        &(this->current_scope->entry[entry_name]);
-                    
-                    string source = string("a")+to_string(i);
-                    string target = to_string(entry->address_offset)+string("(s0)");
-                    EMITS_2("  sw  ", source.c_str(), target.c_str());
-                    EMITSN("  # __param_save_to_local");
-                }
+                int over_size = 4*(m->prototype.size());
 
-                int over_size = 4*(m->prototype.size()-8);
-
-                for (uint i = 8; i < m->prototype.size(); i++) {
+                for (uint i = 0; i < m->prototype.size(); i++) {
                     string entry_name = this->current_scope->entry_name[i];
                     SymbolEntry* entry = 
                         &(this->current_scope->entry[entry_name]);
@@ -543,34 +532,12 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
 
             } else {
                 
-                for (uint i = 0; i < 8; i++){
+                for (uint i = 0; i < m->arguments->size(); i++){
                     (*(m->arguments))[i]->accept(*this);
                 }
 
-                for (int i=8-1; i>=0; i--){
-                    STACK_TOP("t0");
-                    STACK_POP_32;   
+                over_size = 4*(m->arguments->size());      
 
-                    string target = string("a")+to_string(i);
-                    EMITSN_2("  mv  ", target.c_str(), "t0");
-                }
-
-                over_size = 4*(m->arguments->size()-8);                
-                EMITSN_3("  addi", "sp", "sp", to_string(-over_size).c_str());
-
-                for (uint i = 8; i < m->arguments->size(); i++){
-                    (*(m->arguments))[i]->accept(*this);
-                }
-
-                for (int i = 8; i< m->arguments->size(); i++){
-                    STACK_TOP("t0");
-                    STACK_POP_32;
-
-                    int offset = 4*(i-8);
-                    string target = to_string(offset)+string("(sp)");
-
-                    EMITSN_2("  sw  ", "t0", target.c_str());
-                }
             }
         }
         
