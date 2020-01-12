@@ -71,13 +71,11 @@ void CodeGenerator::visit(VariableNode *m) {
             EMITSN(".bss");
             EMITSN(string(m->variable_name+":").c_str());
             EMITSN("  .word 0");
-            EMITSN("");
         } else {
             EMITSN(".text");
             EMITSN(string(m->variable_name+":").c_str());
             EMITS("  .word ");
             EMITDN(m->type->int_literal);
-            EMITSN("");
         }
     } else {
         // Local Scope
@@ -96,7 +94,6 @@ void CodeGenerator::visit(VariableNode *m) {
             EMITS("  sw  t0, ");
             EMITD(this->s0_offset);
             EMITSN("(s0)");
-            EMITSN("");
         }
     }
 }
@@ -104,7 +101,6 @@ void CodeGenerator::visit(VariableNode *m) {
 void CodeGenerator::visit(ConstantValueNode *m) { // EXPRESSION
     EMITSN_2("  li  ", "t0", to_string(m->constant_value->int_literal).c_str());
     STACK_PUSH_32("t0");
-    EMITSN("");
 }
 
 void CodeGenerator::visit(FunctionNode *m) {
@@ -112,60 +108,66 @@ void CodeGenerator::visit(FunctionNode *m) {
     this->level_up();
     this->table_push();
     
+    int label_return = this->new_label();
+
     this->function_header(m->function_name);
     this->stacking();
 
-        // Visit Child Node
-        this->push_src_node(EnumNodeTable::FUNCTION_NODE);
-            // Parameter Declaratoin
-            if (m->parameters != nullptr){
-                for (uint i = 0; i < m->parameters->size(); i++) {
-                    (*(m->parameters))[i]->node->accept(*this);
-                }
-
-                if(m->prototype.size() <= 8){
-                    for (uint i = 0; i < m->prototype.size(); i++) {
-                        string entry_name = this->current_scope->entry_name[i];
-                        SymbolEntry* entry = 
-                            &(this->current_scope->entry[entry_name]);
-                        
-                        string source = string("a")+to_string(i);
-                        string target = to_string(entry->address_offset)+string("(s0)");
-                        EMITSN_2("  sw  ", source.c_str(), target.c_str());
-                    }
-                } else {
-                    for (uint i = 0; i < 8; i++) {
-                        string entry_name = this->current_scope->entry_name[i];
-                        SymbolEntry* entry = 
-                            &(this->current_scope->entry[entry_name]);
-                        
-                        string source = string("a")+to_string(i);
-                        string target = to_string(entry->address_offset)+string("(s0)");
-                        EMITSN_2("  sw  ", source.c_str(), target.c_str());
-                    }
-
-                    int over_size = 4*(m->prototype.size()-8);
-
-                    for (uint i = 8; i < m->prototype.size(); i++) {
-                        string entry_name = this->current_scope->entry_name[i];
-                        SymbolEntry* entry = 
-                            &(this->current_scope->entry[entry_name]);
-                        
-                        string source = to_string(over_size-4)+string("(s0)");
-                        string target = to_string(entry->address_offset)+string("(s0)");
-                        EMITSN_2("  lw  ", "t1", source.c_str());
-                        EMITSN_2("  sw  ", "t1", target.c_str());
-
-                        over_size-=4;
-                    }
-                }
-                
+    // Visit Child Node
+    this->push_src_node(EnumNodeTable::FUNCTION_NODE);
+        // Parameter Declaratoin
+        if (m->parameters != nullptr){
+            for (uint i = 0; i < m->parameters->size(); i++) {
+                (*(m->parameters))[i]->node->accept(*this);
             }
-            // Statement
-            if (m->body != nullptr)
-                m->body->accept(*this);
-        this->pop_src_node();
 
+            if(m->prototype.size() <= 8){
+                for (uint i = 0; i < m->prototype.size(); i++) {
+                    string entry_name = this->current_scope->entry_name[i];
+                    SymbolEntry* entry = 
+                        &(this->current_scope->entry[entry_name]);
+                    
+                    string source = string("a")+to_string(i);
+                    string target = to_string(entry->address_offset)+string("(s0)");
+                    EMITSN_2("  sw  ", source.c_str(), target.c_str());
+                }
+            } else {
+                for (uint i = 0; i < 8; i++) {
+                    string entry_name = this->current_scope->entry_name[i];
+                    SymbolEntry* entry = 
+                        &(this->current_scope->entry[entry_name]);
+                    
+                    string source = string("a")+to_string(i);
+                    string target = to_string(entry->address_offset)+string("(s0)");
+                    EMITSN_2("  sw  ", source.c_str(), target.c_str());
+                }
+
+                int over_size = 4*(m->prototype.size()-8);
+
+                for (uint i = 8; i < m->prototype.size(); i++) {
+                    string entry_name = this->current_scope->entry_name[i];
+                    SymbolEntry* entry = 
+                        &(this->current_scope->entry[entry_name]);
+                    
+                    string source = to_string(over_size-4)+string("(s0)");
+                    string target = to_string(entry->address_offset)+string("(s0)");
+                    EMITSN_2("  lw  ", "t1", source.c_str());
+                    EMITSN_2("  sw  ", "t1", target.c_str());
+
+                    over_size-=4;
+                }
+            }        
+        }
+
+        // Statement
+        this->specify_return_label_on(label_return);
+        if (m->body != nullptr)
+            m->body->accept(*this);
+        this->specify_return_label_off();
+
+    this->pop_src_node();
+
+    EMIT_LABEL(label_return);
     this->unstacking(m->function_name);
 
     // Pop Scope
@@ -218,9 +220,7 @@ void CodeGenerator::visit(AssignmentNode *m) { // STATEMENT
     STACK_TOP("t1");
     STACK_POP_32;
 
-    EMITS_2("  sw  ", "t1", "0(t0)");
-    EMITSN("");
-    EMITSN("");
+    EMITSN_2("  sw  ", "t1", "0(t0)");
 }
 
 void CodeGenerator::visit(PrintNode *m) { // STATEMENT
@@ -229,19 +229,18 @@ void CodeGenerator::visit(PrintNode *m) { // STATEMENT
         if (m->expression_node != nullptr)
             m->expression_node->accept(*this);
     this->pop_src_node();
-
+    
     STACK_TOP("t0");
     STACK_POP_32;
 
     EMITSN("  mv   a0, t0   ");
     EMITSN("  jal  ra, print");
-    EMITSN("");
 }
 
 void CodeGenerator::visit(ReadNode *m) { // STATEMENT
     // Visit Child Node
     this->push_src_node(EnumNodeTable::READ_NODE);
-    
+
         EMITSN("  jal  ra, read");
 
         if (m->variable_reference_node != nullptr)
@@ -254,7 +253,6 @@ void CodeGenerator::visit(ReadNode *m) { // STATEMENT
 
     this->pop_src_node();
 
-    EMITSN("");
 }
 
 void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
@@ -290,8 +288,6 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
             STACK_PUSH_32("t0");
         }
     }
-
-    EMITSN("");
 
 }
 
@@ -363,9 +359,6 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
             default: break;
         }
     }
-
-    EMITSN("");
-    EMITSN("");
 }
 
 void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
@@ -389,9 +382,6 @@ void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
             default: break;
         }
     }
-    
-    EMITSN("");
-    EMITSN("");
 }
 
 void CodeGenerator::visit(IfNode *m) { // STATEMENT
@@ -514,8 +504,11 @@ void CodeGenerator::visit(ReturnNode *m) { // STATEMENT
     STACK_TOP("t0");
     STACK_POP_32;
 
-    EMITS("  mv   a0, t0");
-    EMITSN("");
+    EMITSN("  mv   a0, t0");
+
+    if(this->is_specify_return_label == true)
+        EMITSN_1("  j   ",this->label_convert(this->specify_return_label).c_str()); // jump unstacking
+
 }
 
 void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
@@ -577,8 +570,6 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
             EMITSN_3("  addi", "sp", "sp", to_string(over_size).c_str());
 
         STACK_PUSH_32("a0");
-
-        EMITSN("");
 
     this->pop_src_node();
 }

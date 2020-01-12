@@ -21,6 +21,9 @@ CodeGenerator::CodeGenerator(string _filename, string _dirpath, SymbolTable* _ta
 
     this->is_specify_label = false;
     this->specify_label    = 0;
+
+    this->is_specify_return_label = false;
+    this->specify_return_label    = 0;
 }
 
 void CodeGenerator::out_file_create(){
@@ -168,6 +171,19 @@ void CodeGenerator::specify_label_off(){
 
 string CodeGenerator::get_specify_label(){
     return string("L")+to_string(this->specify_label);
+}
+
+void CodeGenerator::specify_return_label_on(int _label){
+    this->is_specify_return_label = true;
+    this->specify_return_label = _label;
+}
+
+void CodeGenerator::specify_return_label_off(){
+    this->is_specify_return_label = false;
+}
+
+string CodeGenerator::get_specify_return_label(){
+    return string("L")+to_string(this->specify_return_label);
 }
 
 string CodeGenerator::label_convert(int _label){

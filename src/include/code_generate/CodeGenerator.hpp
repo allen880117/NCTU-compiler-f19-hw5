@@ -31,11 +31,6 @@ using namespace std;
 #define EMITS_3(instr, val1, val2, val3) \
   fprintf(this->out_fp, "%s %s, %s, %s",(instr),(val1),(val2),(val3));
 
-#define SEPERATE                            \
-    EMITS(";");                             \
-    for(int i=0; i<25; i++){ EMITS("=="); } \
-    EMITS("\n");                            \
-
 #define EMIT_LABEL(val) \
   fprintf(this->out_fp, "L%d:\n",(val));
 
@@ -43,14 +38,16 @@ using namespace std;
   fprintf(this->out_fp, "L%d\n",(val));
 
 #define STACK_POP_32 \
-  EMITSN_3("  addi", "sp", "sp", "4")
+  EMITSN_3("    addi", "sp", "sp", "4")
 
 #define STACK_PUSH_32(val) \
-  EMITSN_3("  addi", "sp", "sp", "-4") \
-  EMITSN_2("  sw  ", (val), "0(sp)")   \
+  { \
+  EMITSN_3("    addi", "sp", "sp", "-4") \
+  EMITSN_2("    sw  ", (val), "0(sp)")   \
+  } \
 
 #define STACK_TOP(target) \
-  EMITSN_2("  lw  ", (target), "0(sp)") \
+  EMITSN_2("    lw  ", (target), "0(sp)") \
 
 class CodeGenerator : public ASTVisitorBase {
   public:
@@ -124,5 +121,13 @@ class CodeGenerator : public ASTVisitorBase {
     void specify_label_on(int);
     void specify_label_off();
     string get_specify_label();
+
+    bool is_specify_return_label;
+    int  specify_return_label;
+    void specify_return_label_on(int);
+    void specify_return_label_off();
+    string get_specify_return_label();
+    
     string label_convert(int);
+
 };
