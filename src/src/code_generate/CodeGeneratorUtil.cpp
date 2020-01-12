@@ -29,6 +29,9 @@ CodeGenerator::CodeGenerator(string _filename, string _dirpath, SymbolTable* _ta
 void CodeGenerator::out_file_create(){
     this->out_fp = fopen(this->out_file_name.c_str(), "w");
     
+    EMITSN("# ===========");
+    EMITSN("# HEADER PART")
+    EMITSN("# ===========");
     fprintf(this->out_fp,"%s%s%s\n", 
         "  .file   \"", this->in_file_name.c_str(), "\"" );
     fprintf(this->out_fp,"%s\n",
@@ -110,6 +113,10 @@ void CodeGenerator::offset_up_32bit(){
 
 void CodeGenerator::function_header(string _label_name) {
 
+    EMITSN("");
+    EMITSN("# ===============");
+    EMITSN("# MAIN / FUNCTION")
+    EMITSN("# ===============");
     fprintf(this->out_fp,"%s%s%s%s%s%s%s\n",
         ".text\n"
         "  .align  2\n"
@@ -129,10 +136,10 @@ void CodeGenerator::stacking() {
 
     EMITSN("");
     fprintf(this->out_fp, "%s\n",
-        "  addi sp, sp, -64\n"
-        "  sd   ra, 56(sp)\n"
-        "  sd   s0, 48(sp)\n"
-        "  addi s0, sp, 64 "
+        "  addi sp, sp, -64 # STACKING: PUSH APPEND\n"
+        "  sd   ra, 56(sp)  # STACKING: SAVE ra\n"
+        "  sd   s0, 48(sp)  # STACKING: SAVE s0\n"
+        "  addi s0, sp, 64  # STACKING: MOVE s0"
     );
     EMITSN("");
 }
@@ -141,10 +148,10 @@ void CodeGenerator::unstacking(string _lable_name) {
 
     EMITSN("");
     fprintf(this->out_fp, "%s\n",
-        "  ld   ra, 56(sp)\n"      
-        "  ld   s0, 48(sp)\n"          
-        "  addi sp, sp, 64\n"    
-        "  jr   ra        "              
+        "  ld   ra, 56(sp)  # UNSTACKING: LOAD ra\n"      
+        "  ld   s0, 48(sp)  # UNSTACKING: LOAD s0\n"          
+        "  addi sp, sp, 64  # UNSTACKING: POP\n"    
+        "  jr   ra          # UNSTACKING: JUMP ra"              
     );
     fprintf(this->out_fp, "%s%s%s%s\n",
         "  .size ",_lable_name.c_str(),", .-",_lable_name.c_str()

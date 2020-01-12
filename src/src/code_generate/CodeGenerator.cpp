@@ -68,10 +68,14 @@ void CodeGenerator::visit(VariableNode *m) {
     if(this->current_scope->level == 0) {
         // Global Scope
         if(m->constant_value_node == nullptr) { // Not Constant
+            EMITSN("")
+            EMITSN("# GLOBAL VARIABLE")
             EMITSN(".bss");
             EMITSN(string(m->variable_name+":").c_str());
             EMITSN("  .word 0");
         } else {
+            EMITSN("")
+            EMITSN("# GLOBAL CONSTANT")
             EMITSN(".text");
             EMITSN(string(m->variable_name+":").c_str());
             EMITS("  .word ");
@@ -89,11 +93,13 @@ void CodeGenerator::visit(VariableNode *m) {
             this->get_table_entry(m->variable_name)
                 ->set_address_offset(this->s0_offset);
             
-            EMITS("  li  t0, ");
-            EMITDN(m->type->int_literal);
-            EMITS("  sw  t0, ");
+            EMITS("  li   t0, ");
+            EMITD(m->type->int_literal);
+            EMITSN("  # __local constant: load immediate");
+            EMITS("  sw   t0, ");
             EMITD(this->s0_offset);
-            EMITSN("(s0)");
+            EMITS("(s0)");
+            EMITSN("  # __local_constant: save immediate");
         }
     }
 }
@@ -129,7 +135,8 @@ void CodeGenerator::visit(FunctionNode *m) {
                     
                     string source = string("a")+to_string(i);
                     string target = to_string(entry->address_offset)+string("(s0)");
-                    EMITSN_2("  sw  ", source.c_str(), target.c_str());
+                    EMITS_2("  sw  ", source.c_str(), target.c_str());
+                    EMITSN("  # __param_save_to_local");
                 }
             } else {
                 for (uint i = 0; i < 8; i++) {
@@ -139,7 +146,8 @@ void CodeGenerator::visit(FunctionNode *m) {
                     
                     string source = string("a")+to_string(i);
                     string target = to_string(entry->address_offset)+string("(s0)");
-                    EMITSN_2("  sw  ", source.c_str(), target.c_str());
+                    EMITS_2("  sw  ", source.c_str(), target.c_str());
+                    EMITSN("  # __param_save_to_local");
                 }
 
                 int over_size = 4*(m->prototype.size()-8);
@@ -151,8 +159,10 @@ void CodeGenerator::visit(FunctionNode *m) {
                     
                     string source = to_string(over_size-4)+string("(s0)");
                     string target = to_string(entry->address_offset)+string("(s0)");
-                    EMITSN_2("  lw  ", "t1", source.c_str());
-                    EMITSN_2("  sw  ", "t1", target.c_str());
+                    EMITS_2("  lw  ", "t1", source.c_str());
+                    EMITSN("  # __param_save_to_local: stack load");
+                    EMITS_2("  sw  ", "t1", target.c_str());
+                    EMITSN("  # __param_save_to_local: save");
 
                     over_size-=4;
                 }
