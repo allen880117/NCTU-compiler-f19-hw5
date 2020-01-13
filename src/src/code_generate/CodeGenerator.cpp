@@ -106,7 +106,7 @@ void CodeGenerator::visit(VariableNode *m) {
 
 void CodeGenerator::visit(ConstantValueNode *m) { // EXPRESSION
     EMITSN_2("  li  ", "t0", to_string(m->constant_value->int_literal).c_str());
-    STACK_PUSH_32("t0");
+    STACK_PUSH_64("t0");
 }
 
 void CodeGenerator::visit(FunctionNode *m) {
@@ -139,26 +139,21 @@ void CodeGenerator::visit(FunctionNode *m) {
                     EMITSN("  # __param_save_to_local");
                 }
             } else {
-                int over_size = 4*(m->prototype.size());
-                if(m->prototype.size() % 2 == 1){
-                    // Padding
-                    EMITSN("  # REMEMBER: PADDING OCCUR")
-                    over_size+=4;
-                }
+                int over_size = 8*(m->prototype.size());
 
                 for (uint i = 0; i < m->prototype.size(); i++) {
                     string entry_name = this->current_scope->entry_name[i];
                     SymbolEntry* entry = 
                         &(this->current_scope->entry[entry_name]);
                     
-                    string source = to_string(over_size-4)+string("(s0)");
+                    string source = to_string(over_size-8)+string("(s0)");
                     string target = to_string(entry->address_offset)+string("(s0)");
                     EMITS_2("  lw  ", "t1", source.c_str());
                     EMITSN("  # __param_save_to_local: stack load");
                     EMITS_2("  sw  ", "t1", target.c_str());
                     EMITSN("  # __param_save_to_local: save");
 
-                    over_size-=4;
+                    over_size-=8;
                 }
             }        
         }
@@ -219,10 +214,10 @@ void CodeGenerator::visit(AssignmentNode *m) { // STATEMENT
     this->pop_src_node();
 
     STACK_TOP("t0");
-    STACK_POP_32;
+    STACK_POP_64;
 
     STACK_TOP("t1");
-    STACK_POP_32;
+    STACK_POP_64;
 
     EMITSN_2("  sw  ", "t1", "0(t0)");
 }
@@ -235,7 +230,7 @@ void CodeGenerator::visit(PrintNode *m) { // STATEMENT
     this->pop_src_node();
     
     STACK_TOP("t0");
-    STACK_POP_32;
+    STACK_POP_64;
 
     EMITSN("  mv   a0, t0   ");
     EMITSN("  jal  ra, print");
@@ -251,7 +246,7 @@ void CodeGenerator::visit(ReadNode *m) { // STATEMENT
             m->variable_reference_node->accept(*this);
 
         STACK_TOP("t0");
-        STACK_POP_32;
+        STACK_POP_64;
 
         EMITSN("  sw   a0, 0(t0)");
 
@@ -272,24 +267,24 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
         // GIVE THE ADDRESS OF THE VARIABLE
         if(entry->level == 0){
             EMITSN_2("  la  ", "t0", m->variable_name.c_str());
-            STACK_PUSH_32("t0");
+            STACK_PUSH_64("t0");
 
         } else {
             string offset = to_string(entry->address_offset);
             EMITSN_3("  addi", "t0", "s0", offset.c_str());
-            STACK_PUSH_32("t0");
+            STACK_PUSH_64("t0");
         }
     }
     else {
         if(entry->level == 0){
             EMITSN_2("  la  ", "t1", m->variable_name.c_str());
             EMITSN_2("  lw  ", "t0", "0(t1)");
-            STACK_PUSH_32("t0");
+            STACK_PUSH_64("t0");
 
         } else { 
             string address = to_string(entry->address_offset) + string("(s0)");
             EMITSN_2("  lw  ", "t0", address.c_str());
-            STACK_PUSH_32("t0");
+            STACK_PUSH_64("t0");
         }
     }
 
@@ -306,10 +301,10 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
     this->pop_src_node();
 
     STACK_TOP("t0"); // RHS
-    STACK_POP_32;
+    STACK_POP_64;
 
     STACK_TOP("t1"); // LHS
-    STACK_POP_32;
+    STACK_POP_64;
 
     if(this->is_specify_label == true){
         switch(m->op){
@@ -342,23 +337,23 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
         switch(m->op){
             case EnumOperator::OP_PLUS: {
                 EMITSN_3("  addw", "t2", "t1", "t0");        
-                STACK_PUSH_32("t2");            
+                STACK_PUSH_64("t2");            
             } break;
             case EnumOperator::OP_MINUS: {
                 EMITSN_3("  subw", "t2", "t1", "t0");   
-                STACK_PUSH_32("t2");            
+                STACK_PUSH_64("t2");            
             } break;
             case EnumOperator::OP_MULTIPLY: {
                 EMITSN_3("  mulw", "t2", "t1", "t0");  
-                STACK_PUSH_32("t2");            
+                STACK_PUSH_64("t2");            
             } break;
             case EnumOperator::OP_DIVIDE: {
                 EMITSN_3("  divw", "t2", "t1", "t0");    
-                STACK_PUSH_32("t2");            
+                STACK_PUSH_64("t2");            
             } break;
             case EnumOperator::OP_MOD: {
                 EMITSN_3("  remw", "t2", "t1", "t0"); 
-                STACK_PUSH_32("t2");            
+                STACK_PUSH_64("t2");            
             } break;
             default: break;
         }
@@ -373,7 +368,7 @@ void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
     this->pop_src_node();
 
     STACK_TOP("t0");
-    STACK_POP_32;
+    STACK_POP_64;
 
     if(this->is_specify_label == true){
         ;
@@ -381,7 +376,7 @@ void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
         switch(m->op){
             case EnumOperator::OP_MINUS: {
                 EMITSN_3("  subw", "t1", "zero", "t0");
-                STACK_PUSH_32("t1");            
+                STACK_PUSH_64("t1");            
             } break;
             default: break;
         }
@@ -474,7 +469,7 @@ void CodeGenerator::visit(ForNode *m) { // STATEMENT
             m->condition->accept(*this);
         
         STACK_TOP("t0"); // UpperBound;
-        STACK_POP_32;
+        STACK_POP_64;
 
         EMITSN_2("  lw  ","t1",loop_var.c_str());
         EMITSN_3("  bge ","t1", "t0",this->label_convert(label_2).c_str());
@@ -506,7 +501,7 @@ void CodeGenerator::visit(ReturnNode *m) { // STATEMENT
     this->pop_src_node();
 
     STACK_TOP("t0");
-    STACK_POP_32;
+    STACK_POP_64;
 
     EMITSN("  mv   a0, t0");
 
@@ -529,7 +524,7 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
 
                 for (int i=m->arguments->size()-1; i>=0; i--){
                     STACK_TOP("t0");
-                    STACK_POP_32;   
+                    STACK_POP_64;   
 
                     string target = string("a")+to_string(i);
                     EMITSN_2("  mv  ", target.c_str(), "t0");
@@ -541,23 +536,18 @@ void CodeGenerator::visit(FunctionCallNode *m) { // EXPRESSION //STATEMENT
                     (*(m->arguments))[i]->accept(*this);
                 }
 
-                over_size = 4*(m->arguments->size());      
-                if(m->arguments->size()%2 == 1) {
-                    // Odd will cause alignment error
-                    // Need Padding
-                    EMITSN("  # PADDING");
-                    STACK_PUSH_32("zero");
-                    over_size += 4 ;
-                }
+                over_size = 8*(m->arguments->size());      
             }
         }
         
         EMITSN_2("  jal ", "ra", m->function_name.c_str());
 
-        if(over_size > 0) 
-            EMITSN_3("  addi", "sp", "sp", to_string(over_size).c_str());
+        if(over_size > 0) {
+            EMITS_3("  addi", "sp", "sp", to_string(over_size).c_str());
+            EMITSN("  # __pop_param")
+        }
 
-        STACK_PUSH_32("a0");
+        STACK_PUSH_64("a0");
 
     this->pop_src_node();
 }
