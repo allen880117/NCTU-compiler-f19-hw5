@@ -24,6 +24,9 @@ CodeGenerator::CodeGenerator(string _filename, string _dirpath, SymbolTable* _ta
 
     this->is_specify_return_label = false;
     this->specify_return_label    = 0;
+
+    this->is_specify_kind = false;
+    this->specify_kind    = FieldKind::KIND_UNKNOWN;
 }
 
 void CodeGenerator::out_file_create(){
@@ -195,4 +198,21 @@ string CodeGenerator::get_specify_return_label(){
 
 string CodeGenerator::label_convert(int _label){
     return string("L")+to_string(_label);
+}
+
+void CodeGenerator::specify_kind_on(FieldKind _kind){
+    this->is_specify_kind = true;
+    this->specify_kind = _kind;
+}
+
+void CodeGenerator::specify_kind_off(){
+    this->is_specify_kind = false;
+}
+
+void CodeGenerator::push_scope_stack(EnumNodeTable _node){
+    this->scope_stack.push(_node);
+}
+
+void CodeGenerator::pop_scope_stack(){
+    this->scope_stack.pop();
 }

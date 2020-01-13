@@ -19,7 +19,7 @@ using namespace std;
 
 #define EMITS_1(instr, val1) \
   fprintf(this->out_fp, "%s %-3s                  ",(instr),(val1)); \
-
+  
 #define EMITSN_2(instr, val1, val2) \
   fprintf(this->out_fp, "%s %-3s, %-7s\n",(instr),(val1),(val2)); \
 
@@ -135,4 +135,17 @@ class CodeGenerator : public ASTVisitorBase {
     
     string label_convert(int);
 
+    // KIND
+    bool is_specify_kind;
+    FieldKind specify_kind;
+    void specify_kind_on(FieldKind);
+    void specify_kind_off();
+
+    // ARRAY WIDTH
+    stack<int> array_width;
+
+    // SCOPE STACK
+    stack<EnumNodeTable> scope_stack;
+    void push_scope_stack(EnumNodeTable);
+    void pop_scope_stack();
 };

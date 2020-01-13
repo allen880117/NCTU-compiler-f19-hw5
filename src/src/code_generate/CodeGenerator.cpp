@@ -29,6 +29,7 @@ void CodeGenerator::visit(ProgramNode *m) {
 
     // Visit Child Nodes
     this->push_src_node(EnumNodeTable::PROGRAM_NODE);
+    this->push_scope_stack(EnumNodeTable::PROGRAM_NODE);
 
         if (m->declaration_node_list != nullptr)
             for (uint i = 0; i < m->declaration_node_list->size(); i++) {
@@ -48,6 +49,7 @@ void CodeGenerator::visit(ProgramNode *m) {
 
         this->unstacking(string("main"));
 
+    this->pop_scope_stack();
     this->pop_src_node();
 
     // Pop Scope
@@ -105,6 +107,18 @@ void CodeGenerator::visit(VariableNode *m) {
         // Local Scope
         switch(m->type->type_set){
             case EnumTypeSet::SET_ACCUMLATED:{
+                // Special Case : Function Parameter
+                // We need address only, so just allocate 4bytes only
+                if( this->scope_stack.top() ==EnumNodeTable::FUNCTION_NODE &&
+                    this->is_specify_kind == true &&
+                    this->specify_kind == FieldKind::KIND_PARAMETER ){
+                    this->offset_down_64bit();
+                    this->get_table_entry(m->variable_name)
+                        ->set_address_offset(this->s0_offset);
+                    
+                    return;
+                }
+
                 // LOCAL VARIABLE ARRAY
                 int total_num = 1;
                 for(uint i=0; i<m->type->array_range.size(); i++){
@@ -158,10 +172,13 @@ void CodeGenerator::visit(FunctionNode *m) {
 
     // Visit Child Node
     this->push_src_node(EnumNodeTable::FUNCTION_NODE);
-        // Parameter Declaratoin
+    this->push_scope_stack(EnumNodeTable::FUNCTION_NODE);
+        // Parameter Declaration
         if (m->parameters != nullptr){
             for (uint i = 0; i < m->parameters->size(); i++) {
+                this->specify_kind_on(FieldKind::KIND_PARAMETER);
                 (*(m->parameters))[i]->node->accept(*this);
+                this->specify_kind_off();
             }
 
             if(m->prototype.size() <= 8){
@@ -200,7 +217,8 @@ void CodeGenerator::visit(FunctionNode *m) {
         if (m->body != nullptr)
             m->body->accept(*this);
         this->specify_return_label_off();
-
+    
+    this->pop_scope_stack();
     this->pop_src_node();
 
     EMIT_LABEL(label_return);
@@ -250,14 +268,30 @@ void CodeGenerator::visit(AssignmentNode *m) { // STATEMENT
             m->variable_reference_node->accept(*this);
     this->pop_src_node();
 
+    // Address
     STACK_TOP("t0");
     STACK_POP_64;
 
+    // Value
     STACK_TOP("t1");
     STACK_POP_64;
 
-    EMITS_2("  sw  ", "t1", "0(t0)");
-    EMITSN("  # assign");
+    int width = this->array_width.top() / 4;
+    this->array_width.pop();
+
+    if(width > 1){
+        for(uint i=0; i<width; i++){
+            string address = to_string(i)+string("(t1)");
+            EMITS_2("  lw  ", "t2", address.c_str());
+            EMITSN("  # assign: array step 1");
+            address = to_string(i)+string("(t0)");
+            EMITS_2("  sw  ", "t2", address.c_str());
+            EMITSN("  # assign: array step 2");
+        }
+    } else {
+        EMITS_2("  sw  ", "t1", "0(t0)");
+        EMITSN("  # assign");
+    }
 }
 
 void CodeGenerator::visit(PrintNode *m) { // STATEMENT
@@ -284,6 +318,7 @@ void CodeGenerator::visit(ReadNode *m) { // STATEMENT
 
         if (m->variable_reference_node != nullptr)
             m->variable_reference_node->accept(*this);
+        this->array_width.pop(); // Not Use Here, But Still Need POP
 
         STACK_TOP("t0");
         STACK_POP_64;
@@ -296,39 +331,250 @@ void CodeGenerator::visit(ReadNode *m) { // STATEMENT
 
 void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
     this->push_src_node(EnumNodeTable::VARIABLE_REFERENCE_NODE);
-        //if (m->expression_node_list != nullptr)
-        //    for (int i = m->expression_node_list->size() - 1; i >= 0; i--) // REVERSE TRAVERSE
-        //        (*(m->expression_node_list))[i]->accept(*this);
+        if (m->expression_node_list != nullptr)
+            for (int i = m->expression_node_list->size() - 1; i >= 0; i--) // REVERSE TRAVERSE
+                (*(m->expression_node_list))[i]->accept(*this);
     this->pop_src_node();
 
     SymbolEntry* entry = this->get_table_entry(m->variable_name);
     if(this->src_node.top() == EnumNodeTable::READ_NODE ||
        this->src_node.top() == EnumNodeTable::ASSIGNMENT_NODE ){
         // GIVE THE ADDRESS OF THE VARIABLE
-        if(entry->level == 0){
-            EMITS_2("  la  ", "t0", m->variable_name.c_str());
-            EMITSN("  # var_ref: give address");
-            STACK_PUSH_64("t0");
-        } else {
-            string offset = to_string(entry->address_offset);
-            EMITS_3("  addi", "t0", "s0", offset.c_str());
-            EMITSN("  # var_ref: give address");
-            STACK_PUSH_64("t0");
+        if(entry->level == 0){ // GLOBAL
+            switch(entry->type.type_set){
+                case EnumTypeSet::SET_ACCUMLATED:{
+                    EMITS_2("  la  ", "t0", m->variable_name.c_str());
+                    EMITSN("  # var_ref: get array base");
+                    for(uint i=0; i<m->expression_node_list->size(); i++){
+                        int width = 4;
+                        for(uint j=i+1; j<entry->type.array_range.size(); j++){
+                            width *= entry->type.array_range[j].end - entry->type.array_range[j].start;
+                        }
+
+                        STACK_TOP("t1");
+                        STACK_POP_64;
+
+                        EMITS_3("  subi", "t1", "t1", to_string(entry->type.array_range[i].start).c_str());
+                        EMITSN("  # var_ref: minus dimension lower bound");
+
+                        EMITS_2("  li  ", "t2", to_string(width).c_str());
+                        EMITSN("  # var_ref: get dimension width");
+
+                        EMITS_3("  mulw", "t1", "t1", "t2");
+                        EMITSN("  # var_ref: calculate offset");
+
+                        EMITS_3("  addw", "t0", "t0", "t1");
+                        EMITSN("  # var_ref: add offset to base");
+                    }
+
+                    STACK_PUSH_64("t0");
+
+                    int width = 4;
+                    for(int i=entry->type.array_range.size()-1; i>=m->expression_node_list->size(); i--){
+                        width *= entry->type.array_range[i].end - entry->type.array_range[i].start;
+                    }
+
+                    this->array_width.push(width);
+
+                } break;
+                case EnumTypeSet::SET_CONSTANT_LITERAL:{
+                    EMITS_2("  la  ", "t0", m->variable_name.c_str());
+                    EMITSN("  # var_ref: give address");
+                    STACK_PUSH_64("t0");
+
+                    this->array_width.push(4);
+                } break;
+                case EnumTypeSet::SET_SCALAR:{
+                    EMITS_2("  la  ", "t0", m->variable_name.c_str());
+                    EMITSN("  # var_ref: give address");
+                    STACK_PUSH_64("t0");
+
+                    this->array_width.push(4);
+                } break;
+                default: break;
+            }
+            
+        } else { // LOCAL
+            switch(entry->type.type_set){
+                case EnumTypeSet::SET_ACCUMLATED:{
+                    // Special Case : Function Parameter
+                    if( this->scope_stack.top() == EnumNodeTable::FUNCTION_NODE &&
+                        entry->kind == FieldKind::KIND_PARAMETER ){
+                        string address = to_string(entry->address_offset)+string("(s0)");
+                        EMITS_2("  ld  ", "t0", address.c_str());
+                        EMITSN("  # var_ref: get array base");
+                    }
+                    // Normal Case
+                    else {
+                        string address = to_string(entry->address_offset);
+                        EMITS_3("  addi", "t0", "s0", address.c_str());
+                        EMITSN("  # var_ref: get array base");
+                    }
+                    
+                    for(uint i=0; i<m->expression_node_list->size(); i++){
+                        int width = 4;
+                        for(uint j=i+1; j<entry->type.array_range.size(); j++){
+                            width *= entry->type.array_range[j].end - entry->type.array_range[j].start;
+                        }
+
+                        STACK_TOP("t1");
+                        STACK_POP_64;
+
+                        EMITS_2("  li  ", "t2", to_string(width).c_str());
+                        EMITSN("  # var_ref: get dimension width");
+
+                        EMITS_3("  mulw", "t1", "t1", "t2");
+                        EMITSN("  # var_ref: calculate offset");
+
+                        EMITS_3("  addw", "t0", "t0", "t1");
+                        EMITSN("  # var_ref: add offset to base");
+                    }
+
+                    STACK_PUSH_64("t0");
+
+                    int width = 4;
+                    for(int i=entry->type.array_range.size()-1; i>=m->expression_node_list->size(); i--){
+                        width *= entry->type.array_range[i].end - entry->type.array_range[i].start;
+                    }
+
+                    this->array_width.push(width);
+
+                } break;
+                case EnumTypeSet::SET_CONSTANT_LITERAL:{
+                    string offset = to_string(entry->address_offset);
+                    EMITS_3("  addi", "t0", "s0", offset.c_str());
+                    EMITSN("  # var_ref: give address");
+                    STACK_PUSH_64("t0");
+
+                    this->array_width.push(4);
+
+                } break;
+                case EnumTypeSet::SET_SCALAR:{
+                    string offset = to_string(entry->address_offset);
+                    EMITS_3("  addi", "t0", "s0", offset.c_str());
+                    EMITSN("  # var_ref: give address");
+                    STACK_PUSH_64("t0");
+
+                    this->array_width.push(4);
+
+                } break;
+                default: break;
+            }
         }
     }
     else {
-        if(entry->level == 0){
-            EMITS_2("  la  ", "t1", m->variable_name.c_str());
-            EMITSN("  # var_ref: load address");
-            EMITS_2("  lw  ", "t0", "0(t1)");
-            EMITSN("  # var_ref: give value");
-            STACK_PUSH_64("t0");
+        // GIVE THE VALUE
+        if(entry->level == 0){ // GLOBAL
+            switch(entry->type.type_set){
+                case EnumTypeSet::SET_ACCUMLATED:{
+                    EMITS_2("  la  ", "t0", m->variable_name.c_str());
+                    EMITSN("  # var_ref: get array base");
+                    for(uint i=0; i<m->expression_node_list->size(); i++){
+                        int width = 4;
+                        for(uint j=i+1; j<entry->type.array_range.size(); j++){
+                            width *= entry->type.array_range[j].end - entry->type.array_range[j].start;
+                        }
 
-        } else { 
-            string address = to_string(entry->address_offset) + string("(s0)");
-            EMITS_2("  lw  ", "t0", address.c_str());
-            EMITSN("  # var_ref: give value");
-            STACK_PUSH_64("t0");
+                        STACK_TOP("t1");
+                        STACK_POP_64;
+
+                        EMITS_2("  li  ", "t2", to_string(width).c_str());
+                        EMITSN("  # var_ref: get dimension width");
+
+                        EMITS_3("  mulw", "t1", "t1", "t2");
+                        EMITSN("  # var_ref: calculate offset");
+
+                        EMITS_3("  addw", "t0", "t0", "t1");
+                        EMITSN("  # var_ref: add offset to base");
+                    }
+
+                    if(m->expression_node_list->size() == entry->type.array_range.size()){
+                        // Give Value
+                        EMITS_2("  lw  ", "t0", "0(t0)");
+                        EMITSN("  # var_ref: arrray, give value");
+                        STACK_PUSH_64("t0");
+                    } else {
+                        // Give Address
+                        STACK_PUSH_64("t0");
+                    }
+                } break;
+                case EnumTypeSet::SET_CONSTANT_LITERAL:{
+                    EMITS_2("  la  ", "t1", m->variable_name.c_str());
+                    EMITSN("  # var_ref: load address");
+                    EMITS_2("  lw  ", "t0", "0(t1)");
+                    EMITSN("  # var_ref: give value");
+                    STACK_PUSH_64("t0");
+                } break;
+                case EnumTypeSet::SET_SCALAR:{
+                    EMITS_2("  la  ", "t1", m->variable_name.c_str());
+                    EMITSN("  # var_ref: load address");
+                    EMITS_2("  lw  ", "t0", "0(t1)");
+                    EMITSN("  # var_ref: give value");
+                    STACK_PUSH_64("t0");
+                } break;
+                default: break;
+            }
+        } else {  // LOCAL
+            switch(entry->type.type_set){
+                case EnumTypeSet::SET_ACCUMLATED:{
+                    // Special Case : Function Parameter
+                    if( this->scope_stack.top() == EnumNodeTable::FUNCTION_NODE &&
+                        entry->kind == FieldKind::KIND_PARAMETER ){
+                        string address = to_string(entry->address_offset)+string("(s0)");
+                        EMITS_2("  ld  ", "t0", address.c_str());
+                        EMITSN("  # var_ref: get array base");
+                    }
+                    // Normal Case
+                    else {
+                         string address = to_string(entry->address_offset);
+                        EMITS_3("  addi", "t0", "s0", address.c_str());
+                        EMITSN("  # var_ref: get array base");
+                    }
+    
+                    for(uint i=0; i<m->expression_node_list->size(); i++){
+                        int width = 4;
+                        for(uint j=i+1; j<entry->type.array_range.size(); j++){
+                            width *= entry->type.array_range[j].end - entry->type.array_range[j].start;
+                        }
+
+                        STACK_TOP("t1");
+                        STACK_POP_64;
+
+                        EMITS_2("  li  ", "t2", to_string(width).c_str());
+                        EMITSN("  # var_ref: get dimension width");
+
+                        EMITS_3("  mulw", "t1", "t1", "t2");
+                        EMITSN("  # var_ref: calculate offset");
+
+                        EMITS_3("  addw", "t0", "t0", "t1");
+                        EMITSN("  # var_ref: add offset to base");
+                    }
+
+                    if(m->expression_node_list->size() == entry->type.array_range.size()){
+                        // Give Value
+                        EMITS_2("  lw  ", "t0", "0(t0)");
+                        EMITSN("  # var_ref: arrray, give value");
+                        STACK_PUSH_64("t0");
+                    } else {
+                        // Give Address
+                        STACK_PUSH_64("t0");
+                    }
+                } break;
+                case EnumTypeSet::SET_CONSTANT_LITERAL:{
+                    string address = to_string(entry->address_offset) + string("(s0)");
+                    EMITS_2("  lw  ", "t0", address.c_str());
+                    EMITSN("  # var_ref: give value");
+                    STACK_PUSH_64("t0");
+                } break;
+                case EnumTypeSet::SET_SCALAR:{
+                    string address = to_string(entry->address_offset) + string("(s0)");
+                    EMITS_2("  lw  ", "t0", address.c_str());
+                    EMITSN("  # var_ref: give value");
+                    STACK_PUSH_64("t0");
+                } break;
+                default: break;
+            }
+           
         }
     }
 
