@@ -78,11 +78,12 @@ void CodeGenerator::visit(VariableNode *m) {
                 }
                 EMITSN("")
                 EMITSN("# GLOBAL VARIABLE ARRAY")
-                EMITSN(".text");
+                EMITSN(".bss");
                 EMITSN(string(m->variable_name+":").c_str());
                 for(uint i=0; i<total_num; i++){
                     EMITSN("  .word 0");
                 }
+                EMITSN(".align 2");
             } break;
             case EnumTypeSet::SET_CONSTANT_LITERAL:{
                 // GLOBAL CONSTANT
@@ -92,6 +93,7 @@ void CodeGenerator::visit(VariableNode *m) {
                 EMITSN(string(m->variable_name+":").c_str());
                 EMITS("  .word ");
                 EMITSN(to_string(m->type->int_literal).c_str());
+                EMITSN(".align 2");
             } break;
             case EnumTypeSet::SET_SCALAR:{
                 // GLOBAL VARIABLE
@@ -100,6 +102,7 @@ void CodeGenerator::visit(VariableNode *m) {
                 EMITSN(".bss");
                 EMITSN(string(m->variable_name+":").c_str());
                 EMITSN("  .word 0");
+                EMITSN(".align 2");
             } break;
             default: break;
         }
@@ -548,7 +551,7 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
 
                         EMITS_3("  addi", "t1", "t1", to_string(-entry->type.array_range[i].start).c_str());
                         EMITSN("  # var_ref: minus dimension lower bound");
-                        
+
                         EMITS_2("  li  ", "t2", to_string(width).c_str());
                         EMITSN("  # var_ref: get dimension width");
 
