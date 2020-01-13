@@ -209,7 +209,6 @@ void CodeGenerator::visit(FunctionNode *m) {
                     
                     string source = to_string(over_size-8)+string("(s0)");
                     string target = to_string(entry->address_offset)+string("(s0)");
-                     string target = to_string(entry->address_offset)+string("(s0)");
                     if(entry->type.type_set == EnumTypeSet::SET_ACCUMLATED){
                         EMITS_2("  ld  ", "t1", source.c_str());
                         EMITSN("  # param_save_to_local: stack load");
