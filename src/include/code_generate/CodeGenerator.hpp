@@ -8,28 +8,29 @@
 #include <vector>
 using namespace std;
 
-#define EMITS(val) fprintf(this->out_fp, "%s",(val));
-#define EMITSN(val) fprintf(this->out_fp, "%s\n",(val));
-#define EMITD(val) fprintf(this->out_fp, "%d",(val));
-#define EMITDN(val) fprintf(this->out_fp, "%d\n",(val));
+#define EMITS(val) \
+  fprintf(this->out_fp, "%s",(val)); \
+
+#define EMITSN(val) \
+  fprintf(this->out_fp, "%s\n",(val)); \
 
 #define EMITSN_1(instr, val1) \
-  fprintf(this->out_fp, "%s %s\n",(instr),(val1));
+  fprintf(this->out_fp, "%s %-3s\n",(instr),(val1));
 
 #define EMITS_1(instr, val1) \
-  fprintf(this->out_fp, "%s %s",(instr),(val1)); \
+  fprintf(this->out_fp, "%s %-3s                  ",(instr),(val1)); \
 
 #define EMITSN_2(instr, val1, val2) \
-  fprintf(this->out_fp, "%s %s, %s\n",(instr),(val1),(val2)); \
+  fprintf(this->out_fp, "%s %-3s, %-7s\n",(instr),(val1),(val2)); \
 
 #define EMITS_2(instr, val1, val2) \
-  fprintf(this->out_fp, "%s %s, %s",(instr),(val1),(val2));
+  fprintf(this->out_fp, "%s %-3s, %-7s         ",(instr),(val1),(val2));
 
 #define EMITSN_3(instr, val1, val2, val3) \
-  fprintf(this->out_fp, "%s %s, %s, %s\n",(instr),(val1),(val2),(val3));
+  fprintf(this->out_fp, "%s %-3s, %-7s, %-7s\n",(instr),(val1),(val2),(val3));
 
 #define EMITS_3(instr, val1, val2, val3) \
-  fprintf(this->out_fp, "%s %s, %s, %s",(instr),(val1),(val2),(val3));
+  fprintf(this->out_fp, "%s %-3s, %-7s, %-7s",(instr),(val1),(val2),(val3));
 
 #define EMIT_LABEL(val) \
   fprintf(this->out_fp, "L%d:\n",(val));
@@ -39,19 +40,19 @@ using namespace std;
 
 #define STACK_POP_64 \
   EMITS_3("  addi", "sp", "sp", "8") \
-  EMITSN("  # 64BITS STACK POP") \
+  EMITSN("  # ____8bytes stack pop") \
 
 #define STACK_PUSH_64(val) \
   { \
   EMITS_3("  addi", "sp", "sp", "-8") \
-  EMITSN(" # 64BITS STACK PUSH STEP1") \
+  EMITSN("  # ____8bytes stack push 1") \
   EMITS_2("  sw  ", (val), "0(sp)")   \
-  EMITSN("  # 64BITS STACK PUSH STEP2") \
+  EMITSN("  # ____8bytes stack push 2") \
   } \
 
 #define STACK_TOP(target) \
   EMITS_2("  lw  ", (target), "0(sp)") \
-  EMITSN("  # STACK TOP") \
+  EMITSN("  # ____stack top") \
 
 class CodeGenerator : public ASTVisitorBase {
   public:
@@ -134,4 +135,18 @@ class CodeGenerator : public ASTVisitorBase {
     
     string label_convert(int);
 
+    // KIND
+    bool is_specify_kind;
+    FieldKind specify_kind;
+    void specify_kind_on(FieldKind);
+    void specify_kind_off();
+
+    // ARRAY WIDTH
+    stack<int> array_width;
+    bool assignment_lhs;
+
+    // SCOPE STACK
+    stack<EnumNodeTable> scope_stack;
+    void push_scope_stack(EnumNodeTable);
+    void pop_scope_stack();
 };
