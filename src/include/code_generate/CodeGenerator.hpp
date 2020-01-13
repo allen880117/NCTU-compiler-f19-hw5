@@ -8,8 +8,11 @@
 #include <vector>
 using namespace std;
 
-#define EMITS(val) fprintf(this->out_fp, "%s",(val));
-#define EMITSN(val) fprintf(this->out_fp, "%s\n",(val));
+#define EMITS(val) \
+  fprintf(this->out_fp, "%s",(val)); \
+
+#define EMITSN(val) \
+  fprintf(this->out_fp, "%s\n",(val)); 
 
 #define EMITSN_1(instr, val1) \
   fprintf(this->out_fp, "%s %-3s\n",(instr),(val1));

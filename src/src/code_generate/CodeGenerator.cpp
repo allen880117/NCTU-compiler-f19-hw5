@@ -67,38 +67,75 @@ void CodeGenerator::visit(DeclarationNode *m) {
 void CodeGenerator::visit(VariableNode *m) {
     if(this->current_scope->level == 0) {
         // Global Scope
-        if(m->constant_value_node == nullptr) { // Not Constant
-            EMITSN("")
-            EMITSN("# GLOBAL VARIABLE")
-            EMITSN(".bss");
-            EMITSN(string(m->variable_name+":").c_str());
-            EMITSN("  .word 0");
-        } else {
-            EMITSN("")
-            EMITSN("# GLOBAL CONSTANT")
-            EMITSN(".text");
-            EMITSN(string(m->variable_name+":").c_str());
-            EMITS("  .word ");
-            EMITSN(to_string(m->type->int_literal).c_str());
+        switch(m->type->type_set){
+            case EnumTypeSet::SET_ACCUMLATED:{
+                // GLOBAL VARIABLE ARRAY
+                int total_num = 1;
+                for(uint i=0; i<m->type->array_range.size(); i++){
+                    total_num *= m->type->array_range[i].end-m->type->array_range[i].start;
+                }
+                EMITSN("")
+                EMITSN("# GLOBAL VARIABLE ARRAY")
+                EMITSN(".text");
+                EMITSN(string(m->variable_name+":").c_str());
+                for(uint i=0; i<total_num; i++){
+                    EMITSN("  .word 0");
+                }
+            } break;
+            case EnumTypeSet::SET_CONSTANT_LITERAL:{
+                // GLOBAL CONSTANT
+                EMITSN("")
+                EMITSN("# GLOBAL CONSTANT")
+                EMITSN(".text");
+                EMITSN(string(m->variable_name+":").c_str());
+                EMITS("  .word ");
+                EMITSN(to_string(m->type->int_literal).c_str());
+            } break;
+            case EnumTypeSet::SET_SCALAR:{
+                // GLOBAL VARIABLE
+                EMITSN("")
+                EMITSN("# GLOBAL VARIABLE")
+                EMITSN(".bss");
+                EMITSN(string(m->variable_name+":").c_str());
+                EMITSN("  .word 0");
+            } break;
+            default: break;
         }
     } else {
         // Local Scope
-        if(m->constant_value_node == nullptr) { // Not Constant
-            this->offset_down_32bit();
-            this->get_table_entry(m->variable_name)
-                ->set_address_offset(this->s0_offset);
-
-        } else {
-            this->offset_down_32bit();
-            this->get_table_entry(m->variable_name)
-                ->set_address_offset(this->s0_offset);
-            
-            string value   = to_string(m->type->int_literal);
-            string address = to_string(this->s0_offset)+string("(s0)");
-            EMITS_2("  li  ","t0",value.c_str());
-            EMITSN("  # local constant: load immediate");
-            EMITS_2("  sw  ","t0",address.c_str());
-            EMITSN("  # local_constant: save immediate");
+        switch(m->type->type_set){
+            case EnumTypeSet::SET_ACCUMLATED:{
+                // LOCAL VARIABLE ARRAY
+                int total_num = 1;
+                for(uint i=0; i<m->type->array_range.size(); i++){
+                    total_num *= m->type->array_range[i].end-m->type->array_range[i].start;
+                }
+                for(uint i=0; i<total_num; i++){
+                    this->offset_down_32bit();
+                }
+                this->get_table_entry(m->variable_name)
+                    ->set_address_offset(this->s0_offset);
+            } break;
+            case EnumTypeSet::SET_CONSTANT_LITERAL:{
+                // LOCAL CONSTANT
+                this->offset_down_32bit();
+                this->get_table_entry(m->variable_name)
+                    ->set_address_offset(this->s0_offset);
+                
+                string value   = to_string(m->type->int_literal);
+                string address = to_string(this->s0_offset)+string("(s0)");
+                EMITS_2("  li  ","t0",value.c_str());
+                EMITSN("  # local constant: load immediate");
+                EMITS_2("  sw  ","t0",address.c_str());
+                EMITSN("  # local_constant: save immediate");
+            } break;
+            case EnumTypeSet::SET_SCALAR:{
+                // LOCAL VARIABLE
+                this->offset_down_32bit();
+                this->get_table_entry(m->variable_name)
+                    ->set_address_offset(this->s0_offset);
+            } break;
+            default: break;
         }
     }
 }
