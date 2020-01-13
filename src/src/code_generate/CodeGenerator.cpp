@@ -348,7 +348,12 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
                 case EnumTypeSet::SET_ACCUMLATED:{
                     EMITS_2("  la  ", "t0", m->variable_name.c_str());
                     EMITSN("  # var_ref: get array base");
-                    for(uint i=0; i<m->expression_node_list->size(); i++){
+                    
+                    int slice_size = 0;
+                    if(m->expression_node_list != nullptr) 
+                        slice_size = m->expression_node_list->size();
+
+                    for(uint i=0; i<slice_size; i++){
                         int width = 4;
                         for(uint j=i+1; j<entry->type.array_range.size(); j++){
                             width *= entry->type.array_range[j].end - entry->type.array_range[j].start;
@@ -369,7 +374,7 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
                         EMITS_3("  addw", "t0", "t0", "t1");
                         EMITSN("  # var_ref: add offset to base");
                     }
-
+                    
                     STACK_PUSH_64("t0");
 
                     int width = 4;
@@ -414,7 +419,11 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
                         EMITSN("  # var_ref: get array base");
                     }
                     
-                    for(uint i=0; i<m->expression_node_list->size(); i++){
+                    int slice_size = 0;
+                    if(m->expression_node_list != nullptr) 
+                        slice_size = m->expression_node_list->size();
+
+                    for(uint i=0; i<slice_size; i++){
                         int width = 4;
                         for(uint j=i+1; j<entry->type.array_range.size(); j++){
                             width *= entry->type.array_range[j].end - entry->type.array_range[j].start;
@@ -439,7 +448,7 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
                     STACK_PUSH_64("t0");
 
                     int width = 4;
-                    for(int i=entry->type.array_range.size()-1; i>=m->expression_node_list->size(); i--){
+                    for(int i=entry->type.array_range.size()-1; i>=slice_size; i--){
                         width *= entry->type.array_range[i].end - entry->type.array_range[i].start;
                     }
 
@@ -475,7 +484,12 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
                 case EnumTypeSet::SET_ACCUMLATED:{
                     EMITS_2("  la  ", "t0", m->variable_name.c_str());
                     EMITSN("  # var_ref: get array base");
-                    for(uint i=0; i<m->expression_node_list->size(); i++){
+
+                    int slice_size = 0;
+                    if(m->expression_node_list != nullptr) 
+                        slice_size = m->expression_node_list->size();
+
+                    for(uint i=0; i<slice_size; i++){
                         int width = 4;
                         for(uint j=i+1; j<entry->type.array_range.size(); j++){
                             width *= entry->type.array_range[j].end - entry->type.array_range[j].start;
@@ -497,7 +511,7 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
                         EMITSN("  # var_ref: add offset to base");
                     }
 
-                    if(m->expression_node_list->size() == entry->type.array_range.size()){
+                    if(slice_size == entry->type.array_range.size()){
                         // Give Value
                         EMITS_2("  lw  ", "t0", "0(t0)");
                         EMITSN("  # var_ref: arrray, give value");
@@ -539,8 +553,12 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
                         EMITS_3("  addi", "t0", "s0", address.c_str());
                         EMITSN("  # var_ref: get array base");
                     }
-    
-                    for(uint i=0; i<m->expression_node_list->size(); i++){
+
+                    int slice_size = 0;
+                    if(m->expression_node_list != nullptr) 
+                        slice_size = m->expression_node_list->size();
+
+                    for(uint i=0; i<slice_size; i++){
                         int width = 4;
                         for(uint j=i+1; j<entry->type.array_range.size(); j++){
                             width *= entry->type.array_range[j].end - entry->type.array_range[j].start;
@@ -562,7 +580,7 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
                         EMITSN("  # var_ref: add offset to base");
                     }
 
-                    if(m->expression_node_list->size() == entry->type.array_range.size()){
+                    if(slice_size == entry->type.array_range.size()){
                         // Give Value
                         EMITS_2("  lw  ", "t0", "0(t0)");
                         EMITSN("  # var_ref: arrray, give value");
