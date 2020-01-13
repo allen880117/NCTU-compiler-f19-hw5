@@ -420,6 +420,9 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
                         STACK_TOP("t1");
                         STACK_POP_64;
 
+                        EMITS_3("  addi", "t1", "t1", to_string(-entry->type.array_range[i].start).c_str());
+                        EMITSN("  # var_ref: minus dimension lower bound");
+
                         EMITS_2("  li  ", "t2", to_string(width).c_str());
                         EMITSN("  # var_ref: get dimension width");
 
@@ -477,6 +480,9 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
 
                         STACK_TOP("t1");
                         STACK_POP_64;
+
+                        EMITS_3("  addi", "t1", "t1", to_string(-entry->type.array_range[i].start).c_str());
+                        EMITSN("  # var_ref: minus dimension lower bound");
 
                         EMITS_2("  li  ", "t2", to_string(width).c_str());
                         EMITSN("  # var_ref: get dimension width");
@@ -540,6 +546,9 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
                         STACK_TOP("t1");
                         STACK_POP_64;
 
+                        EMITS_3("  addi", "t1", "t1", to_string(-entry->type.array_range[i].start).c_str());
+                        EMITSN("  # var_ref: minus dimension lower bound");
+                        
                         EMITS_2("  li  ", "t2", to_string(width).c_str());
                         EMITSN("  # var_ref: get dimension width");
 
