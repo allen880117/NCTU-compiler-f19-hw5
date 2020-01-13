@@ -27,6 +27,8 @@ CodeGenerator::CodeGenerator(string _filename, string _dirpath, SymbolTable* _ta
 
     this->is_specify_kind = false;
     this->specify_kind    = FieldKind::KIND_UNKNOWN;
+
+    this->assignment_lhs = false;
 }
 
 void CodeGenerator::out_file_create(){

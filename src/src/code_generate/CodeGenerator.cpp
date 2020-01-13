@@ -277,8 +277,10 @@ void CodeGenerator::visit(AssignmentNode *m) { // STATEMENT
             m->expression_node->accept(*this);
 
         // Second, Get LHS Address
+        this->assignment_lhs = true;
         if (m->variable_reference_node != nullptr)
             m->variable_reference_node->accept(*this);
+        this->assignment_lhs = false;
     this->pop_src_node();
 
     // Address
@@ -351,7 +353,8 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
 
     SymbolEntry* entry = this->get_table_entry(m->variable_name);
     if(this->src_node.top() == EnumNodeTable::READ_NODE ||
-       this->src_node.top() == EnumNodeTable::ASSIGNMENT_NODE ){
+       this->assignment_lhs == true ){
+        EMITSN("# GIVE THE ADDRESS");
         // GIVE THE ADDRESS OF THE VARIABLE
         if(entry->level == 0){ // GLOBAL
             switch(entry->type.type_set){
@@ -488,6 +491,7 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
         }
     }
     else {
+        EMITSN("# GIVE THE VALUE");
         // GIVE THE VALUE
         if(entry->level == 0){ // GLOBAL
             switch(entry->type.type_set){
@@ -524,7 +528,7 @@ void CodeGenerator::visit(VariableReferenceNode *m) { // EXPRESSION
                     if(slice_size == entry->type.array_range.size()){
                         // Give Value
                         EMITS_2("  lw  ", "t0", "0(t0)");
-                        EMITSN("  # var_ref: arrray, give value");
+                        EMITSN("  # var_ref: array, give value");
                         STACK_PUSH_64("t0");
                     } else {
                         // Give Address

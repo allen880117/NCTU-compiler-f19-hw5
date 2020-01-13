@@ -12,14 +12,14 @@ using namespace std;
   fprintf(this->out_fp, "%s",(val)); \
 
 #define EMITSN(val) \
-  fprintf(this->out_fp, "%s\n",(val)); 
+  fprintf(this->out_fp, "%s\n",(val)); \
 
 #define EMITSN_1(instr, val1) \
   fprintf(this->out_fp, "%s %-3s\n",(instr),(val1));
 
 #define EMITS_1(instr, val1) \
   fprintf(this->out_fp, "%s %-3s                  ",(instr),(val1)); \
-  
+
 #define EMITSN_2(instr, val1, val2) \
   fprintf(this->out_fp, "%s %-3s, %-7s\n",(instr),(val1),(val2)); \
 
@@ -143,6 +143,7 @@ class CodeGenerator : public ASTVisitorBase {
 
     // ARRAY WIDTH
     stack<int> array_width;
+    bool assignment_lhs;
 
     // SCOPE STACK
     stack<EnumNodeTable> scope_stack;
