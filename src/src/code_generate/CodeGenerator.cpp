@@ -192,7 +192,11 @@ void CodeGenerator::visit(FunctionNode *m) {
                     
                     string source = string("a")+to_string(i);
                     string target = to_string(entry->address_offset)+string("(s0)");
-                    EMITS_2("  sw  ", source.c_str(), target.c_str());
+                    if(entry->type.type_set == EnumTypeSet::SET_ACCUMLATED){
+                        EMITS_2("  sd  ", source.c_str(), target.c_str());
+                    } else {
+                        EMITS_2("  sw  ", source.c_str(), target.c_str());
+                    }
                     EMITSN("  # param_save_to_local");
                 }
             } else {
@@ -205,11 +209,18 @@ void CodeGenerator::visit(FunctionNode *m) {
                     
                     string source = to_string(over_size-8)+string("(s0)");
                     string target = to_string(entry->address_offset)+string("(s0)");
-                    EMITS_2("  lw  ", "t1", source.c_str());
-                    EMITSN("  # param_save_to_local: stack load");
-                    EMITS_2("  sw  ", "t1", target.c_str());
-                    EMITSN("  # param_save_to_local: save");
-
+                     string target = to_string(entry->address_offset)+string("(s0)");
+                    if(entry->type.type_set == EnumTypeSet::SET_ACCUMLATED){
+                        EMITS_2("  ld  ", "t1", source.c_str());
+                        EMITSN("  # param_save_to_local: stack load");
+                        EMITS_2("  sd  ", "t1", target.c_str());
+                        EMITSN("  # param_save_to_local: save");
+                    } else {
+                        EMITS_2("  lw  ", "t1", source.c_str());
+                        EMITSN("  # param_save_to_local: stack load");
+                        EMITS_2("  sw  ", "t1", target.c_str());
+                        EMITSN("  # param_save_to_local: save");
+                    }
                     over_size-=8;
                 }
             }        
