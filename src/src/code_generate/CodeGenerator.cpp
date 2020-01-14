@@ -92,7 +92,22 @@ void CodeGenerator::visit(VariableNode *m) {
                 EMITSN(".text");
                 EMITSN(string(m->variable_name+":").c_str());
                 EMITS("  .word ");
-                EMITSN(to_string(m->type->int_literal).c_str());
+                
+                string value;
+                switch(m->type->type){
+                    case EnumType::TYPE_INTEGER: {
+                        value = to_string(m->type->int_literal);
+                    } break;
+                    case EnumType::TYPE_BOOLEAN: {
+                        if ( m->type->boolean_literal == Boolean_TRUE)
+                            value = string("1");
+                        else 
+                            value = string("0");
+                    } break;
+                    default: break;
+                }
+                
+                EMITSN(value.c_str());
                 EMITSN(".align 2");
             } break;
             case EnumTypeSet::SET_SCALAR:{
@@ -111,7 +126,7 @@ void CodeGenerator::visit(VariableNode *m) {
         switch(m->type->type_set){
             case EnumTypeSet::SET_ACCUMLATED:{
                 // Special Case : Function Parameter
-                // We need address only, so just allocate 4bytes only
+                // We need address only, so just allocate 8bytes(64bits) only
                 if( this->scope_stack.top() ==EnumNodeTable::FUNCTION_NODE &&
                     this->is_specify_kind == true &&
                     this->specify_kind == FieldKind::KIND_PARAMETER ){
@@ -139,7 +154,20 @@ void CodeGenerator::visit(VariableNode *m) {
                 this->get_table_entry(m->variable_name)
                     ->set_address_offset(this->s0_offset);
                 
-                string value   = to_string(m->type->int_literal);
+                string value;
+                switch(m->type->type){
+                    case EnumType::TYPE_INTEGER: {
+                        value = to_string(m->type->int_literal);
+                    } break;
+                    case EnumType::TYPE_BOOLEAN: {
+                        if ( m->type->boolean_literal == Boolean_TRUE)
+                            value = string("1");
+                        else 
+                            value = string("0");
+                    } break;
+                    default: break;
+                }
+                
                 string address = to_string(this->s0_offset)+string("(s0)");
                 EMITS_2("  li  ","t0",value.c_str());
                 EMITSN("  # local constant: load immediate");
@@ -158,7 +186,21 @@ void CodeGenerator::visit(VariableNode *m) {
 }
 
 void CodeGenerator::visit(ConstantValueNode *m) { // EXPRESSION
-    EMITS_2("  li  ", "t0", to_string(m->constant_value->int_literal).c_str());
+    string value;
+    switch(m->constant_value->type){
+        case EnumType::TYPE_INTEGER:{
+            value = to_string(m->constant_value->int_literal);
+        } break;
+        case EnumType::TYPE_BOOLEAN:{
+            if ( m->constant_value->boolean_literal == Boolean_TRUE)
+                value = string("1");
+            else 
+                value = string("0");
+        } break;
+        default: break;
+    }
+
+    EMITS_2("  li  ", "t0", value.c_str());
     EMITSN("  # constant_value: give value");
     STACK_PUSH_64("t0");
 }
@@ -283,6 +325,8 @@ void CodeGenerator::visit(AssignmentNode *m) { // STATEMENT
         this->assignment_lhs = false;
     this->pop_src_node();
 
+    EMITSN("# ASSIGNMENT");
+
     // Address
     STACK_TOP("t0");
     STACK_POP_64;
@@ -316,6 +360,8 @@ void CodeGenerator::visit(PrintNode *m) { // STATEMENT
             m->expression_node->accept(*this);
     this->pop_src_node();
     
+    EMITSN("# PRINT");
+
     STACK_TOP("t0");
     STACK_POP_64;
 
@@ -323,11 +369,16 @@ void CodeGenerator::visit(PrintNode *m) { // STATEMENT
     EMITSN("  # print: move param to a0");
     EMITS_2("  jal ","ra","print");
     EMITSN("  # print: jump to print");
+
+    EMITSN("# PRINT END");
+
 }
 
 void CodeGenerator::visit(ReadNode *m) { // STATEMENT
     // Visit Child Node
     this->push_src_node(EnumNodeTable::READ_NODE);
+
+    EMITSN("# READ");
 
         EMITSN("  jal  ra, read  # read: jump to read");
 
@@ -339,6 +390,8 @@ void CodeGenerator::visit(ReadNode *m) { // STATEMENT
         STACK_POP_64;
 
         EMITSN("  sw   a0, 0(t0)  # read: move ret_val to var_ref");
+
+    EMITSN("# READ END");
 
     this->pop_src_node();
 
@@ -640,58 +693,155 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
     STACK_TOP("t1"); // LHS
     STACK_POP_64;
 
-    if(this->is_specify_label == true){
-        switch(m->op){
+    int label_t0_true;
+    int label_t0_false;
+    int label_t1_true;
+    int label_t1_false;
+    int label_true;
+    int label_out;
+    switch(m->op){
+        case EnumOperator::OP_OR: {
+            label_out = this->new_label();
+            label_true = this->new_label();
+            label_t0_true = this->new_label();
+            label_t0_false = this->new_label();
+            label_t1_true = this->new_label();
+            label_t1_false = this->new_label();
+            EMITSN_2("  beqz ", "t0", this->label_convert(label_t0_false).c_str());
+            EMITSN_1("  j  ", this->label_convert(label_t0_true).c_str());
+
+            EMIT_LABEL(label_t0_false);
+            EMITSN_2("  beqz ", "t1", this->label_convert(label_t1_false).c_str());
+            EMITSN_1("  j  ", this->label_convert(label_t1_true).c_str());
+
+            EMIT_LABEL(label_t1_false); 
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+           
+            EMIT_LABEL(label_t0_true);
+            EMIT_LABEL(label_t1_true);
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+
+            EMIT_LABEL(label_out);
             
-            // WE NEED EXACTLY INVERSE CASE
-            // Since Branch invokes when the result is FALSE
+        } break;
+        case EnumOperator::OP_AND: {
+            label_out = this->new_label();
+            label_true = this->new_label();
+            label_t0_true = this->new_label();
+            label_t0_false = this->new_label();
+            label_t1_true = this->new_label();
+            label_t1_false = this->new_label();
+            EMITSN_2("  beqz ", "t0", this->label_convert(label_t0_false).c_str());
+            EMITSN_1("  j  ", this->label_convert(label_t0_true).c_str());
 
-            case EnumOperator::OP_LESS: { // need >=
-                EMITS_3("  bge ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            case EnumOperator::OP_LESS_OR_EQUAL: { // need >
-                EMITS_3("  bgt ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            case EnumOperator::OP_EQUAL: { // need !=
-                EMITS_3("  bne ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            case EnumOperator::OP_GREATER: { // need <=
-                EMITS_3("  ble ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            case EnumOperator::OP_GREATER_OR_EQUAL: { // need <
-                EMITS_3("  blt ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            case EnumOperator::OP_NOT_EQUAL: { // need ==
-                EMITS_3("  beq ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            default: break;
-        }
+            EMIT_LABEL(label_t0_true);
+            EMITSN_2("  beqz ", "t1", this->label_convert(label_t1_false).c_str());
+            EMITSN_1("  j  ", this->label_convert(label_t1_true).c_str());
 
-        EMITSN("  # binary_op: branch expression");
+            EMIT_LABEL(label_t1_true); 
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+           
+            EMIT_LABEL(label_t0_false);
+            EMIT_LABEL(label_t1_false);
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
 
-    } else {
-        switch(m->op){
-            case EnumOperator::OP_PLUS: {
-                EMITS_3("  addw", "t2", "t1", "t0");        
-            } break;
-            case EnumOperator::OP_MINUS: {
-                EMITS_3("  subw", "t2", "t1", "t0");   
-            } break;
-            case EnumOperator::OP_MULTIPLY: {
-                EMITS_3("  mulw", "t2", "t1", "t0");  
-            } break;
-            case EnumOperator::OP_DIVIDE: {
-                EMITS_3("  divw", "t2", "t1", "t0");    
-            } break;
-            case EnumOperator::OP_MOD: {
-                EMITS_3("  remw", "t2", "t1", "t0"); 
-            } break;
-            default: break;
-        }
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_LESS: {
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITSN_3("  blt ", "t1", "t0", this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_LESS_OR_EQUAL: {
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITSN_3("  ble ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_EQUAL: { 
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITSN_3("  beq ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_GREATER: { 
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITSN_3("  bgt ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_GREATER_OR_EQUAL: { 
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITSN_3("  bge ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_NOT_EQUAL: { 
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITSN_3("  bne ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
 
-        EMITSN("  # binary_op: arithmatic expression");
-        STACK_PUSH_64("t2");            
+        case EnumOperator::OP_PLUS: {
+            EMITS_3("  addw", "t2", "t1", "t0");        
+            EMITSN("  # binary_op: arithmatic expression");
+        } break;
+        case EnumOperator::OP_MINUS: {
+            EMITS_3("  subw", "t2", "t1", "t0");   
+            EMITSN("  # binary_op: arithmatic expression");
+        } break;
+        case EnumOperator::OP_MULTIPLY: {
+            EMITS_3("  mulw", "t2", "t1", "t0");  
+            EMITSN("  # binary_op: arithmatic expression");
+        } break;
+        case EnumOperator::OP_DIVIDE: {
+            EMITS_3("  divw", "t2", "t1", "t0"); 
+            EMITSN("  # binary_op: arithmatic expression");
+        } break;
+        case EnumOperator::OP_MOD: {
+            EMITS_3("  remw", "t2", "t1", "t0"); 
+            EMITSN("  # binary_op: arithmatic expression");
+        } break;
+        default: break;
     }
+
+    STACK_PUSH_64("t2");            
 }
 
 void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
@@ -703,20 +853,30 @@ void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
 
     STACK_TOP("t0");
     STACK_POP_64;
-
-    if(this->is_specify_label == true){
-        ;
-    } else {
-        switch(m->op){
-            case EnumOperator::OP_MINUS: {
-                EMITS_3("  subw", "t1", "zero", "t0");
-            } break;
-            default: break;
-        }
-
-        EMITSN("  # unary_op: arithmatic expression");
-        STACK_PUSH_64("t1");            
+   
+    int label_true;
+    int label_out;
+    switch(m->op){
+        case EnumOperator::OP_NOT: {
+            label_true = new_label();
+            label_out  = new_label();
+            EMITSN_2("  bnez", "t0", this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t1", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITSN_2("  li  ", "t1", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_MINUS: {
+            EMITS_3("  subw", "t1", "zero", "t0");
+            EMITSN("  # unary_op: arithmatic expression");
+        } break;
+        default: break;
     }
+
+    STACK_PUSH_64("t1");            
+
 }
 
 void CodeGenerator::visit(IfNode *m) { // STATEMENT
@@ -727,11 +887,14 @@ void CodeGenerator::visit(IfNode *m) { // STATEMENT
     // Visit Child Nodes
     this->push_src_node(EnumNodeTable::IF_NODE);
         
-        this->specify_label_on(label_2); // if FALSE jump to L2
         if (m->condition != nullptr)
             m->condition->accept(*this);
-        this->specify_label_off();
-
+        
+        STACK_TOP("t0");
+        STACK_POP_64;
+        
+        EMITS_2("  beqz", "t0", this->label_convert(label_2).c_str());
+        EMITSN("  # if: jump to else");
         EMIT_LABEL(label_1);
 
         if (m->body != nullptr)
@@ -761,10 +924,14 @@ void CodeGenerator::visit(WhileNode *m) { // STATEMENT
 
         EMIT_LABEL(label_1);
 
-        this->specify_label_on(label_2); // if FALSE jump to L2
         if (m->condition != nullptr)
             m->condition->accept(*this);
-        this->specify_label_off();
+        
+        STACK_TOP("t0");
+        STACK_POP_64;
+        
+        EMITS_2("  beqz ", "t0", this->label_convert(label_2).c_str());
+        EMITSN("  # while: jump to out");
 
         if (m->body != nullptr)
             for (uint i = 0; i < m->body->size(); i++)
