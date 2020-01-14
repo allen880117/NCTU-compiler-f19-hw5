@@ -646,89 +646,93 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
         case EnumOperator::OP_LESS: {
             label_out = this->new_label();
             label_true = this->new_label();
-            EMITS_3("  blt ", "t1", "t0", this->label_convert(label_true).c_str());
-            EMITS_2("  li  ", "t2", "0");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_3("  blt ", "t1", "t0", this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_true);
-            EMITS_2("  li  ", "t2", "1");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_out);
         } break;
         case EnumOperator::OP_LESS_OR_EQUAL: {
             label_out = this->new_label();
             label_true = this->new_label();
-            EMITS_3("  ble ", "t1", "t0",this->label_convert(label_true).c_str());
-            EMITS_2("  li  ", "t2", "0");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_3("  ble ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_true);
-            EMITS_2("  li  ", "t2", "1");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_out);
         } break;
         case EnumOperator::OP_EQUAL: { // need !=
             label_out = this->new_label();
             label_true = this->new_label();
-            EMITS_3("  beq ", "t1", "t0",this->label_convert(label_true).c_str());
-            EMITS_2("  li  ", "t2", "0");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_3("  beq ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_true);
-            EMITS_2("  li  ", "t2", "1");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_out);
         } break;
         case EnumOperator::OP_GREATER: { // need <=
             label_out = this->new_label();
             label_true = this->new_label();
-            EMITS_3("  bgt ", "t1", "t0",this->label_convert(label_true).c_str());
-            EMITS_2("  li  ", "t2", "0");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_3("  bgt ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_true);
-            EMITS_2("  li  ", "t2", "1");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_out);
         } break;
         case EnumOperator::OP_GREATER_OR_EQUAL: { // need <
             label_out = this->new_label();
             label_true = this->new_label();
-            EMITS_3("  bge ", "t1", "t0",this->label_convert(label_true).c_str());
-            EMITS_2("  li  ", "t2", "0");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_3("  bge ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_true);
-            EMITS_2("  li  ", "t2", "1");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_out);
         } break;
         case EnumOperator::OP_NOT_EQUAL: { // need ==
             label_out = this->new_label();
             label_true = this->new_label();
-            EMITS_3("  bne ", "t1", "t0",this->label_convert(label_true).c_str());
-            EMITS_2("  li  ", "t2", "0");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_3("  bne ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITSN_2("  li  ", "t2", "0");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_true);
-            EMITS_2("  li  ", "t2", "1");
-            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMITSN_2("  li  ", "t2", "1");
+            EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_out);
         } break;
 
         case EnumOperator::OP_PLUS: {
             EMITS_3("  addw", "t2", "t1", "t0");        
+            EMITSN("  # binary_op: arithmatic expression");
         } break;
         case EnumOperator::OP_MINUS: {
             EMITS_3("  subw", "t2", "t1", "t0");   
+            EMITSN("  # binary_op: arithmatic expression");
         } break;
         case EnumOperator::OP_MULTIPLY: {
             EMITS_3("  mulw", "t2", "t1", "t0");  
+            EMITSN("  # binary_op: arithmatic expression");
         } break;
         case EnumOperator::OP_DIVIDE: {
-            EMITS_3("  divw", "t2", "t1", "t0");    
+            EMITS_3("  divw", "t2", "t1", "t0"); 
+            EMITSN("  # binary_op: arithmatic expression");
         } break;
         case EnumOperator::OP_MOD: {
             EMITS_3("  remw", "t2", "t1", "t0"); 
+            EMITSN("  # binary_op: arithmatic expression");
         } break;
         default: break;
     }
 
-    EMITSN("  # binary_op: arithmatic expression");
     STACK_PUSH_64("t2");            
 }
 
