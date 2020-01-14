@@ -4,6 +4,7 @@
 
 bool;
 
+var gar:array 2 to 4 of boolean;
 var gd:boolean;
 var jj:true;
 
@@ -17,9 +18,21 @@ begin
 end
 end botest
 
+arrtest(tt:array 0 to 2 of boolean): integer;
+begin
+    tt[1] := true;
+    if tt[0] and tt[1] then
+        return 1719; 
+    else 
+        return 1555;
+    end if
+end
+end arrtest
+
 
 begin
 
+var lar:array 3 to 5 of  boolean;
 var kk:boolean;
 var pk:boolean;
 var ck:true;
@@ -65,6 +78,21 @@ end if
 print botest(ck); // 3
 print botest(dk); // 2
 
+lar[3] := true;
+print arrtest(lar);
+gar[2] := true;
+print arrtest(gar);
+gar[2] := false;
+print arrtest(gar);
+
+if lar[4] then
+    print 1;
+end if
+
+if not gar[3] then
+    print 3;
+end if
+
 end
 end bool
 
@@ -76,3 +104,7 @@ end bool
 // 77
 // 3
 // 2
+// 1719
+// 1719
+// 1555
+// 1
