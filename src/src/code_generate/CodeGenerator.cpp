@@ -811,8 +811,6 @@ void CodeGenerator::visit(WhileNode *m) { // STATEMENT
         
         EMITS_2("  beqz ", "t0", this->label_convert(label_2).c_str());
         EMITSN("  # while: jump to out");
-        EMIT_LABEL(label_2);
-
 
         if (m->body != nullptr)
             for (uint i = 0; i < m->body->size(); i++)
