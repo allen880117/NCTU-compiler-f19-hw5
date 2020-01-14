@@ -29,6 +29,10 @@ CodeGenerator::CodeGenerator(string _filename, string _dirpath, SymbolTable* _ta
     this->specify_kind    = FieldKind::KIND_UNKNOWN;
 
     this->assignment_lhs = false;
+
+    this->is_local_fp_constant = false;
+    this->lc_label = 0;
+    this->lc = "  .section .rodata\n";
 }
 
 void CodeGenerator::out_file_create(){
@@ -217,4 +221,15 @@ void CodeGenerator::push_scope_stack(EnumNodeTable _node){
 
 void CodeGenerator::pop_scope_stack(){
     this->scope_stack.pop();
+}
+
+int CodeGenerator::new_lc(float _fp){
+    this->lc_label++;
+    this->lc+=string("  .align 2\n");
+    this->lc+=string(".LC");
+    this->lc+=to_string(this->lc_label);
+    this->lc+=string(":\n  .float ");
+    this->lc+=to_string(_fp);
+    this->lc+=string("\n");
+    return this->lc_label;
 }

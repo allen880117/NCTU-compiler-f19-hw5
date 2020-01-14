@@ -153,4 +153,13 @@ class CodeGenerator : public ASTVisitorBase {
     stack<EnumNodeTable> scope_stack;
     void push_scope_stack(EnumNodeTable);
     void pop_scope_stack();
+
+    // EXPRESSION STACK
+    stack<VariableInfo> expression_stack;
+
+    // FLOATING CONSTANT
+    bool is_local_fp_constant;
+    int lc_label;
+    int new_lc(float);
+    string lc;
 };
