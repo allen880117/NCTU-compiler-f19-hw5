@@ -12,7 +12,7 @@ int read()
     return value;
 }
 
-void print_real(int real)
+void print_real(float real)
 {
     printf("%f\n", real);
 }

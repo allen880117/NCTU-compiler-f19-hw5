@@ -477,9 +477,13 @@ void CodeGenerator::visit(PrintNode *m) { // STATEMENT
     VariableInfo rhs = this->expression_stack.top();
     this->expression_stack.pop();
 
-    EMITS_2("  mv  ","a0","t0");
-    EMITSN("  # print: move param to a0");
-
+    if(rhs.type == EnumType::TYPE_REAL){
+        EMITS_2("  fmv.w.x","fa0","t0");
+        EMITSN("  # print: move param to fa0");
+    } else {
+        EMITS_2("  mv  ","a0","t0");
+        EMITSN("  # print: move param to a0");
+    }
     if(rhs.type == EnumType::TYPE_REAL){
         EMITS_2("  jal ","ra","print_real");
         EMITSN("  # print: jump to print_real");
@@ -508,14 +512,17 @@ void CodeGenerator::visit(ReadNode *m) { // STATEMENT
         if(rhs.type == EnumType::TYPE_REAL){
             EMITSN("  jal  ra, read_real  # read: jump to read_real");
         } else {
-            EMITSN("  jal  ra, read  # read: jump to read");
+            EMITSN("  jal  ra, read       # read: jump to read");
         }
 
         STACK_TOP("t0");
         STACK_POP_64;
-
-        EMITSN("  sw   a0, 0(t0)  # read: move ret_val to var_ref");
-
+        
+        if(rhs.type == EnumType::TYPE_REAL){
+            EMITSN("  fsw  fa0, 0(t0)  # read: move ret_val to var_ref");
+        } else {
+            EMITSN("  sw   a0, 0(t0)   # read: move ret_val to var_ref");
+        }
     EMITSN("# READ END");
 
     this->pop_src_node();
