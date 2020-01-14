@@ -468,22 +468,18 @@ void CodeGenerator::visit(PrintNode *m) { // STATEMENT
         if (m->expression_node != nullptr)
             m->expression_node->accept(*this);
     this->pop_src_node();
-    
-    VariableInfo rhs = this->expression_stack.top();
-    this->expression_stack.pop();
 
     EMITSN("# PRINT");
 
     STACK_TOP("t0");
     STACK_POP_64;
 
-    if(rhs.type == EnumType::TYPE_REAL){
-        EMITS_2("  fmv.w.x","fa0","t0");
-        EMITSN("  # print: move param to fa0");
-    } else {
-        EMITS_2("  mv  ","a0","t0");
-        EMITSN("  # print: move param to a0");
-    }
+    VariableInfo rhs = this->expression_stack.top();
+    this->expression_stack.pop();
+
+    EMITS_2("  mv  ","a0","t0");
+    EMITSN("  # print: move param to a0");
+
     if(rhs.type == EnumType::TYPE_REAL){
         EMITS_2("  jal ","ra","print_real");
         EMITSN("  # print: jump to print_real");
