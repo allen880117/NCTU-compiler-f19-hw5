@@ -15,7 +15,7 @@ using namespace std;
   fprintf(this->out_fp, "%s\n",(val)); \
 
 #define EMITSN_1(instr, val1) \
-  fprintf(this->out_fp, "%s %-3s\n",(instr),(val1));
+  fprintf(this->out_fp, "%s %-3s\n",(instr),(val1)); \
 
 #define EMITS_1(instr, val1) \
   fprintf(this->out_fp, "%s %-3s                  ",(instr),(val1)); \
@@ -27,7 +27,7 @@ using namespace std;
   fprintf(this->out_fp, "%s %-3s, %-7s         ",(instr),(val1),(val2));
 
 #define EMITSN_3(instr, val1, val2, val3) \
-  fprintf(this->out_fp, "%s %-3s, %-7s, %-7s\n",(instr),(val1),(val2),(val3));
+  fprintf(this->out_fp, "%s %-3s, %-7s, %-7s\n",(instr),(val1),(val2),(val3)); 
 
 #define EMITS_3(instr, val1, val2, val3) \
   fprintf(this->out_fp, "%s %-3s, %-7s, %-7s",(instr),(val1),(val2),(val3));
@@ -39,8 +39,10 @@ using namespace std;
   fprintf(this->out_fp, "L%d\n",(val));
 
 #define STACK_POP_64 \
+  { \
   EMITS_3("  addi", "sp", "sp", "8") \
   EMITSN("  # ____8bytes stack pop") \
+  } \
 
 #define STACK_PUSH_64(val) \
   { \
@@ -51,8 +53,10 @@ using namespace std;
   } \
 
 #define STACK_TOP(target) \
+  { \
   EMITS_2("  lw  ", (target), "0(sp)") \
   EMITSN("  # ____stack top") \
+  } \
 
 class CodeGenerator : public ASTVisitorBase {
   public:

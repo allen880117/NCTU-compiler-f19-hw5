@@ -640,58 +640,96 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
     STACK_TOP("t1"); // LHS
     STACK_POP_64;
 
-    if(this->is_specify_label == true){
-        switch(m->op){
-            
-            // WE NEED EXACTLY INVERSE CASE
-            // Since Branch invokes when the result is FALSE
+    int label_out;
+    int label_true;
+    switch(m->op){
+        case EnumOperator::OP_LESS: {
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITS_3("  blt ", "t1", "t0", this->label_convert(label_true).c_str());
+            EMITS_2("  li  ", "t2", "0");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITS_2("  li  ", "t2", "1");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_LESS_OR_EQUAL: {
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITS_3("  ble ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITS_2("  li  ", "t2", "0");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITS_2("  li  ", "t2", "1");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_EQUAL: { // need !=
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITS_3("  beq ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITS_2("  li  ", "t2", "0");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITS_2("  li  ", "t2", "1");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_GREATER: { // need <=
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITS_3("  bgt ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITS_2("  li  ", "t2", "0");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITS_2("  li  ", "t2", "1");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_GREATER_OR_EQUAL: { // need <
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITS_3("  bge ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITS_2("  li  ", "t2", "0");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITS_2("  li  ", "t2", "1");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
+        case EnumOperator::OP_NOT_EQUAL: { // need ==
+            label_out = this->new_label();
+            label_true = this->new_label();
+            EMITS_3("  bne ", "t1", "t0",this->label_convert(label_true).c_str());
+            EMITS_2("  li  ", "t2", "0");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_true);
+            EMITS_2("  li  ", "t2", "1");
+            EMITS_1("  j   ", this->label_convert(label_out).c_str());
+            EMIT_LABEL(label_out);
+        } break;
 
-            case EnumOperator::OP_LESS: { // need >=
-                EMITS_3("  bge ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            case EnumOperator::OP_LESS_OR_EQUAL: { // need >
-                EMITS_3("  bgt ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            case EnumOperator::OP_EQUAL: { // need !=
-                EMITS_3("  bne ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            case EnumOperator::OP_GREATER: { // need <=
-                EMITS_3("  ble ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            case EnumOperator::OP_GREATER_OR_EQUAL: { // need <
-                EMITS_3("  blt ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            case EnumOperator::OP_NOT_EQUAL: { // need ==
-                EMITS_3("  beq ", "t1", "t0", this->get_specify_label().c_str());
-            } break;
-            default: break;
-        }
-
-        EMITSN("  # binary_op: branch expression");
-
-    } else {
-        switch(m->op){
-            case EnumOperator::OP_PLUS: {
-                EMITS_3("  addw", "t2", "t1", "t0");        
-            } break;
-            case EnumOperator::OP_MINUS: {
-                EMITS_3("  subw", "t2", "t1", "t0");   
-            } break;
-            case EnumOperator::OP_MULTIPLY: {
-                EMITS_3("  mulw", "t2", "t1", "t0");  
-            } break;
-            case EnumOperator::OP_DIVIDE: {
-                EMITS_3("  divw", "t2", "t1", "t0");    
-            } break;
-            case EnumOperator::OP_MOD: {
-                EMITS_3("  remw", "t2", "t1", "t0"); 
-            } break;
-            default: break;
-        }
-
-        EMITSN("  # binary_op: arithmatic expression");
-        STACK_PUSH_64("t2");            
+        case EnumOperator::OP_PLUS: {
+            EMITS_3("  addw", "t2", "t1", "t0");        
+        } break;
+        case EnumOperator::OP_MINUS: {
+            EMITS_3("  subw", "t2", "t1", "t0");   
+        } break;
+        case EnumOperator::OP_MULTIPLY: {
+            EMITS_3("  mulw", "t2", "t1", "t0");  
+        } break;
+        case EnumOperator::OP_DIVIDE: {
+            EMITS_3("  divw", "t2", "t1", "t0");    
+        } break;
+        case EnumOperator::OP_MOD: {
+            EMITS_3("  remw", "t2", "t1", "t0"); 
+        } break;
+        default: break;
     }
+
+    EMITSN("  # binary_op: arithmatic expression");
+    STACK_PUSH_64("t2");            
 }
 
 void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
@@ -703,20 +741,17 @@ void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
 
     STACK_TOP("t0");
     STACK_POP_64;
-
-    if(this->is_specify_label == true){
-        ;
-    } else {
-        switch(m->op){
-            case EnumOperator::OP_MINUS: {
-                EMITS_3("  subw", "t1", "zero", "t0");
-            } break;
-            default: break;
-        }
-
-        EMITSN("  # unary_op: arithmatic expression");
-        STACK_PUSH_64("t1");            
+   
+    switch(m->op){
+        case EnumOperator::OP_MINUS: {
+            EMITS_3("  subw", "t1", "zero", "t0");
+        } break;
+        default: break;
     }
+
+    EMITSN("  # unary_op: arithmatic expression");
+    STACK_PUSH_64("t1");            
+
 }
 
 void CodeGenerator::visit(IfNode *m) { // STATEMENT
@@ -727,11 +762,14 @@ void CodeGenerator::visit(IfNode *m) { // STATEMENT
     // Visit Child Nodes
     this->push_src_node(EnumNodeTable::IF_NODE);
         
-        this->specify_label_on(label_2); // if FALSE jump to L2
         if (m->condition != nullptr)
             m->condition->accept(*this);
-        this->specify_label_off();
-
+        
+        STACK_TOP("t0");
+        STACK_POP_64;
+        
+        EMITS_2("  beqz ", "t0", this->label_convert(label_2).c_str());
+        EMITSN("  # if: jump to else");
         EMIT_LABEL(label_1);
 
         if (m->body != nullptr)
@@ -761,10 +799,16 @@ void CodeGenerator::visit(WhileNode *m) { // STATEMENT
 
         EMIT_LABEL(label_1);
 
-        this->specify_label_on(label_2); // if FALSE jump to L2
         if (m->condition != nullptr)
             m->condition->accept(*this);
-        this->specify_label_off();
+        
+        STACK_TOP("t0");
+        STACK_POP_64;
+        
+        EMITS_2("  beqz ", "t0", this->label_convert(label_2).c_str());
+        EMITSN("  # while: jump to out");
+        EMIT_LABEL(label_2);
+
 
         if (m->body != nullptr)
             for (uint i = 0; i < m->body->size(); i++)

@@ -1,9 +1,9 @@
-Terminals unused in grammar
+終端機在文法中未使用
 
    DEF
 
 
-Grammar
+文法
 
     0 $accept: Program $end
 
@@ -135,7 +135,7 @@ Grammar
    89 Epsilon: %empty
 
 
-Terminals, with rules where they appear
+終結語詞，附有它們出現處的規則
 
 $end (0) 0
 error (256)
@@ -190,941 +190,941 @@ REAL_LITERAL (305) 35
 STRING_LITERAL (306) 36
 
 
-Nonterminals, with rules where they appear
+非終結語詞，附有它們出現處的規則
 
 $accept (52)
-    on left: 0
+    於左側： 0
 Program (53)
-    on left: 1, on right: 0
+    於左側： 1, 於右側： 0
 ProgramName (54)
-    on left: 2, on right: 1
+    於左側： 2, 於右側： 1
 DeclarationList (55)
-    on left: 3 4, on right: 1 46
+    於左側： 3 4, 於右側： 1 46
 Declarations (56)
-    on left: 5 6, on right: 4 6
+    於左側： 5 6, 於右側： 4 6
 FunctionList (57)
-    on left: 7 8, on right: 1
+    於左側： 7 8, 於右側： 1
 Functions (58)
-    on left: 9 10, on right: 8 10
+    於左側： 9 10, 於右側： 8 10
 FunctionDeclaration (59)
-    on left: 11, on right: 9 10
+    於左側： 11, 於右側： 9 10
 FunctionName (60)
-    on left: 12, on right: 11
+    於左側： 12, 於右側： 11
 FormalArgList (61)
-    on left: 13 14, on right: 11
+    於左側： 13 14, 於右側： 11
 FormalArgs (62)
-    on left: 15 16, on right: 14 16
+    於左側： 15 16, 於右側： 14 16
 FormalArg (63)
-    on left: 17, on right: 15 16
+    於左側： 17, 於右側： 15 16
 IdList (64)
-    on left: 18 19, on right: 17 19 22
+    於左側： 18 19, 於右側： 17 19 22
 ReturnType (65)
-    on left: 20 21, on right: 11
+    於左側： 20 21, 於右側： 11
 Declaration (66)
-    on left: 22, on right: 5 6
+    於左側： 22, 於右側： 5 6
 TypeOrConstant (67)
-    on left: 23 24, on right: 22
+    於左側： 23 24, 於右側： 22
 Type (68)
-    on left: 25 26, on right: 17 23
+    於左側： 25 26, 於右側： 17 23
 ScalarType (69)
-    on left: 27 28 29 30, on right: 20 25 31
+    於左側： 27 28 29 30, 於右側： 20 25 31
 ArrType (70)
-    on left: 31, on right: 26
+    於左側： 31, 於右側： 26
 ArrDecl (71)
-    on left: 32 33, on right: 31 33
+    於左側： 32 33, 於右側： 31 33
 LiteralConstant (72)
-    on left: 34 35 36 37 38, on right: 24 86
+    於左側： 34 35 36 37 38, 於右側： 24 86
 Statement (73)
-    on left: 39 40 41 42 43 44 45, on right: 68 69
+    於左側： 39 40 41 42 43 44 45, 於右側： 68 69
 CompoundStatement (74)
-    on left: 46, on right: 1 11 39
+    於左側： 46, 於右側： 1 11 39
 Simple (75)
-    on left: 47 48 49, on right: 40
+    於左側： 47 48 49, 於右側： 40
 VariableReference (76)
-    on left: 50 51, on right: 47 49 87
+    於左側： 50 51, 於右側： 47 49 87
 ArrForm (77)
-    on left: 52 53, on right: 51 53
+    於左側： 52 53, 於右側： 51 53
 Condition (78)
-    on left: 54, on right: 41
+    於左側： 54, 於右側： 41
 ElseOrNot (79)
-    on left: 55 56, on right: 54
+    於左側： 55 56, 於右側： 54
 While (80)
-    on left: 57, on right: 42
+    於左側： 57, 於右側： 42
 For (81)
-    on left: 58, on right: 43
+    於左側： 58, 於右側： 43
 Return (82)
-    on left: 59, on right: 44
+    於左側： 59, 於右側： 44
 FunctionInvokation (83)
-    on left: 60, on right: 45
+    於左側： 60, 於右側： 45
 FunctionCall (84)
-    on left: 61, on right: 60 88
+    於左側： 61, 於右側： 60 88
 ExpressionList (85)
-    on left: 62 63, on right: 61
+    於左側： 62 63, 於右側： 61
 Expressions (86)
-    on left: 64 65, on right: 63 65
+    於左側： 64 65, 於右側： 63 65
 StatementList (87)
-    on left: 66 67, on right: 46 54 55 57 58
+    於左側： 66 67, 於右側： 46 54 55 57 58
 Statements (88)
-    on left: 68 69, on right: 67 69
+    於左側： 68 69, 於右側： 67 69
 Expression (89)
-    on left: 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87
-    88, on right: 47 48 52 53 54 57 59 64 65 70 71 72 73 74 75 76 77
-    78 79 80 81 82 83 84 85
+    於左側： 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86
+    87 88, 於右側： 47 48 52 53 54 57 59 64 65 70 71 72 73 74 75
+    76 77 78 79 80 81 82 83 84 85
 Epsilon (90)
-    on left: 89, on right: 3 7 13 21 56 62 66
+    於左側： 89, 於右側： 3 7 13 21 56 62 66
 
 
-State 0
+狀態 0
 
     0 $accept: . Program $end
 
-    ID  shift, and go to state 1
+    ID  偏移，並進入狀態 1
 
-    Program      go to state 2
-    ProgramName  go to state 3
+    Program      進入狀態 2
+    ProgramName  進入狀態 3
 
 
-State 1
+狀態 1
 
     2 ProgramName: ID .
 
-    $default  reduce using rule 2 (ProgramName)
+    $預設  使用規則 2 以縮減 (ProgramName)
 
 
-State 2
+狀態 2
 
     0 $accept: Program . $end
 
-    $end  shift, and go to state 4
+    $end  偏移，並進入狀態 4
 
 
-State 3
+狀態 3
 
     1 Program: ProgramName . SEMICOLON DeclarationList FunctionList CompoundStatement END ProgramName
 
-    SEMICOLON  shift, and go to state 5
+    SEMICOLON  偏移，並進入狀態 5
 
 
-State 4
+狀態 4
 
     0 $accept: Program $end .
 
-    $default  accept
+    $預設  接受
 
 
-State 5
+狀態 5
 
     1 Program: ProgramName SEMICOLON . DeclarationList FunctionList CompoundStatement END ProgramName
 
-    VAR  shift, and go to state 6
+    VAR  偏移，並進入狀態 6
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    DeclarationList  go to state 7
-    Declarations     go to state 8
-    Declaration      go to state 9
-    Epsilon          go to state 10
+    DeclarationList  進入狀態 7
+    Declarations     進入狀態 8
+    Declaration      進入狀態 9
+    Epsilon          進入狀態 10
 
 
-State 6
+狀態 6
 
    22 Declaration: VAR . IdList COLON TypeOrConstant SEMICOLON
 
-    ID  shift, and go to state 11
+    ID  偏移，並進入狀態 11
 
-    IdList  go to state 12
+    IdList  進入狀態 12
 
 
-State 7
+狀態 7
 
     1 Program: ProgramName SEMICOLON DeclarationList . FunctionList CompoundStatement END ProgramName
 
-    ID  shift, and go to state 13
+    ID  偏移，並進入狀態 13
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    FunctionList         go to state 14
-    Functions            go to state 15
-    FunctionDeclaration  go to state 16
-    FunctionName         go to state 17
-    Epsilon              go to state 18
+    FunctionList         進入狀態 14
+    Functions            進入狀態 15
+    FunctionDeclaration  進入狀態 16
+    FunctionName         進入狀態 17
+    Epsilon              進入狀態 18
 
 
-State 8
+狀態 8
 
     4 DeclarationList: Declarations .
     6 Declarations: Declarations . Declaration
 
-    VAR  shift, and go to state 6
+    VAR  偏移，並進入狀態 6
 
-    $default  reduce using rule 4 (DeclarationList)
+    $預設  使用規則 4 以縮減 (DeclarationList)
 
-    Declaration  go to state 19
+    Declaration  進入狀態 19
 
 
-State 9
+狀態 9
 
     5 Declarations: Declaration .
 
-    $default  reduce using rule 5 (Declarations)
+    $預設  使用規則 5 以縮減 (Declarations)
 
 
-State 10
+狀態 10
 
     3 DeclarationList: Epsilon .
 
-    $default  reduce using rule 3 (DeclarationList)
+    $預設  使用規則 3 以縮減 (DeclarationList)
 
 
-State 11
+狀態 11
 
    18 IdList: ID .
 
-    $default  reduce using rule 18 (IdList)
+    $預設  使用規則 18 以縮減 (IdList)
 
 
-State 12
+狀態 12
 
    19 IdList: IdList . COMMA ID
    22 Declaration: VAR IdList . COLON TypeOrConstant SEMICOLON
 
-    COMMA  shift, and go to state 20
-    COLON  shift, and go to state 21
+    COMMA  偏移，並進入狀態 20
+    COLON  偏移，並進入狀態 21
 
 
-State 13
+狀態 13
 
    12 FunctionName: ID .
 
-    $default  reduce using rule 12 (FunctionName)
+    $預設  使用規則 12 以縮減 (FunctionName)
 
 
-State 14
+狀態 14
 
     1 Program: ProgramName SEMICOLON DeclarationList FunctionList . CompoundStatement END ProgramName
 
-    BEGIN_  shift, and go to state 22
+    BEGIN_  偏移，並進入狀態 22
 
-    CompoundStatement  go to state 23
+    CompoundStatement  進入狀態 23
 
 
-State 15
+狀態 15
 
     8 FunctionList: Functions .
    10 Functions: Functions . FunctionDeclaration
 
-    ID  shift, and go to state 13
+    ID  偏移，並進入狀態 13
 
-    $default  reduce using rule 8 (FunctionList)
+    $預設  使用規則 8 以縮減 (FunctionList)
 
-    FunctionDeclaration  go to state 24
-    FunctionName         go to state 17
+    FunctionDeclaration  進入狀態 24
+    FunctionName         進入狀態 17
 
 
-State 16
+狀態 16
 
     9 Functions: FunctionDeclaration .
 
-    $default  reduce using rule 9 (Functions)
+    $預設  使用規則 9 以縮減 (Functions)
 
 
-State 17
+狀態 17
 
    11 FunctionDeclaration: FunctionName . L_PARENTHESIS FormalArgList R_PARENTHESIS ReturnType SEMICOLON CompoundStatement END FunctionName
 
-    L_PARENTHESIS  shift, and go to state 25
+    L_PARENTHESIS  偏移，並進入狀態 25
 
 
-State 18
+狀態 18
 
     7 FunctionList: Epsilon .
 
-    $default  reduce using rule 7 (FunctionList)
+    $預設  使用規則 7 以縮減 (FunctionList)
 
 
-State 19
+狀態 19
 
     6 Declarations: Declarations Declaration .
 
-    $default  reduce using rule 6 (Declarations)
+    $預設  使用規則 6 以縮減 (Declarations)
 
 
-State 20
+狀態 20
 
    19 IdList: IdList COMMA . ID
 
-    ID  shift, and go to state 26
+    ID  偏移，並進入狀態 26
 
 
-State 21
+狀態 21
 
    22 Declaration: VAR IdList COLON . TypeOrConstant SEMICOLON
 
-    ARRAY           shift, and go to state 27
-    BOOLEAN         shift, and go to state 28
-    INTEGER         shift, and go to state 29
-    REAL            shift, and go to state 30
-    STRING          shift, and go to state 31
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    ARRAY           偏移，並進入狀態 27
+    BOOLEAN         偏移，並進入狀態 28
+    INTEGER         偏移，並進入狀態 29
+    REAL            偏移，並進入狀態 30
+    STRING          偏移，並進入狀態 31
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    TypeOrConstant   go to state 37
-    Type             go to state 38
-    ScalarType       go to state 39
-    ArrType          go to state 40
-    ArrDecl          go to state 41
-    LiteralConstant  go to state 42
+    TypeOrConstant   進入狀態 37
+    Type             進入狀態 38
+    ScalarType       進入狀態 39
+    ArrType          進入狀態 40
+    ArrDecl          進入狀態 41
+    LiteralConstant  進入狀態 42
 
 
-State 22
+狀態 22
 
    46 CompoundStatement: BEGIN_ . DeclarationList StatementList END
 
-    VAR  shift, and go to state 6
+    VAR  偏移，並進入狀態 6
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    DeclarationList  go to state 43
-    Declarations     go to state 8
-    Declaration      go to state 9
-    Epsilon          go to state 10
+    DeclarationList  進入狀態 43
+    Declarations     進入狀態 8
+    Declaration      進入狀態 9
+    Epsilon          進入狀態 10
 
 
-State 23
+狀態 23
 
     1 Program: ProgramName SEMICOLON DeclarationList FunctionList CompoundStatement . END ProgramName
 
-    END  shift, and go to state 44
+    END  偏移，並進入狀態 44
 
 
-State 24
+狀態 24
 
    10 Functions: Functions FunctionDeclaration .
 
-    $default  reduce using rule 10 (Functions)
+    $預設  使用規則 10 以縮減 (Functions)
 
 
-State 25
+狀態 25
 
    11 FunctionDeclaration: FunctionName L_PARENTHESIS . FormalArgList R_PARENTHESIS ReturnType SEMICOLON CompoundStatement END FunctionName
 
-    ID  shift, and go to state 11
+    ID  偏移，並進入狀態 11
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    FormalArgList  go to state 45
-    FormalArgs     go to state 46
-    FormalArg      go to state 47
-    IdList         go to state 48
-    Epsilon        go to state 49
+    FormalArgList  進入狀態 45
+    FormalArgs     進入狀態 46
+    FormalArg      進入狀態 47
+    IdList         進入狀態 48
+    Epsilon        進入狀態 49
 
 
-State 26
+狀態 26
 
    19 IdList: IdList COMMA ID .
 
-    $default  reduce using rule 19 (IdList)
+    $預設  使用規則 19 以縮減 (IdList)
 
 
-State 27
+狀態 27
 
    32 ArrDecl: ARRAY . INT_LITERAL TO INT_LITERAL OF
 
-    INT_LITERAL  shift, and go to state 50
+    INT_LITERAL  偏移，並進入狀態 50
 
 
-State 28
+狀態 28
 
    30 ScalarType: BOOLEAN .
 
-    $default  reduce using rule 30 (ScalarType)
+    $預設  使用規則 30 以縮減 (ScalarType)
 
 
-State 29
+狀態 29
 
    27 ScalarType: INTEGER .
 
-    $default  reduce using rule 27 (ScalarType)
+    $預設  使用規則 27 以縮減 (ScalarType)
 
 
-State 30
+狀態 30
 
    28 ScalarType: REAL .
 
-    $default  reduce using rule 28 (ScalarType)
+    $預設  使用規則 28 以縮減 (ScalarType)
 
 
-State 31
+狀態 31
 
    29 ScalarType: STRING .
 
-    $default  reduce using rule 29 (ScalarType)
+    $預設  使用規則 29 以縮減 (ScalarType)
 
 
-State 32
+狀態 32
 
    38 LiteralConstant: FALSE .
 
-    $default  reduce using rule 38 (LiteralConstant)
+    $預設  使用規則 38 以縮減 (LiteralConstant)
 
 
-State 33
+狀態 33
 
    37 LiteralConstant: TRUE .
 
-    $default  reduce using rule 37 (LiteralConstant)
+    $預設  使用規則 37 以縮減 (LiteralConstant)
 
 
-State 34
+狀態 34
 
    34 LiteralConstant: INT_LITERAL .
 
-    $default  reduce using rule 34 (LiteralConstant)
+    $預設  使用規則 34 以縮減 (LiteralConstant)
 
 
-State 35
+狀態 35
 
    35 LiteralConstant: REAL_LITERAL .
 
-    $default  reduce using rule 35 (LiteralConstant)
+    $預設  使用規則 35 以縮減 (LiteralConstant)
 
 
-State 36
+狀態 36
 
    36 LiteralConstant: STRING_LITERAL .
 
-    $default  reduce using rule 36 (LiteralConstant)
+    $預設  使用規則 36 以縮減 (LiteralConstant)
 
 
-State 37
+狀態 37
 
    22 Declaration: VAR IdList COLON TypeOrConstant . SEMICOLON
 
-    SEMICOLON  shift, and go to state 51
+    SEMICOLON  偏移，並進入狀態 51
 
 
-State 38
+狀態 38
 
    23 TypeOrConstant: Type .
 
-    $default  reduce using rule 23 (TypeOrConstant)
+    $預設  使用規則 23 以縮減 (TypeOrConstant)
 
 
-State 39
+狀態 39
 
    25 Type: ScalarType .
 
-    $default  reduce using rule 25 (Type)
+    $預設  使用規則 25 以縮減 (Type)
 
 
-State 40
+狀態 40
 
    26 Type: ArrType .
 
-    $default  reduce using rule 26 (Type)
+    $預設  使用規則 26 以縮減 (Type)
 
 
-State 41
+狀態 41
 
    31 ArrType: ArrDecl . ScalarType
    33 ArrDecl: ArrDecl . ARRAY INT_LITERAL TO INT_LITERAL OF
 
-    ARRAY    shift, and go to state 52
-    BOOLEAN  shift, and go to state 28
-    INTEGER  shift, and go to state 29
-    REAL     shift, and go to state 30
-    STRING   shift, and go to state 31
+    ARRAY    偏移，並進入狀態 52
+    BOOLEAN  偏移，並進入狀態 28
+    INTEGER  偏移，並進入狀態 29
+    REAL     偏移，並進入狀態 30
+    STRING   偏移，並進入狀態 31
 
-    ScalarType  go to state 53
+    ScalarType  進入狀態 53
 
 
-State 42
+狀態 42
 
    24 TypeOrConstant: LiteralConstant .
 
-    $default  reduce using rule 24 (TypeOrConstant)
+    $預設  使用規則 24 以縮減 (TypeOrConstant)
 
 
-State 43
+狀態 43
 
    46 CompoundStatement: BEGIN_ DeclarationList . StatementList END
 
-    BEGIN_  shift, and go to state 22
-    FOR     shift, and go to state 54
-    IF      shift, and go to state 55
-    WHILE   shift, and go to state 56
-    RETURN  shift, and go to state 57
-    PRINT   shift, and go to state 58
-    READ    shift, and go to state 59
-    ID      shift, and go to state 60
+    BEGIN_  偏移，並進入狀態 22
+    FOR     偏移，並進入狀態 54
+    IF      偏移，並進入狀態 55
+    WHILE   偏移，並進入狀態 56
+    RETURN  偏移，並進入狀態 57
+    PRINT   偏移，並進入狀態 58
+    READ    偏移，並進入狀態 59
+    ID      偏移，並進入狀態 60
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    Statement           go to state 61
-    CompoundStatement   go to state 62
-    Simple              go to state 63
-    VariableReference   go to state 64
-    Condition           go to state 65
-    While               go to state 66
-    For                 go to state 67
-    Return              go to state 68
-    FunctionInvokation  go to state 69
-    FunctionCall        go to state 70
-    StatementList       go to state 71
-    Statements          go to state 72
-    Epsilon             go to state 73
+    Statement           進入狀態 61
+    CompoundStatement   進入狀態 62
+    Simple              進入狀態 63
+    VariableReference   進入狀態 64
+    Condition           進入狀態 65
+    While               進入狀態 66
+    For                 進入狀態 67
+    Return              進入狀態 68
+    FunctionInvokation  進入狀態 69
+    FunctionCall        進入狀態 70
+    StatementList       進入狀態 71
+    Statements          進入狀態 72
+    Epsilon             進入狀態 73
 
 
-State 44
+狀態 44
 
     1 Program: ProgramName SEMICOLON DeclarationList FunctionList CompoundStatement END . ProgramName
 
-    ID  shift, and go to state 1
+    ID  偏移，並進入狀態 1
 
-    ProgramName  go to state 74
+    ProgramName  進入狀態 74
 
 
-State 45
+狀態 45
 
    11 FunctionDeclaration: FunctionName L_PARENTHESIS FormalArgList . R_PARENTHESIS ReturnType SEMICOLON CompoundStatement END FunctionName
 
-    R_PARENTHESIS  shift, and go to state 75
+    R_PARENTHESIS  偏移，並進入狀態 75
 
 
-State 46
+狀態 46
 
    14 FormalArgList: FormalArgs .
    16 FormalArgs: FormalArgs . SEMICOLON FormalArg
 
-    SEMICOLON  shift, and go to state 76
+    SEMICOLON  偏移，並進入狀態 76
 
-    $default  reduce using rule 14 (FormalArgList)
+    $預設  使用規則 14 以縮減 (FormalArgList)
 
 
-State 47
+狀態 47
 
    15 FormalArgs: FormalArg .
 
-    $default  reduce using rule 15 (FormalArgs)
+    $預設  使用規則 15 以縮減 (FormalArgs)
 
 
-State 48
+狀態 48
 
    17 FormalArg: IdList . COLON Type
    19 IdList: IdList . COMMA ID
 
-    COMMA  shift, and go to state 20
-    COLON  shift, and go to state 77
+    COMMA  偏移，並進入狀態 20
+    COLON  偏移，並進入狀態 77
 
 
-State 49
+狀態 49
 
    13 FormalArgList: Epsilon .
 
-    $default  reduce using rule 13 (FormalArgList)
+    $預設  使用規則 13 以縮減 (FormalArgList)
 
 
-State 50
+狀態 50
 
    32 ArrDecl: ARRAY INT_LITERAL . TO INT_LITERAL OF
 
-    TO  shift, and go to state 78
+    TO  偏移，並進入狀態 78
 
 
-State 51
+狀態 51
 
    22 Declaration: VAR IdList COLON TypeOrConstant SEMICOLON .
 
-    $default  reduce using rule 22 (Declaration)
+    $預設  使用規則 22 以縮減 (Declaration)
 
 
-State 52
+狀態 52
 
    33 ArrDecl: ArrDecl ARRAY . INT_LITERAL TO INT_LITERAL OF
 
-    INT_LITERAL  shift, and go to state 79
+    INT_LITERAL  偏移，並進入狀態 79
 
 
-State 53
+狀態 53
 
    31 ArrType: ArrDecl ScalarType .
 
-    $default  reduce using rule 31 (ArrType)
+    $預設  使用規則 31 以縮減 (ArrType)
 
 
-State 54
+狀態 54
 
    58 For: FOR . ID ASSIGN INT_LITERAL TO INT_LITERAL DO StatementList END DO
 
-    ID  shift, and go to state 80
+    ID  偏移，並進入狀態 80
 
 
-State 55
+狀態 55
 
    54 Condition: IF . Expression THEN StatementList ElseOrNot END IF
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 87
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 87
 
 
-State 56
+狀態 56
 
    57 While: WHILE . Expression DO StatementList END DO
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 88
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 88
 
 
-State 57
+狀態 57
 
    59 Return: RETURN . Expression SEMICOLON
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 89
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 89
 
 
-State 58
+狀態 58
 
    48 Simple: PRINT . Expression SEMICOLON
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 90
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 90
 
 
-State 59
+狀態 59
 
    49 Simple: READ . VariableReference SEMICOLON
 
-    ID  shift, and go to state 91
+    ID  偏移，並進入狀態 91
 
-    VariableReference  go to state 92
+    VariableReference  進入狀態 92
 
 
-State 60
+狀態 60
 
    50 VariableReference: ID .
    51                  | ID . ArrForm
    61 FunctionCall: ID . L_PARENTHESIS ExpressionList R_PARENTHESIS
 
-    L_PARENTHESIS  shift, and go to state 93
-    L_BRACKET      shift, and go to state 94
+    L_PARENTHESIS  偏移，並進入狀態 93
+    L_BRACKET      偏移，並進入狀態 94
 
-    $default  reduce using rule 50 (VariableReference)
+    $預設  使用規則 50 以縮減 (VariableReference)
 
-    ArrForm  go to state 95
+    ArrForm  進入狀態 95
 
 
-State 61
+狀態 61
 
    68 Statements: Statement .
 
-    $default  reduce using rule 68 (Statements)
+    $預設  使用規則 68 以縮減 (Statements)
 
 
-State 62
+狀態 62
 
    39 Statement: CompoundStatement .
 
-    $default  reduce using rule 39 (Statement)
+    $預設  使用規則 39 以縮減 (Statement)
 
 
-State 63
+狀態 63
 
    40 Statement: Simple .
 
-    $default  reduce using rule 40 (Statement)
+    $預設  使用規則 40 以縮減 (Statement)
 
 
-State 64
+狀態 64
 
    47 Simple: VariableReference . ASSIGN Expression SEMICOLON
 
-    ASSIGN  shift, and go to state 96
+    ASSIGN  偏移，並進入狀態 96
 
 
-State 65
+狀態 65
 
    41 Statement: Condition .
 
-    $default  reduce using rule 41 (Statement)
+    $預設  使用規則 41 以縮減 (Statement)
 
 
-State 66
+狀態 66
 
    42 Statement: While .
 
-    $default  reduce using rule 42 (Statement)
+    $預設  使用規則 42 以縮減 (Statement)
 
 
-State 67
+狀態 67
 
    43 Statement: For .
 
-    $default  reduce using rule 43 (Statement)
+    $預設  使用規則 43 以縮減 (Statement)
 
 
-State 68
+狀態 68
 
    44 Statement: Return .
 
-    $default  reduce using rule 44 (Statement)
+    $預設  使用規則 44 以縮減 (Statement)
 
 
-State 69
+狀態 69
 
    45 Statement: FunctionInvokation .
 
-    $default  reduce using rule 45 (Statement)
+    $預設  使用規則 45 以縮減 (Statement)
 
 
-State 70
+狀態 70
 
    60 FunctionInvokation: FunctionCall . SEMICOLON
 
-    SEMICOLON  shift, and go to state 97
+    SEMICOLON  偏移，並進入狀態 97
 
 
-State 71
+狀態 71
 
    46 CompoundStatement: BEGIN_ DeclarationList StatementList . END
 
-    END  shift, and go to state 98
+    END  偏移，並進入狀態 98
 
 
-State 72
+狀態 72
 
    67 StatementList: Statements .
    69 Statements: Statements . Statement
 
-    BEGIN_  shift, and go to state 22
-    FOR     shift, and go to state 54
-    IF      shift, and go to state 55
-    WHILE   shift, and go to state 56
-    RETURN  shift, and go to state 57
-    PRINT   shift, and go to state 58
-    READ    shift, and go to state 59
-    ID      shift, and go to state 60
+    BEGIN_  偏移，並進入狀態 22
+    FOR     偏移，並進入狀態 54
+    IF      偏移，並進入狀態 55
+    WHILE   偏移，並進入狀態 56
+    RETURN  偏移，並進入狀態 57
+    PRINT   偏移，並進入狀態 58
+    READ    偏移，並進入狀態 59
+    ID      偏移，並進入狀態 60
 
-    $default  reduce using rule 67 (StatementList)
+    $預設  使用規則 67 以縮減 (StatementList)
 
-    Statement           go to state 99
-    CompoundStatement   go to state 62
-    Simple              go to state 63
-    VariableReference   go to state 64
-    Condition           go to state 65
-    While               go to state 66
-    For                 go to state 67
-    Return              go to state 68
-    FunctionInvokation  go to state 69
-    FunctionCall        go to state 70
+    Statement           進入狀態 99
+    CompoundStatement   進入狀態 62
+    Simple              進入狀態 63
+    VariableReference   進入狀態 64
+    Condition           進入狀態 65
+    While               進入狀態 66
+    For                 進入狀態 67
+    Return              進入狀態 68
+    FunctionInvokation  進入狀態 69
+    FunctionCall        進入狀態 70
 
 
-State 73
+狀態 73
 
    66 StatementList: Epsilon .
 
-    $default  reduce using rule 66 (StatementList)
+    $預設  使用規則 66 以縮減 (StatementList)
 
 
-State 74
+狀態 74
 
     1 Program: ProgramName SEMICOLON DeclarationList FunctionList CompoundStatement END ProgramName .
 
-    $default  reduce using rule 1 (Program)
+    $預設  使用規則 1 以縮減 (Program)
 
 
-State 75
+狀態 75
 
    11 FunctionDeclaration: FunctionName L_PARENTHESIS FormalArgList R_PARENTHESIS . ReturnType SEMICOLON CompoundStatement END FunctionName
 
-    COLON  shift, and go to state 100
+    COLON  偏移，並進入狀態 100
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    ReturnType  go to state 101
-    Epsilon     go to state 102
+    ReturnType  進入狀態 101
+    Epsilon     進入狀態 102
 
 
-State 76
+狀態 76
 
    16 FormalArgs: FormalArgs SEMICOLON . FormalArg
 
-    ID  shift, and go to state 11
+    ID  偏移，並進入狀態 11
 
-    FormalArg  go to state 103
-    IdList     go to state 48
+    FormalArg  進入狀態 103
+    IdList     進入狀態 48
 
 
-State 77
+狀態 77
 
    17 FormalArg: IdList COLON . Type
 
-    ARRAY    shift, and go to state 27
-    BOOLEAN  shift, and go to state 28
-    INTEGER  shift, and go to state 29
-    REAL     shift, and go to state 30
-    STRING   shift, and go to state 31
+    ARRAY    偏移，並進入狀態 27
+    BOOLEAN  偏移，並進入狀態 28
+    INTEGER  偏移，並進入狀態 29
+    REAL     偏移，並進入狀態 30
+    STRING   偏移，並進入狀態 31
 
-    Type        go to state 104
-    ScalarType  go to state 39
-    ArrType     go to state 40
-    ArrDecl     go to state 41
+    Type        進入狀態 104
+    ScalarType  進入狀態 39
+    ArrType     進入狀態 40
+    ArrDecl     進入狀態 41
 
 
-State 78
+狀態 78
 
    32 ArrDecl: ARRAY INT_LITERAL TO . INT_LITERAL OF
 
-    INT_LITERAL  shift, and go to state 105
+    INT_LITERAL  偏移，並進入狀態 105
 
 
-State 79
+狀態 79
 
    33 ArrDecl: ArrDecl ARRAY INT_LITERAL . TO INT_LITERAL OF
 
-    TO  shift, and go to state 106
+    TO  偏移，並進入狀態 106
 
 
-State 80
+狀態 80
 
    58 For: FOR ID . ASSIGN INT_LITERAL TO INT_LITERAL DO StatementList END DO
 
-    ASSIGN  shift, and go to state 107
+    ASSIGN  偏移，並進入狀態 107
 
 
-State 81
+狀態 81
 
    70 Expression: L_PARENTHESIS . Expression R_PARENTHESIS
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 108
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 108
 
 
-State 82
+狀態 82
 
    83 Expression: NOT . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 109
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 109
 
 
-State 83
+狀態 83
 
    71 Expression: MINUS . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 110
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 110
 
 
-State 84
+狀態 84
 
    86 Expression: LiteralConstant .
 
-    $default  reduce using rule 86 (Expression)
+    $預設  使用規則 86 以縮減 (Expression)
 
 
-State 85
+狀態 85
 
    87 Expression: VariableReference .
 
-    $default  reduce using rule 87 (Expression)
+    $預設  使用規則 87 以縮減 (Expression)
 
 
-State 86
+狀態 86
 
    88 Expression: FunctionCall .
 
-    $default  reduce using rule 88 (Expression)
+    $預設  使用規則 88 以縮減 (Expression)
 
 
-State 87
+狀態 87
 
    54 Condition: IF Expression . THEN StatementList ElseOrNot END IF
    72 Expression: Expression . MULTIPLY Expression
@@ -1141,23 +1141,23 @@ State 87
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    OR                shift, and go to state 111
-    AND               shift, and go to state 112
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
-    THEN              shift, and go to state 124
+    OR                偏移，並進入狀態 111
+    AND               偏移，並進入狀態 112
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
+    THEN              偏移，並進入狀態 124
 
 
-State 88
+狀態 88
 
    57 While: WHILE Expression . DO StatementList END DO
    72 Expression: Expression . MULTIPLY Expression
@@ -1174,23 +1174,23 @@ State 88
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    OR                shift, and go to state 111
-    AND               shift, and go to state 112
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
-    DO                shift, and go to state 125
+    OR                偏移，並進入狀態 111
+    AND               偏移，並進入狀態 112
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
+    DO                偏移，並進入狀態 125
 
 
-State 89
+狀態 89
 
    59 Return: RETURN Expression . SEMICOLON
    72 Expression: Expression . MULTIPLY Expression
@@ -1207,23 +1207,23 @@ State 89
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    SEMICOLON         shift, and go to state 126
-    OR                shift, and go to state 111
-    AND               shift, and go to state 112
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
+    SEMICOLON         偏移，並進入狀態 126
+    OR                偏移，並進入狀態 111
+    AND               偏移，並進入狀態 112
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
 
 
-State 90
+狀態 90
 
    48 Simple: PRINT Expression . SEMICOLON
    72 Expression: Expression . MULTIPLY Expression
@@ -1240,199 +1240,199 @@ State 90
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    SEMICOLON         shift, and go to state 127
-    OR                shift, and go to state 111
-    AND               shift, and go to state 112
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
+    SEMICOLON         偏移，並進入狀態 127
+    OR                偏移，並進入狀態 111
+    AND               偏移，並進入狀態 112
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
 
 
-State 91
+狀態 91
 
    50 VariableReference: ID .
    51                  | ID . ArrForm
 
-    L_BRACKET  shift, and go to state 94
+    L_BRACKET  偏移，並進入狀態 94
 
-    $default  reduce using rule 50 (VariableReference)
+    $預設  使用規則 50 以縮減 (VariableReference)
 
-    ArrForm  go to state 95
+    ArrForm  進入狀態 95
 
 
-State 92
+狀態 92
 
    49 Simple: READ VariableReference . SEMICOLON
 
-    SEMICOLON  shift, and go to state 128
+    SEMICOLON  偏移，並進入狀態 128
 
 
-State 93
+狀態 93
 
    61 FunctionCall: ID L_PARENTHESIS . ExpressionList R_PARENTHESIS
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    ExpressionList     go to state 129
-    Expressions        go to state 130
-    Expression         go to state 131
-    Epsilon            go to state 132
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    ExpressionList     進入狀態 129
+    Expressions        進入狀態 130
+    Expression         進入狀態 131
+    Epsilon            進入狀態 132
 
 
-State 94
+狀態 94
 
    52 ArrForm: L_BRACKET . Expression R_BRACKET
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 133
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 133
 
 
-State 95
+狀態 95
 
    51 VariableReference: ID ArrForm .
    53 ArrForm: ArrForm . L_BRACKET Expression R_BRACKET
 
-    L_BRACKET  shift, and go to state 134
+    L_BRACKET  偏移，並進入狀態 134
 
-    $default  reduce using rule 51 (VariableReference)
+    $預設  使用規則 51 以縮減 (VariableReference)
 
 
-State 96
+狀態 96
 
    47 Simple: VariableReference ASSIGN . Expression SEMICOLON
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 135
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 135
 
 
-State 97
+狀態 97
 
    60 FunctionInvokation: FunctionCall SEMICOLON .
 
-    $default  reduce using rule 60 (FunctionInvokation)
+    $預設  使用規則 60 以縮減 (FunctionInvokation)
 
 
-State 98
+狀態 98
 
    46 CompoundStatement: BEGIN_ DeclarationList StatementList END .
 
-    $default  reduce using rule 46 (CompoundStatement)
+    $預設  使用規則 46 以縮減 (CompoundStatement)
 
 
-State 99
+狀態 99
 
    69 Statements: Statements Statement .
 
-    $default  reduce using rule 69 (Statements)
+    $預設  使用規則 69 以縮減 (Statements)
 
 
-State 100
+狀態 100
 
    20 ReturnType: COLON . ScalarType
 
-    BOOLEAN  shift, and go to state 28
-    INTEGER  shift, and go to state 29
-    REAL     shift, and go to state 30
-    STRING   shift, and go to state 31
+    BOOLEAN  偏移，並進入狀態 28
+    INTEGER  偏移，並進入狀態 29
+    REAL     偏移，並進入狀態 30
+    STRING   偏移，並進入狀態 31
 
-    ScalarType  go to state 136
+    ScalarType  進入狀態 136
 
 
-State 101
+狀態 101
 
    11 FunctionDeclaration: FunctionName L_PARENTHESIS FormalArgList R_PARENTHESIS ReturnType . SEMICOLON CompoundStatement END FunctionName
 
-    SEMICOLON  shift, and go to state 137
+    SEMICOLON  偏移，並進入狀態 137
 
 
-State 102
+狀態 102
 
    21 ReturnType: Epsilon .
 
-    $default  reduce using rule 21 (ReturnType)
+    $預設  使用規則 21 以縮減 (ReturnType)
 
 
-State 103
+狀態 103
 
    16 FormalArgs: FormalArgs SEMICOLON FormalArg .
 
-    $default  reduce using rule 16 (FormalArgs)
+    $預設  使用規則 16 以縮減 (FormalArgs)
 
 
-State 104
+狀態 104
 
    17 FormalArg: IdList COLON Type .
 
-    $default  reduce using rule 17 (FormalArg)
+    $預設  使用規則 17 以縮減 (FormalArg)
 
 
-State 105
+狀態 105
 
    32 ArrDecl: ARRAY INT_LITERAL TO INT_LITERAL . OF
 
-    OF  shift, and go to state 138
+    OF  偏移，並進入狀態 138
 
 
-State 106
+狀態 106
 
    33 ArrDecl: ArrDecl ARRAY INT_LITERAL TO . INT_LITERAL OF
 
-    INT_LITERAL  shift, and go to state 139
+    INT_LITERAL  偏移，並進入狀態 139
 
 
-State 107
+狀態 107
 
    58 For: FOR ID ASSIGN . INT_LITERAL TO INT_LITERAL DO StatementList END DO
 
-    INT_LITERAL  shift, and go to state 140
+    INT_LITERAL  偏移，並進入狀態 140
 
 
-State 108
+狀態 108
 
    70 Expression: L_PARENTHESIS Expression . R_PARENTHESIS
    72           | Expression . MULTIPLY Expression
@@ -1449,23 +1449,23 @@ State 108
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    R_PARENTHESIS     shift, and go to state 141
-    OR                shift, and go to state 111
-    AND               shift, and go to state 112
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
+    R_PARENTHESIS     偏移，並進入狀態 141
+    OR                偏移，並進入狀態 111
+    AND               偏移，並進入狀態 112
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
 
 
-State 109
+狀態 109
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -1482,22 +1482,22 @@ State 109
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
 
-    $default  reduce using rule 83 (Expression)
+    $預設  使用規則 83 以縮減 (Expression)
 
 
-State 110
+狀態 110
 
    71 Expression: MINUS Expression .
    72           | Expression . MULTIPLY Expression
@@ -1514,368 +1514,368 @@ State 110
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    $default  reduce using rule 71 (Expression)
+    $預設  使用規則 71 以縮減 (Expression)
 
 
-State 111
+狀態 111
 
    85 Expression: Expression OR . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 142
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 142
 
 
-State 112
+狀態 112
 
    84 Expression: Expression AND . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 143
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 143
 
 
-State 113
+狀態 113
 
    77 Expression: Expression LESS . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 144
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 144
 
 
-State 114
+狀態 114
 
    78 Expression: Expression LESS_OR_EQUAL . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 145
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 145
 
 
-State 115
+狀態 115
 
    81 Expression: Expression EQUAL . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 146
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 146
 
 
-State 116
+狀態 116
 
    79 Expression: Expression GREATER . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 147
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 147
 
 
-State 117
+狀態 117
 
    80 Expression: Expression GREATER_OR_EQUAL . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 148
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 148
 
 
-State 118
+狀態 118
 
    82 Expression: Expression NOT_EQUAL . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 149
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 149
 
 
-State 119
+狀態 119
 
    75 Expression: Expression PLUS . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 150
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 150
 
 
-State 120
+狀態 120
 
    76 Expression: Expression MINUS . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 151
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 151
 
 
-State 121
+狀態 121
 
    72 Expression: Expression MULTIPLY . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 152
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 152
 
 
-State 122
+狀態 122
 
    73 Expression: Expression DIVIDE . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 153
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 153
 
 
-State 123
+狀態 123
 
    74 Expression: Expression MOD . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 154
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 154
 
 
-State 124
+狀態 124
 
    54 Condition: IF Expression THEN . StatementList ElseOrNot END IF
 
-    BEGIN_  shift, and go to state 22
-    FOR     shift, and go to state 54
-    IF      shift, and go to state 55
-    WHILE   shift, and go to state 56
-    RETURN  shift, and go to state 57
-    PRINT   shift, and go to state 58
-    READ    shift, and go to state 59
-    ID      shift, and go to state 60
+    BEGIN_  偏移，並進入狀態 22
+    FOR     偏移，並進入狀態 54
+    IF      偏移，並進入狀態 55
+    WHILE   偏移，並進入狀態 56
+    RETURN  偏移，並進入狀態 57
+    PRINT   偏移，並進入狀態 58
+    READ    偏移，並進入狀態 59
+    ID      偏移，並進入狀態 60
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    Statement           go to state 61
-    CompoundStatement   go to state 62
-    Simple              go to state 63
-    VariableReference   go to state 64
-    Condition           go to state 65
-    While               go to state 66
-    For                 go to state 67
-    Return              go to state 68
-    FunctionInvokation  go to state 69
-    FunctionCall        go to state 70
-    StatementList       go to state 155
-    Statements          go to state 72
-    Epsilon             go to state 73
+    Statement           進入狀態 61
+    CompoundStatement   進入狀態 62
+    Simple              進入狀態 63
+    VariableReference   進入狀態 64
+    Condition           進入狀態 65
+    While               進入狀態 66
+    For                 進入狀態 67
+    Return              進入狀態 68
+    FunctionInvokation  進入狀態 69
+    FunctionCall        進入狀態 70
+    StatementList       進入狀態 155
+    Statements          進入狀態 72
+    Epsilon             進入狀態 73
 
 
-State 125
+狀態 125
 
    57 While: WHILE Expression DO . StatementList END DO
 
-    BEGIN_  shift, and go to state 22
-    FOR     shift, and go to state 54
-    IF      shift, and go to state 55
-    WHILE   shift, and go to state 56
-    RETURN  shift, and go to state 57
-    PRINT   shift, and go to state 58
-    READ    shift, and go to state 59
-    ID      shift, and go to state 60
+    BEGIN_  偏移，並進入狀態 22
+    FOR     偏移，並進入狀態 54
+    IF      偏移，並進入狀態 55
+    WHILE   偏移，並進入狀態 56
+    RETURN  偏移，並進入狀態 57
+    PRINT   偏移，並進入狀態 58
+    READ    偏移，並進入狀態 59
+    ID      偏移，並進入狀態 60
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    Statement           go to state 61
-    CompoundStatement   go to state 62
-    Simple              go to state 63
-    VariableReference   go to state 64
-    Condition           go to state 65
-    While               go to state 66
-    For                 go to state 67
-    Return              go to state 68
-    FunctionInvokation  go to state 69
-    FunctionCall        go to state 70
-    StatementList       go to state 156
-    Statements          go to state 72
-    Epsilon             go to state 73
+    Statement           進入狀態 61
+    CompoundStatement   進入狀態 62
+    Simple              進入狀態 63
+    VariableReference   進入狀態 64
+    Condition           進入狀態 65
+    While               進入狀態 66
+    For                 進入狀態 67
+    Return              進入狀態 68
+    FunctionInvokation  進入狀態 69
+    FunctionCall        進入狀態 70
+    StatementList       進入狀態 156
+    Statements          進入狀態 72
+    Epsilon             進入狀態 73
 
 
-State 126
+狀態 126
 
    59 Return: RETURN Expression SEMICOLON .
 
-    $default  reduce using rule 59 (Return)
+    $預設  使用規則 59 以縮減 (Return)
 
 
-State 127
+狀態 127
 
    48 Simple: PRINT Expression SEMICOLON .
 
-    $default  reduce using rule 48 (Simple)
+    $預設  使用規則 48 以縮減 (Simple)
 
 
-State 128
+狀態 128
 
    49 Simple: READ VariableReference SEMICOLON .
 
-    $default  reduce using rule 49 (Simple)
+    $預設  使用規則 49 以縮減 (Simple)
 
 
-State 129
+狀態 129
 
    61 FunctionCall: ID L_PARENTHESIS ExpressionList . R_PARENTHESIS
 
-    R_PARENTHESIS  shift, and go to state 157
+    R_PARENTHESIS  偏移，並進入狀態 157
 
 
-State 130
+狀態 130
 
    63 ExpressionList: Expressions .
    65 Expressions: Expressions . COMMA Expression
 
-    COMMA  shift, and go to state 158
+    COMMA  偏移，並進入狀態 158
 
-    $default  reduce using rule 63 (ExpressionList)
+    $預設  使用規則 63 以縮減 (ExpressionList)
 
 
-State 131
+狀態 131
 
    64 Expressions: Expression .
    72 Expression: Expression . MULTIPLY Expression
@@ -1892,31 +1892,31 @@ State 131
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    OR                shift, and go to state 111
-    AND               shift, and go to state 112
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
+    OR                偏移，並進入狀態 111
+    AND               偏移，並進入狀態 112
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
 
-    $default  reduce using rule 64 (Expressions)
+    $預設  使用規則 64 以縮減 (Expressions)
 
 
-State 132
+狀態 132
 
    62 ExpressionList: Epsilon .
 
-    $default  reduce using rule 62 (ExpressionList)
+    $預設  使用規則 62 以縮減 (ExpressionList)
 
 
-State 133
+狀態 133
 
    52 ArrForm: L_BRACKET Expression . R_BRACKET
    72 Expression: Expression . MULTIPLY Expression
@@ -1933,43 +1933,43 @@ State 133
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    R_BRACKET         shift, and go to state 159
-    OR                shift, and go to state 111
-    AND               shift, and go to state 112
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
+    R_BRACKET         偏移，並進入狀態 159
+    OR                偏移，並進入狀態 111
+    AND               偏移，並進入狀態 112
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
 
 
-State 134
+狀態 134
 
    53 ArrForm: ArrForm L_BRACKET . Expression R_BRACKET
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 160
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 160
 
 
-State 135
+狀態 135
 
    47 Simple: VariableReference ASSIGN Expression . SEMICOLON
    72 Expression: Expression . MULTIPLY Expression
@@ -1986,67 +1986,67 @@ State 135
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    SEMICOLON         shift, and go to state 161
-    OR                shift, and go to state 111
-    AND               shift, and go to state 112
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
+    SEMICOLON         偏移，並進入狀態 161
+    OR                偏移，並進入狀態 111
+    AND               偏移，並進入狀態 112
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
 
 
-State 136
+狀態 136
 
    20 ReturnType: COLON ScalarType .
 
-    $default  reduce using rule 20 (ReturnType)
+    $預設  使用規則 20 以縮減 (ReturnType)
 
 
-State 137
+狀態 137
 
    11 FunctionDeclaration: FunctionName L_PARENTHESIS FormalArgList R_PARENTHESIS ReturnType SEMICOLON . CompoundStatement END FunctionName
 
-    BEGIN_  shift, and go to state 22
+    BEGIN_  偏移，並進入狀態 22
 
-    CompoundStatement  go to state 162
+    CompoundStatement  進入狀態 162
 
 
-State 138
+狀態 138
 
    32 ArrDecl: ARRAY INT_LITERAL TO INT_LITERAL OF .
 
-    $default  reduce using rule 32 (ArrDecl)
+    $預設  使用規則 32 以縮減 (ArrDecl)
 
 
-State 139
+狀態 139
 
    33 ArrDecl: ArrDecl ARRAY INT_LITERAL TO INT_LITERAL . OF
 
-    OF  shift, and go to state 163
+    OF  偏移，並進入狀態 163
 
 
-State 140
+狀態 140
 
    58 For: FOR ID ASSIGN INT_LITERAL . TO INT_LITERAL DO StatementList END DO
 
-    TO  shift, and go to state 164
+    TO  偏移，並進入狀態 164
 
 
-State 141
+狀態 141
 
    70 Expression: L_PARENTHESIS Expression R_PARENTHESIS .
 
-    $default  reduce using rule 70 (Expression)
+    $預設  使用規則 70 以縮減 (Expression)
 
 
-State 142
+狀態 142
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2063,23 +2063,23 @@ State 142
    85           | Expression . OR Expression
    85           | Expression OR Expression .
 
-    AND               shift, and go to state 112
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
+    AND               偏移，並進入狀態 112
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
 
-    $default  reduce using rule 85 (Expression)
+    $預設  使用規則 85 以縮減 (Expression)
 
 
-State 143
+狀態 143
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2096,22 +2096,22 @@ State 143
    84           | Expression AND Expression .
    85           | Expression . OR Expression
 
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
 
-    $default  reduce using rule 84 (Expression)
+    $預設  使用規則 84 以縮減 (Expression)
 
 
-State 144
+狀態 144
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2128,16 +2128,16 @@ State 144
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    PLUS      shift, and go to state 119
-    MINUS     shift, and go to state 120
-    MULTIPLY  shift, and go to state 121
-    DIVIDE    shift, and go to state 122
-    MOD       shift, and go to state 123
+    PLUS      偏移，並進入狀態 119
+    MINUS     偏移，並進入狀態 120
+    MULTIPLY  偏移，並進入狀態 121
+    DIVIDE    偏移，並進入狀態 122
+    MOD       偏移，並進入狀態 123
 
-    $default  reduce using rule 77 (Expression)
+    $預設  使用規則 77 以縮減 (Expression)
 
 
-State 145
+狀態 145
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2154,16 +2154,16 @@ State 145
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    PLUS      shift, and go to state 119
-    MINUS     shift, and go to state 120
-    MULTIPLY  shift, and go to state 121
-    DIVIDE    shift, and go to state 122
-    MOD       shift, and go to state 123
+    PLUS      偏移，並進入狀態 119
+    MINUS     偏移，並進入狀態 120
+    MULTIPLY  偏移，並進入狀態 121
+    DIVIDE    偏移，並進入狀態 122
+    MOD       偏移，並進入狀態 123
 
-    $default  reduce using rule 78 (Expression)
+    $預設  使用規則 78 以縮減 (Expression)
 
 
-State 146
+狀態 146
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2180,16 +2180,16 @@ State 146
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    PLUS      shift, and go to state 119
-    MINUS     shift, and go to state 120
-    MULTIPLY  shift, and go to state 121
-    DIVIDE    shift, and go to state 122
-    MOD       shift, and go to state 123
+    PLUS      偏移，並進入狀態 119
+    MINUS     偏移，並進入狀態 120
+    MULTIPLY  偏移，並進入狀態 121
+    DIVIDE    偏移，並進入狀態 122
+    MOD       偏移，並進入狀態 123
 
-    $default  reduce using rule 81 (Expression)
+    $預設  使用規則 81 以縮減 (Expression)
 
 
-State 147
+狀態 147
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2206,16 +2206,16 @@ State 147
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    PLUS      shift, and go to state 119
-    MINUS     shift, and go to state 120
-    MULTIPLY  shift, and go to state 121
-    DIVIDE    shift, and go to state 122
-    MOD       shift, and go to state 123
+    PLUS      偏移，並進入狀態 119
+    MINUS     偏移，並進入狀態 120
+    MULTIPLY  偏移，並進入狀態 121
+    DIVIDE    偏移，並進入狀態 122
+    MOD       偏移，並進入狀態 123
 
-    $default  reduce using rule 79 (Expression)
+    $預設  使用規則 79 以縮減 (Expression)
 
 
-State 148
+狀態 148
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2232,16 +2232,16 @@ State 148
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    PLUS      shift, and go to state 119
-    MINUS     shift, and go to state 120
-    MULTIPLY  shift, and go to state 121
-    DIVIDE    shift, and go to state 122
-    MOD       shift, and go to state 123
+    PLUS      偏移，並進入狀態 119
+    MINUS     偏移，並進入狀態 120
+    MULTIPLY  偏移，並進入狀態 121
+    DIVIDE    偏移，並進入狀態 122
+    MOD       偏移，並進入狀態 123
 
-    $default  reduce using rule 80 (Expression)
+    $預設  使用規則 80 以縮減 (Expression)
 
 
-State 149
+狀態 149
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2258,16 +2258,16 @@ State 149
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    PLUS      shift, and go to state 119
-    MINUS     shift, and go to state 120
-    MULTIPLY  shift, and go to state 121
-    DIVIDE    shift, and go to state 122
-    MOD       shift, and go to state 123
+    PLUS      偏移，並進入狀態 119
+    MINUS     偏移，並進入狀態 120
+    MULTIPLY  偏移，並進入狀態 121
+    DIVIDE    偏移，並進入狀態 122
+    MOD       偏移，並進入狀態 123
 
-    $default  reduce using rule 82 (Expression)
+    $預設  使用規則 82 以縮減 (Expression)
 
 
-State 150
+狀態 150
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2284,14 +2284,14 @@ State 150
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    MULTIPLY  shift, and go to state 121
-    DIVIDE    shift, and go to state 122
-    MOD       shift, and go to state 123
+    MULTIPLY  偏移，並進入狀態 121
+    DIVIDE    偏移，並進入狀態 122
+    MOD       偏移，並進入狀態 123
 
-    $default  reduce using rule 75 (Expression)
+    $預設  使用規則 75 以縮減 (Expression)
 
 
-State 151
+狀態 151
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2308,14 +2308,14 @@ State 151
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    MULTIPLY  shift, and go to state 121
-    DIVIDE    shift, and go to state 122
-    MOD       shift, and go to state 123
+    MULTIPLY  偏移，並進入狀態 121
+    DIVIDE    偏移，並進入狀態 122
+    MOD       偏移，並進入狀態 123
 
-    $default  reduce using rule 76 (Expression)
+    $預設  使用規則 76 以縮減 (Expression)
 
 
-State 152
+狀態 152
 
    72 Expression: Expression . MULTIPLY Expression
    72           | Expression MULTIPLY Expression .
@@ -2332,10 +2332,10 @@ State 152
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    $default  reduce using rule 72 (Expression)
+    $預設  使用規則 72 以縮減 (Expression)
 
 
-State 153
+狀態 153
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2352,10 +2352,10 @@ State 153
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    $default  reduce using rule 73 (Expression)
+    $預設  使用規則 73 以縮減 (Expression)
 
 
-State 154
+狀態 154
 
    72 Expression: Expression . MULTIPLY Expression
    73           | Expression . DIVIDE Expression
@@ -2372,63 +2372,63 @@ State 154
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    $default  reduce using rule 74 (Expression)
+    $預設  使用規則 74 以縮減 (Expression)
 
 
-State 155
+狀態 155
 
    54 Condition: IF Expression THEN StatementList . ElseOrNot END IF
 
-    ELSE  shift, and go to state 165
+    ELSE  偏移，並進入狀態 165
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    ElseOrNot  go to state 166
-    Epsilon    go to state 167
+    ElseOrNot  進入狀態 166
+    Epsilon    進入狀態 167
 
 
-State 156
+狀態 156
 
    57 While: WHILE Expression DO StatementList . END DO
 
-    END  shift, and go to state 168
+    END  偏移，並進入狀態 168
 
 
-State 157
+狀態 157
 
    61 FunctionCall: ID L_PARENTHESIS ExpressionList R_PARENTHESIS .
 
-    $default  reduce using rule 61 (FunctionCall)
+    $預設  使用規則 61 以縮減 (FunctionCall)
 
 
-State 158
+狀態 158
 
    65 Expressions: Expressions COMMA . Expression
 
-    L_PARENTHESIS   shift, and go to state 81
-    NOT             shift, and go to state 82
-    MINUS           shift, and go to state 83
-    FALSE           shift, and go to state 32
-    TRUE            shift, and go to state 33
-    ID              shift, and go to state 60
-    INT_LITERAL     shift, and go to state 34
-    REAL_LITERAL    shift, and go to state 35
-    STRING_LITERAL  shift, and go to state 36
+    L_PARENTHESIS   偏移，並進入狀態 81
+    NOT             偏移，並進入狀態 82
+    MINUS           偏移，並進入狀態 83
+    FALSE           偏移，並進入狀態 32
+    TRUE            偏移，並進入狀態 33
+    ID              偏移，並進入狀態 60
+    INT_LITERAL     偏移，並進入狀態 34
+    REAL_LITERAL    偏移，並進入狀態 35
+    STRING_LITERAL  偏移，並進入狀態 36
 
-    LiteralConstant    go to state 84
-    VariableReference  go to state 85
-    FunctionCall       go to state 86
-    Expression         go to state 169
+    LiteralConstant    進入狀態 84
+    VariableReference  進入狀態 85
+    FunctionCall       進入狀態 86
+    Expression         進入狀態 169
 
 
-State 159
+狀態 159
 
    52 ArrForm: L_BRACKET Expression R_BRACKET .
 
-    $default  reduce using rule 52 (ArrForm)
+    $預設  使用規則 52 以縮減 (ArrForm)
 
 
-State 160
+狀態 160
 
    53 ArrForm: ArrForm L_BRACKET Expression . R_BRACKET
    72 Expression: Expression . MULTIPLY Expression
@@ -2445,102 +2445,102 @@ State 160
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    R_BRACKET         shift, and go to state 170
-    OR                shift, and go to state 111
-    AND               shift, and go to state 112
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
+    R_BRACKET         偏移，並進入狀態 170
+    OR                偏移，並進入狀態 111
+    AND               偏移，並進入狀態 112
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
 
 
-State 161
+狀態 161
 
    47 Simple: VariableReference ASSIGN Expression SEMICOLON .
 
-    $default  reduce using rule 47 (Simple)
+    $預設  使用規則 47 以縮減 (Simple)
 
 
-State 162
+狀態 162
 
    11 FunctionDeclaration: FunctionName L_PARENTHESIS FormalArgList R_PARENTHESIS ReturnType SEMICOLON CompoundStatement . END FunctionName
 
-    END  shift, and go to state 171
+    END  偏移，並進入狀態 171
 
 
-State 163
+狀態 163
 
    33 ArrDecl: ArrDecl ARRAY INT_LITERAL TO INT_LITERAL OF .
 
-    $default  reduce using rule 33 (ArrDecl)
+    $預設  使用規則 33 以縮減 (ArrDecl)
 
 
-State 164
+狀態 164
 
    58 For: FOR ID ASSIGN INT_LITERAL TO . INT_LITERAL DO StatementList END DO
 
-    INT_LITERAL  shift, and go to state 172
+    INT_LITERAL  偏移，並進入狀態 172
 
 
-State 165
+狀態 165
 
    55 ElseOrNot: ELSE . StatementList
 
-    BEGIN_  shift, and go to state 22
-    FOR     shift, and go to state 54
-    IF      shift, and go to state 55
-    WHILE   shift, and go to state 56
-    RETURN  shift, and go to state 57
-    PRINT   shift, and go to state 58
-    READ    shift, and go to state 59
-    ID      shift, and go to state 60
+    BEGIN_  偏移，並進入狀態 22
+    FOR     偏移，並進入狀態 54
+    IF      偏移，並進入狀態 55
+    WHILE   偏移，並進入狀態 56
+    RETURN  偏移，並進入狀態 57
+    PRINT   偏移，並進入狀態 58
+    READ    偏移，並進入狀態 59
+    ID      偏移，並進入狀態 60
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    Statement           go to state 61
-    CompoundStatement   go to state 62
-    Simple              go to state 63
-    VariableReference   go to state 64
-    Condition           go to state 65
-    While               go to state 66
-    For                 go to state 67
-    Return              go to state 68
-    FunctionInvokation  go to state 69
-    FunctionCall        go to state 70
-    StatementList       go to state 173
-    Statements          go to state 72
-    Epsilon             go to state 73
+    Statement           進入狀態 61
+    CompoundStatement   進入狀態 62
+    Simple              進入狀態 63
+    VariableReference   進入狀態 64
+    Condition           進入狀態 65
+    While               進入狀態 66
+    For                 進入狀態 67
+    Return              進入狀態 68
+    FunctionInvokation  進入狀態 69
+    FunctionCall        進入狀態 70
+    StatementList       進入狀態 173
+    Statements          進入狀態 72
+    Epsilon             進入狀態 73
 
 
-State 166
+狀態 166
 
    54 Condition: IF Expression THEN StatementList ElseOrNot . END IF
 
-    END  shift, and go to state 174
+    END  偏移，並進入狀態 174
 
 
-State 167
+狀態 167
 
    56 ElseOrNot: Epsilon .
 
-    $default  reduce using rule 56 (ElseOrNot)
+    $預設  使用規則 56 以縮減 (ElseOrNot)
 
 
-State 168
+狀態 168
 
    57 While: WHILE Expression DO StatementList END . DO
 
-    DO  shift, and go to state 175
+    DO  偏移，並進入狀態 175
 
 
-State 169
+狀態 169
 
    65 Expressions: Expressions COMMA Expression .
    72 Expression: Expression . MULTIPLY Expression
@@ -2557,127 +2557,127 @@ State 169
    84           | Expression . AND Expression
    85           | Expression . OR Expression
 
-    OR                shift, and go to state 111
-    AND               shift, and go to state 112
-    LESS              shift, and go to state 113
-    LESS_OR_EQUAL     shift, and go to state 114
-    EQUAL             shift, and go to state 115
-    GREATER           shift, and go to state 116
-    GREATER_OR_EQUAL  shift, and go to state 117
-    NOT_EQUAL         shift, and go to state 118
-    PLUS              shift, and go to state 119
-    MINUS             shift, and go to state 120
-    MULTIPLY          shift, and go to state 121
-    DIVIDE            shift, and go to state 122
-    MOD               shift, and go to state 123
+    OR                偏移，並進入狀態 111
+    AND               偏移，並進入狀態 112
+    LESS              偏移，並進入狀態 113
+    LESS_OR_EQUAL     偏移，並進入狀態 114
+    EQUAL             偏移，並進入狀態 115
+    GREATER           偏移，並進入狀態 116
+    GREATER_OR_EQUAL  偏移，並進入狀態 117
+    NOT_EQUAL         偏移，並進入狀態 118
+    PLUS              偏移，並進入狀態 119
+    MINUS             偏移，並進入狀態 120
+    MULTIPLY          偏移，並進入狀態 121
+    DIVIDE            偏移，並進入狀態 122
+    MOD               偏移，並進入狀態 123
 
-    $default  reduce using rule 65 (Expressions)
+    $預設  使用規則 65 以縮減 (Expressions)
 
 
-State 170
+狀態 170
 
    53 ArrForm: ArrForm L_BRACKET Expression R_BRACKET .
 
-    $default  reduce using rule 53 (ArrForm)
+    $預設  使用規則 53 以縮減 (ArrForm)
 
 
-State 171
+狀態 171
 
    11 FunctionDeclaration: FunctionName L_PARENTHESIS FormalArgList R_PARENTHESIS ReturnType SEMICOLON CompoundStatement END . FunctionName
 
-    ID  shift, and go to state 13
+    ID  偏移，並進入狀態 13
 
-    FunctionName  go to state 176
+    FunctionName  進入狀態 176
 
 
-State 172
+狀態 172
 
    58 For: FOR ID ASSIGN INT_LITERAL TO INT_LITERAL . DO StatementList END DO
 
-    DO  shift, and go to state 177
+    DO  偏移，並進入狀態 177
 
 
-State 173
+狀態 173
 
    55 ElseOrNot: ELSE StatementList .
 
-    $default  reduce using rule 55 (ElseOrNot)
+    $預設  使用規則 55 以縮減 (ElseOrNot)
 
 
-State 174
+狀態 174
 
    54 Condition: IF Expression THEN StatementList ElseOrNot END . IF
 
-    IF  shift, and go to state 178
+    IF  偏移，並進入狀態 178
 
 
-State 175
+狀態 175
 
    57 While: WHILE Expression DO StatementList END DO .
 
-    $default  reduce using rule 57 (While)
+    $預設  使用規則 57 以縮減 (While)
 
 
-State 176
+狀態 176
 
    11 FunctionDeclaration: FunctionName L_PARENTHESIS FormalArgList R_PARENTHESIS ReturnType SEMICOLON CompoundStatement END FunctionName .
 
-    $default  reduce using rule 11 (FunctionDeclaration)
+    $預設  使用規則 11 以縮減 (FunctionDeclaration)
 
 
-State 177
+狀態 177
 
    58 For: FOR ID ASSIGN INT_LITERAL TO INT_LITERAL DO . StatementList END DO
 
-    BEGIN_  shift, and go to state 22
-    FOR     shift, and go to state 54
-    IF      shift, and go to state 55
-    WHILE   shift, and go to state 56
-    RETURN  shift, and go to state 57
-    PRINT   shift, and go to state 58
-    READ    shift, and go to state 59
-    ID      shift, and go to state 60
+    BEGIN_  偏移，並進入狀態 22
+    FOR     偏移，並進入狀態 54
+    IF      偏移，並進入狀態 55
+    WHILE   偏移，並進入狀態 56
+    RETURN  偏移，並進入狀態 57
+    PRINT   偏移，並進入狀態 58
+    READ    偏移，並進入狀態 59
+    ID      偏移，並進入狀態 60
 
-    $default  reduce using rule 89 (Epsilon)
+    $預設  使用規則 89 以縮減 (Epsilon)
 
-    Statement           go to state 61
-    CompoundStatement   go to state 62
-    Simple              go to state 63
-    VariableReference   go to state 64
-    Condition           go to state 65
-    While               go to state 66
-    For                 go to state 67
-    Return              go to state 68
-    FunctionInvokation  go to state 69
-    FunctionCall        go to state 70
-    StatementList       go to state 179
-    Statements          go to state 72
-    Epsilon             go to state 73
+    Statement           進入狀態 61
+    CompoundStatement   進入狀態 62
+    Simple              進入狀態 63
+    VariableReference   進入狀態 64
+    Condition           進入狀態 65
+    While               進入狀態 66
+    For                 進入狀態 67
+    Return              進入狀態 68
+    FunctionInvokation  進入狀態 69
+    FunctionCall        進入狀態 70
+    StatementList       進入狀態 179
+    Statements          進入狀態 72
+    Epsilon             進入狀態 73
 
 
-State 178
+狀態 178
 
    54 Condition: IF Expression THEN StatementList ElseOrNot END IF .
 
-    $default  reduce using rule 54 (Condition)
+    $預設  使用規則 54 以縮減 (Condition)
 
 
-State 179
+狀態 179
 
    58 For: FOR ID ASSIGN INT_LITERAL TO INT_LITERAL DO StatementList . END DO
 
-    END  shift, and go to state 180
+    END  偏移，並進入狀態 180
 
 
-State 180
+狀態 180
 
    58 For: FOR ID ASSIGN INT_LITERAL TO INT_LITERAL DO StatementList END . DO
 
-    DO  shift, and go to state 181
+    DO  偏移，並進入狀態 181
 
 
-State 181
+狀態 181
 
    58 For: FOR ID ASSIGN INT_LITERAL TO INT_LITERAL DO StatementList END DO .
 
-    $default  reduce using rule 58 (For)
+    $預設  使用規則 58 以縮減 (For)
