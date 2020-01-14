@@ -123,7 +123,7 @@ void CodeGenerator::visit(VariableNode *m) {
                         EMITSN(".align 2");
                     } break;
                     case EnumType::TYPE_REAL: {
-                        EMITS("  .float");
+                        EMITS("  .float ");
                         value = to_string(float(m->type->real_literal));
                         EMITSN(value.c_str());
                         EMITSN(".align 2");
