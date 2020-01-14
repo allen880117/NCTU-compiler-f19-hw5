@@ -84,14 +84,9 @@ void CodeGenerator::visit(VariableNode *m) {
                 EMITSN("# GLOBAL VARIABLE ARRAY")
                 EMITSN(".bss");
                 EMITSN(string(m->variable_name+":").c_str());
-                if(m->type->type == EnumType::TYPE_REAL){
-                    for(uint i=0; i<total_num; i++){
-                        EMITSN("  .float 0");
-                    }
-                } else {
-                    for(uint i=0; i<total_num; i++){
-                        EMITSN("  .word 0");
-                    }
+               
+                for(uint i=0; i<total_num; i++){
+                    EMITSN("  .word 0");
                 }
                 
                 EMITSN(".align 2");
@@ -138,12 +133,7 @@ void CodeGenerator::visit(VariableNode *m) {
                 EMITSN("# GLOBAL VARIABLE")
                 EMITSN(".bss");
                 EMITSN(string(m->variable_name+":").c_str());
-                if(m->type->type == EnumType::TYPE_REAL){
-                    EMITSN("  .float 0");
-                } else {
-                    EMITSN("  .word 0");
-                }
-                
+                EMITSN("  .word 0");
                 EMITSN(".align 2");
             } break;
             default: break;
