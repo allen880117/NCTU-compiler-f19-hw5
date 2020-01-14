@@ -325,6 +325,8 @@ void CodeGenerator::visit(AssignmentNode *m) { // STATEMENT
         this->assignment_lhs = false;
     this->pop_src_node();
 
+    EMITSN("# ASSIGNMENT");
+
     // Address
     STACK_TOP("t0");
     STACK_POP_64;
@@ -358,6 +360,8 @@ void CodeGenerator::visit(PrintNode *m) { // STATEMENT
             m->expression_node->accept(*this);
     this->pop_src_node();
     
+    EMITSN("# PRINT");
+
     STACK_TOP("t0");
     STACK_POP_64;
 
@@ -365,11 +369,16 @@ void CodeGenerator::visit(PrintNode *m) { // STATEMENT
     EMITSN("  # print: move param to a0");
     EMITS_2("  jal ","ra","print");
     EMITSN("  # print: jump to print");
+
+    EMITSN("# PRINT END");
+
 }
 
 void CodeGenerator::visit(ReadNode *m) { // STATEMENT
     // Visit Child Node
     this->push_src_node(EnumNodeTable::READ_NODE);
+
+    EMITSN("# READ");
 
         EMITSN("  jal  ra, read  # read: jump to read");
 
@@ -381,6 +390,8 @@ void CodeGenerator::visit(ReadNode *m) { // STATEMENT
         STACK_POP_64;
 
         EMITSN("  sw   a0, 0(t0)  # read: move ret_val to var_ref");
+
+    EMITSN("# READ END");
 
     this->pop_src_node();
 
