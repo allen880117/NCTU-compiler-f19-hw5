@@ -290,7 +290,6 @@ void CodeGenerator::visit(FunctionNode *m) {
             }
 
             if(m->prototype.size() <= 8){
-                int fa_num = 0;
                 for (uint i = 0; i < m->prototype.size(); i++) {
                     string entry_name = this->current_scope->entry_name[i];
                     SymbolEntry* entry = 
@@ -952,7 +951,7 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
                     EMITSN_2(" fmv.w.x","ft0","t0");
                 }
 
-                EMITSN_3("  flt", "t2", "ft1", "ft0");
+                EMITSN_3("  flt.s", "t2", "ft1", "ft0");
                 EMITSN_2("  li  ", "t3", "1");
                 EMITSN_3("  beq ", "t2", "t3", this->label_convert(label_true).c_str());
 
@@ -986,7 +985,7 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
                     EMITSN_2(" fmv.w.x","ft0","t0");
                 }
 
-                EMITSN_3("  fle", "t2", "ft1", "ft0");
+                EMITSN_3("  fle.s", "t2", "ft1", "ft0");
                 EMITSN_2("  li  ", "t3", "1");
                 EMITSN_3("  beq ", "t2", "t3", this->label_convert(label_true).c_str());
 
@@ -1019,7 +1018,7 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
                     EMITSN_2(" fmv.w.x","ft0","t0");
                 }
 
-                EMITSN_3("  feq", "t2", "ft1", "ft0");
+                EMITSN_3("  feq.s", "t2", "ft1", "ft0");
                 EMITSN_2("  li  ", "t3", "1");
                 EMITSN_3("  beq ", "t2", "t3", this->label_convert(label_true).c_str());
 
@@ -1052,7 +1051,7 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
                     EMITSN_2(" fmv.w.x","ft0","t0");
                 }
 
-                EMITSN_3("  fle", "t2", "ft1", "ft0");
+                EMITSN_3("  fle.s", "t2", "ft1", "ft0");
                 EMITSN_2("  beqz", "t2", this->label_convert(label_true).c_str());
 
             } else {
@@ -1084,7 +1083,7 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
                     EMITSN_2(" fmv.w.x","ft0","t0");
                 }
 
-                EMITSN_3("  flt", "t2", "ft1", "ft0");
+                EMITSN_3("  flt.s", "t2", "ft1", "ft0");
                 EMITSN_2("  beqz", "t2", this->label_convert(label_true).c_str());
 
             } else {
@@ -1116,7 +1115,7 @@ void CodeGenerator::visit(BinaryOperatorNode *m) { // EXPRESSION
                     EMITSN_2(" fmv.w.x","ft0","t0");
                 }
 
-                EMITSN_3("  feq", "t2", "ft1", "ft0");
+                EMITSN_3("  feq.s", "t2", "ft1", "ft0");
                 EMITSN_2("  beqz", "t2", this->label_convert(label_true).c_str());
 
             } else {
