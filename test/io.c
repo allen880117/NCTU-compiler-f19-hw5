@@ -11,3 +11,14 @@ int read()
     scanf("%d", &value);
     return value;
 }
+
+void print_real(int real)
+{
+    printf("%f\n", real);
+}
+
+float read_real(){
+    float real;
+    scanf("%f", &real);
+    return real;
+}
