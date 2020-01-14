@@ -849,7 +849,7 @@ void CodeGenerator::visit(UnaryOperatorNode *m) { // EXPRESSION
         case EnumOperator::OP_NOT: {
             label_true = new_label();
             label_out  = new_label();
-            EMITS_2("  bnez", "t0", this->label_convert(label_true).c_str());
+            EMITSN_2("  bnez", "t0", this->label_convert(label_true).c_str());
             EMITSN_2("  li  ", "t1", "1");
             EMITSN_1("  j   ", this->label_convert(label_out).c_str());
             EMIT_LABEL(label_true);
@@ -882,7 +882,7 @@ void CodeGenerator::visit(IfNode *m) { // STATEMENT
         STACK_TOP("t0");
         STACK_POP_64;
         
-        EMITS_2("  beqz ", "t0", this->label_convert(label_2).c_str());
+        EMITS_2("  beqz", "t0", this->label_convert(label_2).c_str());
         EMITSN("  # if: jump to else");
         EMIT_LABEL(label_1);
 
