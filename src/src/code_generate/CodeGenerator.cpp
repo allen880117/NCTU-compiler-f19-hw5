@@ -301,13 +301,7 @@ void CodeGenerator::visit(FunctionNode *m) {
                     if(entry->type.type_set == EnumTypeSet::SET_ACCUMLATED){
                         EMITS_2("  sd  ", source.c_str(), target.c_str());
                     } else {
-                        if (entry->type.type == EnumType::TYPE_REAL){
-                            source = string("fa")+to_string(fa_num);
-                            fa_num++;
-                            EMITS_2("  fsw ", source.c_str(), target.c_str());
-                        } else {
-                            EMITS_2("  sw  ", source.c_str(), target.c_str());
-                        }
+                        EMITS_2("  sw  ", source.c_str(), target.c_str());
                     }
                     EMITSN("  # param_save_to_local");
                 }
@@ -327,17 +321,10 @@ void CodeGenerator::visit(FunctionNode *m) {
                         EMITS_2("  sd  ", "t1", target.c_str());
                         EMITSN("  # param_save_to_local: save");
                     } else {
-                         if (entry->type.type == EnumType::TYPE_REAL){
-                            EMITS_2("  flw ", "ft1", source.c_str());
-                            EMITSN("  # param_save_to_local: stack load");
-                            EMITS_2("  fsw ", "ft1", target.c_str());
-                            EMITSN("  # param_save_to_local: save");
-                        } else {
-                            EMITS_2("  lw  ", "t1", source.c_str());
-                            EMITSN("  # param_save_to_local: stack load");
-                            EMITS_2("  sw  ", "t1", target.c_str());
-                            EMITSN("  # param_save_to_local: save");
-                        }
+                        EMITS_2("  lw  ", "t1", source.c_str());
+                        EMITSN("  # param_save_to_local: stack load");
+                        EMITS_2("  sw  ", "t1", target.c_str());
+                        EMITSN("  # param_save_to_local: save");
                     }
                     over_size-=8;
                 }
