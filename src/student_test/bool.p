@@ -7,6 +7,17 @@ bool;
 var gd:boolean;
 var jj:true;
 
+botest(tt:boolean): integer;
+begin
+    if (tt) then
+        return 3;
+    else
+        return 2;
+    end if
+end
+end botest
+
+
 begin
 
 var kk:boolean;
@@ -51,6 +62,9 @@ if kk and pk then
     print 78; // NOT PRINT
 end if
 
+print botest(ck); // 3
+print botest(dk); // 2
+
 end
 end bool
 
@@ -60,3 +74,5 @@ end bool
 // 55
 // 56
 // 77
+// 3
+// 2
